@@ -6,6 +6,9 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Portal\\' => array($baseDir . '/Portal'),
+    'Panel\\' => array($baseDir . '/Panel'),
+    'Nexus\\' => array($baseDir . '/Nexus'),
     'Illuminate\\Contracts\\' => array($vendorDir . '/illuminate/contracts'),
     'Illuminate\\Container\\' => array($vendorDir . '/illuminate/container'),
     'FastRoute\\' => array($vendorDir . '/nikic/fast-route/src'),

@@ -1,28 +1,33 @@
 <?php
-defined('PAOCMS') || die('The PaoCMS Load Error');
-
 
 namespace Nexus;
 
-
+use Illuminate\Container\Container;
 
 /**
  * @package Nexus
  * @version 20151123
  *
  */
-class Nexus
+class Nexus extends Container
 {
-	protected $config;
+    protected $config;
 
-	protected $router;
+    protected $router;
 
-	protected $request;
-
-
+    protected $request;
 
 
-	static public function wizard()
+    public function __construct()
+    {
+        // 初始化本类
+        static::setInstance($this);
+
+        $this->instance('pao', $this);
+        print_r($this->pao);
+    }
+
+	public function wizard()
 	{
 
 	}
