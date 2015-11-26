@@ -6,9 +6,11 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Stringy\\' => array($vendorDir . '/danielstjules/stringy/src'),
     'Portal\\' => array($baseDir . '/Portal'),
     'Panel\\' => array($baseDir . '/Panel'),
     'Nexus\\' => array($baseDir . '/Nexus'),
+    'Illuminate\\Support\\' => array($vendorDir . '/illuminate/support'),
     'Illuminate\\Contracts\\' => array($vendorDir . '/illuminate/contracts'),
     'Illuminate\\Container\\' => array($vendorDir . '/illuminate/container'),
     'FastRoute\\' => array($vendorDir . '/nikic/fast-route/src'),

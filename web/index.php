@@ -1,6 +1,8 @@
 <?php
-// 定义根目录
-define('PAOCMS', dirname(__DIR__));
+define('DS', DIRECTORY_SEPARATOR);
 
-require(PAOCMS.'/Portal/Portal.php');
+// 定义根目录
+define('PAO', dirname(__DIR__));
+
+require(PAO.'/Portal/Portal.php');
 

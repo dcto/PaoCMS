@@ -1,15 +1,13 @@
 <?php
-$config['cache']['redis'] = array(
-	'host'=>'127.0.0.1',
-	'port'=>'6379'
-);
+defined('PAO') || die('The PaoCMS Load Error');
 
-$config['cache']['memcached'] = array(
-	'host'=>'127.0.0.1',
-	'port'=>'1211'
-);
-
-$config['cache']['ssdb'] = array(
-	'host'=>'127.0.0.1',
-	'port'=>'8888'
+return array(
+	'redis' => array(
+		'host'=>'127.0.0.1',
+		'port'=>'6379'
+	),
+	'memcached' => array(
+		'host'=>'127.0.0.1',
+		'port'=>'1211'
+	)
 );
