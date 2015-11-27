@@ -4,6 +4,8 @@ namespace Nexus;
 
 use Illuminate\Container\Container;
 use Nexus\Configure\Repository;
+use Nexus\Exception\PAOException;
+use Illuminate\Contracts\Routing\ResponseFactory;
 
 /**
  * @package Nexus
@@ -40,6 +42,7 @@ class Nexus extends Container
      */
     protected $systemBindings = [
         'config' => '_bindingsConfigure',
+        'exception'=>'_bindingsException',
 
 
     ];
@@ -56,7 +59,10 @@ class Nexus extends Container
 
     public function wizard()
     {
-        
+        $this->_setExceptionHandling();
+
+
+     echo '<hr />'.   $this->config('config.system.timezone');
     }
 
 
@@ -91,7 +97,7 @@ class Nexus extends Container
     private function _setConfigurations($name)
     {
         $PaoConfig = PAO.DIRECTORY_SEPARATOR.'Config'.DIRECTORY_SEPARATOR.strtolower($name).'.php';
-        $AppConfig = PAO.DIRECTORY_SEPARATOR.APP.DIRECTORY_SEPARATOR.'Config'.DIRECTORY_SEPARATOR.$name.'.php';
+        $AppConfig = PAO.DIRECTORY_SEPARATOR.APP.DIRECTORY_SEPARATOR.'Config'.DIRECTORY_SEPARATOR.strtolower($name).'.php';
 
         $Config = require($PaoConfig);
         if(is_readable($AppConfig)) {
@@ -103,6 +109,23 @@ class Nexus extends Container
     }
 
 
+    private function _setExceptionHandling()
+    {
+        //设置异常错误处理
+        set_error_handler(function ($level, $message, $file = null, $line = 0) {
+            if (error_reporting() & $level) {
+                throw new \ErrorException($message, 0, $level, $file, $line);
+            }
+        });
+
+        //设置抛出异常
+      set_exception_handler(function ($e) {
+            $this->DI('exception')->HandleError($e);
+        });
+
+
+    }
+
 
     private function _bindingsConfigure()
     {
@@ -112,5 +135,11 @@ class Nexus extends Container
     }
 
 
+    private function _bindingsException()
+    {
+        $this->singleton('exception', function(){
+            return new PAOException($this);
+        });
+    }
 
 }
