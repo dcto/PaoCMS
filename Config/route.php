@@ -6,6 +6,6 @@ return array(
 
     ['/' => ['as'=>'index', 'to'=>'Home@index']],
 
-    ['/test'=>['as'=>'test', 'to'=>'Home@test']]
+    ['/test'=> ['as'=>'test', 'to'=>'Home@test']]
 
 );

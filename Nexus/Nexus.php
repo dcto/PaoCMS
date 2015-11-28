@@ -1,11 +1,13 @@
 <?php
 
-namespace Nexus;
+namespace PAO;
 
+use PAO\Http\Request;
+use PAO\Http\Response;
+use PAO\Configure\Repository;
+use PAO\Exception\PAOException;
 use Illuminate\Container\Container;
-use Nexus\Configure\Repository;
-use Nexus\Exception\PAOException;
-use Illuminate\Contracts\Routing\ResponseFactory;
+
 
 /**
  * @package Nexus
@@ -43,6 +45,7 @@ class Nexus extends Container
     protected $systemBindings = [
         'config' => '_bindingsConfigure',
         'exception'=>'_bindingsException',
+        'request'=>'_bindingsRequest',
 
 
     ];
@@ -59,10 +62,19 @@ class Nexus extends Container
 
     public function wizard()
     {
+        //注入异常模块
         $this->_setExceptionHandling();
 
 
-     echo '<hr />'.   $this->config('config.system.timezone');
+
+
+
+     $timezone = $this->config('config.system.timezone');
+
+        $response = new Response($timezone, 404);
+
+        $response->send();
+
     }
 
 
@@ -76,11 +88,6 @@ class Nexus extends Container
         return parent::make($abstract, $parameters);
     }
 
-
-
-    public function todo($name){
-
-    }
 
 
     public function config($config)
@@ -139,6 +146,15 @@ class Nexus extends Container
     {
         $this->singleton('exception', function(){
             return new PAOException($this);
+        });
+    }
+
+
+    private function _bindingsRequest()
+    {
+        $this->singleton('request', function(){
+            $request = Request::createFromGlobals();
+            return $request;
         });
     }
 

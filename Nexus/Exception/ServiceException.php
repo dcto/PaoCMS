@@ -1,6 +1,6 @@
 <?php
 
-namespace Nexus\Exceptions;
+namespace PaoCMS\Exceptions;
 
 class ServiceException extends \RuntimeException
 {

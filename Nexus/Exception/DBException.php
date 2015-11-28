@@ -1,8 +1,8 @@
 <?php
 
-namespace Nexus\Exception;
+namespace PAO\Exception;
 
-use Nexus\Exception\PAOException;
+use PAO\Exception\PAOException;
 
 /**
  * DBÒì³£Àà

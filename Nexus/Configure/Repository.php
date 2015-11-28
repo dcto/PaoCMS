@@ -1,6 +1,6 @@
 <?php
 
-namespace Nexus\Configure;
+namespace PAO\Configure;
 
 use ArrayAccess;
 use Illuminate\Support\Arr;

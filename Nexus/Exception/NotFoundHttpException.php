@@ -1,6 +1,6 @@
 <?php
 
-namespace Nexus\Exception;
+namespace PaoCMS\Exception;
 
 class NotFoundHttpException extends \RuntimeException
 {

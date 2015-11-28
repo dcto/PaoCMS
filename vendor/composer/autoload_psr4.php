@@ -11,7 +11,7 @@ return array(
     'Stringy\\' => array($vendorDir . '/danielstjules/stringy/src'),
     'Portal\\' => array($baseDir . '/Portal'),
     'Panel\\' => array($baseDir . '/Panel'),
-    'Nexus\\' => array($baseDir . '/Nexus'),
+    'PAO\\' => array($baseDir . '/Nexus'),
     'Illuminate\\Support\\' => array($vendorDir . '/illuminate/support'),
     'Illuminate\\Pagination\\' => array($vendorDir . '/illuminate/pagination'),
     'Illuminate\\Events\\' => array($vendorDir . '/illuminate/events'),

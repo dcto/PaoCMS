@@ -9,6 +9,6 @@ require('../vendor/autoload.php');
 require '../Config/route.php';
 
 
-$nexus = new \Nexus\Nexus();
+$nexus = new \PAO\Nexus();
 
 $nexus->wizard();

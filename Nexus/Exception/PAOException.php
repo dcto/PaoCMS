@@ -1,6 +1,6 @@
 <?php
 
-namespace Nexus\Exception;
+namespace PAO\Exception;
 
 use Exception;
 use ReflectionMethod;
