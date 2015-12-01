@@ -2,11 +2,16 @@
 
 namespace PAO;
 
+
+use PAO\Route;
 use PAO\Http\Request;
 use PAO\Http\Response;
 use PAO\Configure\Repository;
 use PAO\Exception\PAOException;
 use Illuminate\Container\Container;
+use PAO\Exception\SystemException;
+use PAO\Exception\ServiceException;
+use PAO\Exception\NotFoundHttpException;
 
 
 /**
@@ -46,6 +51,7 @@ class Nexus extends Container
         'config' => '_bindingsConfigure',
         'exception'=>'_bindingsException',
         'request'=>'_bindingsRequest',
+        'route'=>'_bindingsRoute',
 
 
     ];
@@ -57,30 +63,27 @@ class Nexus extends Container
         static::setInstance($this);
 
         $this->instance('pao', $this);
+
+        $this->instance('Container', $this);
     }
 
 
-    public function wizard()
+    public function Issue()
     {
         //注入异常模块
         $this->_setExceptionHandling();
 
 
+        $this->Dispatcher();
 
 
-
-     $timezone = $this->config('config.system.timezone');
-
-        $response = new Response($timezone, 404);
-
-        $response->send();
+        //$timezone = $this->config('config.system.timezone');
 
     }
 
 
     public function DI($abstract, $parameters = [])
     {
-        if(!isset($this->systemBindings[$abstract])) return false;
         if(!isset($this->is_bindings[$this->systemBindings[$abstract]])){
             $this->{$this->systemBindings[$abstract]}();
             $this->is_bindings[$this->systemBindings[$abstract]] = true;
@@ -101,12 +104,27 @@ class Nexus extends Container
     }
 
 
+    public function Dispatcher()
+    {
+
+
+
+
+
+        $this->DI('route')->dispatch();
+    }
+
+
+
+
+
     private function _setConfigurations($name)
     {
         $PaoConfig = PAO.DIRECTORY_SEPARATOR.'Config'.DIRECTORY_SEPARATOR.strtolower($name).'.php';
         $AppConfig = PAO.DIRECTORY_SEPARATOR.APP.DIRECTORY_SEPARATOR.'Config'.DIRECTORY_SEPARATOR.strtolower($name).'.php';
+        if(!is_readable($PaoConfig)) throw new SystemException('The config file is not available in The '. $PaoConfig);
+        $Config = (array) require($PaoConfig);
 
-        $Config = require($PaoConfig);
         if(is_readable($AppConfig)) {
             $Config = array_replace_recursive($Config, (array) require($AppConfig));
         }
@@ -126,8 +144,8 @@ class Nexus extends Container
         });
 
         //设置抛出异常
-      set_exception_handler(function ($e) {
-            $this->DI('exception')->HandleError($e);
+        set_exception_handler(function ($e) {
+            $this->DI('exception')->Exception($e);
         });
 
 
@@ -153,9 +171,15 @@ class Nexus extends Container
     private function _bindingsRequest()
     {
         $this->singleton('request', function(){
-            $request = Request::createFromGlobals();
-            return $request;
+            $this->request = Request::createFromGlobals();
+            return $this->request;
         });
     }
 
+    private function _bindingsRoute()
+    {
+        $this->singleton('route', function(){
+            return new Route($this);
+        });
+    }
 }

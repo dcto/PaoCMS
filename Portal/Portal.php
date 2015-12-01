@@ -5,10 +5,6 @@ define('APP',  basename(__FILE__, '.php'));
 // Autoload 自动载入
 require('../vendor/autoload.php');
 
-// 路由配置
-require '../Config/route.php';
+$Portal = new \PAO\Nexus();
 
-
-$nexus = new \PAO\Nexus();
-
-$nexus->wizard();
+$Portal->Issue();
