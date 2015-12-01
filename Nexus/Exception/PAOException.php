@@ -2,9 +2,11 @@
 
 namespace PAO\Exception;
 
+
 use Exception;
 use ReflectionMethod;
 use ReflectionFunction;
+use PAO\Http\Response;
 use Illuminate\Container\Container;
 
 class PAOException
@@ -16,10 +18,27 @@ class PAOException
         $this->container = $container;
     }
 
-    public function HandleError($e)
+    /**
+     * [Exception 异常输出]
+     *
+     * @param Exception $e [异常对象]
+     *
+     * @author  11#pao11.com
+     * @version v1
+     *
+     */
+    public function Exception( Exception $e)
     {
         $this->container->config('config.debug') || die('SYSTEM ERROR');
 
+        $HttpCode = method_exists($e, 'getHttpCode') ? $e->getHttpCode() : 500;
+        $response = new Response($this->HandleError($e), $HttpCode);
+        $response->send();
+    }
+
+
+    public function HandleError($e)
+    {
         $type = 'system';
         $errorMsg = $e->getMessage();
         $trace = $e->getTrace();
@@ -59,7 +78,7 @@ class PAOException
             }
             $phpMsg[] = array('file' => str_replace(array(PAO, ''), array('', '/'), $error['file']), 'line' => $error['line'], 'function' => $error['function']);
         }
-        exit(self::showError($type, $errorMsg, $phpMsg));
+        return self::showError($type, $errorMsg, $phpMsg);
     }
 
 

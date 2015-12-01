@@ -4,8 +4,9 @@ defined('PAO') || die('The PaoCMS Load Error');
 
 return array(
 
-    ['/' => ['as'=>'index', 'to'=>'Home@index']],
+    '/' => ['GET','as'=>'index', 'to'=>'Test@index'],
 
-    ['/test'=> ['as'=>'test', 'to'=>'Home@test']]
+    '/test'=> ['ANY', 'as'=>'test', 'to'=>'Test@index'],
+    '/reg/(:str)/(:num)' =>['GET', 'as'=>'reg', 'to'=>'Test@reg']
 
 );

@@ -1,13 +1,14 @@
 <?php
 
-namespace PaoCMS\Exceptions;
+namespace PAO\Exception;
 
 class ServiceException extends \RuntimeException
 {
+    protected $message = '501 The PaoCMS System Service Was Error';
 
     public function getHttpCode()
     {
-        return 404;
+        return 501;
     }
 
     public function getHeaders()

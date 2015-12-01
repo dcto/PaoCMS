@@ -1,7 +1,7 @@
 <?php
 
 return array(
-    'system'=>array(
-        'timezone'=>'tw'
+    'dir'=>array(
+
     )
 );

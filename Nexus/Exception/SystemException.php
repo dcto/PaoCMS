@@ -2,14 +2,15 @@
 
 namespace PAO\Exception;
 
-class NotFoundHttpException extends \RuntimeException
-{
-    protected $message = '404 Not Found';
 
+
+class SystemException extends \RuntimeException
+{
+    protected $message = '500 The System Was Error';
 
     public function getHttpCode()
     {
-        return 404;
+        return 500;
     }
 
     public function getHeaders()

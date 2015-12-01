@@ -14,8 +14,6 @@ class DBException
 
     public function __construct($message, $code = 0, $sql = '')
     {
-
-        echo $this->_getErrorHandle($message);
     }
 
     public function getSql()
