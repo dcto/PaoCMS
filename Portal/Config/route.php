@@ -1,5 +1,5 @@
 <?php
 
 return array(
-    '/' => ['GET','as'=>'index', 'to'=>'Test@index'],
+    '/' => ['GET','as'=>'index', 'to'=>'Test@haha'],
 );

@@ -89,6 +89,10 @@ class Route
                 } else {
                     continue;
                 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 8570f7e0b174c6f4fa342b0e5b0de4152d052b7d
             }
         }
 
@@ -123,14 +127,21 @@ class Route
     protected function _getVerifyMethod(Request $request, $method)
     {
         $method = strtoupper($method);
+<<<<<<< HEAD
         if ($method != $request->getMethod() && $method != 'ANY' && $method != 'ALL') throw new NotFoundHttpException('The route method was not available ' . $request->getUri());
+=======
+        if ($method != $request->getMethod() && $method != 'ANY') throw new NotFoundHttpException('The route method was not available ' . $request->getUri());
+>>>>>>> 8570f7e0b174c6f4fa342b0e5b0de4152d052b7d
 
     }
 
     protected function _getCallBack()
     {
+<<<<<<< HEAD
         if(!$this->callback) throw new NotFoundHttpException('The route was not found');
 
+=======
+>>>>>>> 8570f7e0b174c6f4fa342b0e5b0de4152d052b7d
         //验证回调方法
         $this->_getIsSafeCallable($this->callback);
 
