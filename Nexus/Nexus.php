@@ -76,6 +76,7 @@ class Nexus extends Container
         $this->_setExceptionHandling();
 
         $this->_setExceptionHandling();
+        $this->DI('route')->get(['/gg'=>['as'=>'index', 'to'=>'index@ddd']]);
 
         //起航
         $this->Navigate();
@@ -111,10 +112,11 @@ class Nexus extends Container
     {
         $response = $this->DI('route')->dispatch();
 
-        if(!$response instanceof Response)
-        {
-            $response = new Response($response);
-        }
+//
+//        if(!$response instanceof Response)
+//        {
+//            $response = new Response($response);
+//        }
 
         return $response;
     }

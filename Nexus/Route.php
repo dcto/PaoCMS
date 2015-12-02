@@ -55,15 +55,14 @@ class Route
 
     public function __call($method, $params)
     {
-
-        array_push($this->routes, $params[0]);
-        array_push($this->methods, strtoupper($method));
-        array_push($this->callbacks, $params[1]);
-
+        $route = $params[0];
+        array_push($route[key($route)], $method);
+        $this->routes = array_merge($this->routes, $route);
     }
 
     public function dispatch()
     {
+
         $request = $this->container->DI('request');
         $pathInfo = $request->getPathInfo();
         $parameter = [];
@@ -108,7 +107,7 @@ class Route
      */
     protected function _setRoutesByDefault()
     {
-        $this->routes = $this->container->config('route');
+        $this->routes = array_merge( $this->routes, $this->container->config('route') );
     }
 
 
