@@ -93,7 +93,7 @@ class Route
         }
 
         try {
-            $this->container->call($this->_getCallBack(), $parameter);
+            return $this->container->call($this->_getCallBack(), $parameter);
         } catch (\Exception $e) {
             throw new NotFoundHttpException('The Target [' . implode('::'. $this->_getCallBack()) .']was error in the '. $pathInfo);
         }
@@ -131,6 +131,9 @@ class Route
     protected function _getCallBack()
     {
         if(!$this->callback) throw new NotFoundHttpException('The route was not found');
+
+        //如果是自定义闭包
+        if($this->callback instanceof \Closure) return $this->callback;
 
         //验证回调方法
         $this->_getIsSafeCallable($this->callback);

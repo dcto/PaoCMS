@@ -3,7 +3,7 @@
 namespace PAO;
 
 
-use PAO\Route;
+
 use PAO\Http\Request;
 use PAO\Http\Response;
 use PAO\Configure\Repository;
@@ -52,6 +52,7 @@ class Nexus extends Container
         'exception'=>'_bindingsException',
         'request'=>'_bindingsRequest',
         'route'=>'_bindingsRoute',
+        'view'=>'_bindingsView',
 
 
     ];
@@ -65,6 +66,7 @@ class Nexus extends Container
         $this->instance('pao', $this);
 
         $this->instance('Container', $this);
+
     }
 
 
@@ -73,12 +75,13 @@ class Nexus extends Container
         //注入异常模块
         $this->_setExceptionHandling();
 
+        $this->_setExceptionHandling();
 
-        $this->Dispatcher();
+        //起航
+        $this->Navigate();
 
 
         //$timezone = $this->config('config.system.timezone');
-
     }
 
 
@@ -104,17 +107,17 @@ class Nexus extends Container
     }
 
 
-    public function Dispatcher()
+    public function Navigate()
     {
+        $response = $this->DI('route')->dispatch();
 
+        if(!$response instanceof Response)
+        {
+            $response = new Response($response);
+        }
 
-
-
-
-        $this->DI('route')->dispatch();
+        return $response;
     }
-
-
 
 
 
@@ -179,7 +182,14 @@ class Nexus extends Container
     private function _bindingsRoute()
     {
         $this->singleton('route', function(){
-            return new Route($this);
+            return new \PAO\Route($this);
+        });
+    }
+
+    private function _bindingsView()
+    {
+        $this->singleton('view', function(){
+            return new \PAO\View($this);
         });
     }
 }

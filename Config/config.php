@@ -1,9 +1,6 @@
 <?php
 defined('PAO') || die('The PaoCMS Load Error');
 
-define('DS', DIRECTORY_SEPARATOR);
-
-
 return array(
 
         'debug'=>true, //debug模式
@@ -15,10 +12,10 @@ return array(
 
         //系统相关目录
         'dir'=>array(
-            'pao'=> dirname(__DIR__) , //系统根目录
-            'web'=> dirname(__DIR__).DS.'web', //公共资源目录
-            'logs'=> dirname(__DIR__).DS.'RunTime'.DS.'logs', //日志存放目录
-            'cache'=> dirname(__DIR__).DS.'RunTime'.DS.'Cache', //缓存存放目录
+            'pao'=> PAO , //系统根目录
+            'web'=> PAO.DIRECTORY_SEPARATOR.'web', //公共资源目录
+            'logs'=> PAO.DIRECTORY_SEPARATOR.'RunTime'.DIRECTORY_SEPARATOR.'Logs', //日志存放目录
+            'cache'=> PAO.DIRECTORY_SEPARATOR.'RunTime'.DIRECTORY_SEPARATOR.'Cache', //缓存存放目录
             /*
              * 可自定义其路径
             'controller'=>'Controller',

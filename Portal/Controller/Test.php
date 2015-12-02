@@ -2,14 +2,19 @@
 
 namespace Portal\Controller;
 
-use Portal\Controller\Controller;
+
+use PAO\Http\Response;
+
 
 class Test extends Controller
 {
 
     public function index()
     {
-        echo 'test Controller';
+
+
+        echo 'ddd';
+
     }
 
 
