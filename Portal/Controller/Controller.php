@@ -8,10 +8,9 @@ class Controller extends \PAO\Controller
 {
 
 
-
     public function checkLogin()
     {
-        new Response('Î´µÇÂ½');
+        return new Response('Î´µÇÂ½');
     }
 
 }

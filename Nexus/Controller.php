@@ -7,12 +7,11 @@ use Illuminate\Container\Container;
 
 class Controller
 {
-    protected $container;
+    public $container;
 
 
     public function __construct(Container $container)
     {
         $this->container = $container;
-
     }
 }

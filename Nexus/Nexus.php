@@ -77,7 +77,6 @@ class Nexus extends Container
 
         $this->_setExceptionHandling();
         $this->DI('route')->get(['/gg'=>['as'=>'index', 'to'=>'index@ddd']]);
-
         //起航
         $this->Navigate();
 
@@ -88,7 +87,7 @@ class Nexus extends Container
 
     public function DI($abstract, $parameters = [])
     {
-        if(!isset($this->is_bindings[$this->systemBindings[$abstract]])){
+        if(isset($this->systemBindings[$abstract]) &&  !isset($this->is_bindings[$this->systemBindings[$abstract]])  ){
             $this->{$this->systemBindings[$abstract]}();
             $this->is_bindings[$this->systemBindings[$abstract]] = true;
         }
@@ -112,13 +111,14 @@ class Nexus extends Container
     {
         $response = $this->DI('route')->dispatch();
 
-//
-//        if(!$response instanceof Response)
-//        {
-//            $response = new Response($response);
-//        }
+        //重置Response响应
+        if(!$response instanceof Response)
+        {
+           // $response = new Response($response);
+            throw new SystemException('The Response Must be Instance of PAO\Response');
+        }
 
-        return $response;
+        $response->send();
     }
 
 

@@ -2,9 +2,10 @@
 
 namespace PAO;
 
-use Illuminate\Contracts\Container\Container;
-use PAO\Exception\NotFoundHttpException;
 use PAO\Http\Request;
+use Illuminate\Container\Container;
+use PAO\Exception\NotFoundHttpException;
+
 
 class Route
 {
@@ -62,7 +63,6 @@ class Route
 
     public function dispatch()
     {
-
         $request = $this->container->DI('request');
         $pathInfo = $request->getPathInfo();
         $parameter = [];
@@ -71,7 +71,6 @@ class Route
             $route = $this->routes[$pathInfo];
             $this->_getVerifyMethod($request, $route[0]);
             $this->callback = $route['to'];
-
         } else {
             foreach ($this->routes as $map => $route) {
                 $pattern = strstr($map, ':');
@@ -123,8 +122,6 @@ class Route
     {
         $method = strtoupper($method);
         if ($method != $request->getMethod() && $method != 'ANY' && $method != 'ALL') throw new NotFoundHttpException('The route method was not available ' . $request->getUri());
-
-
     }
 
     protected function _getCallBack()
@@ -145,11 +142,12 @@ class Route
             $controller = APP.'\\Controller\\'.$controller;
         }
 
-        //判断方法是否存在
-        if (!method_exists($controller, $function)) {
+        //判断方法是否存在并将其实例化
+        if (!method_exists($instance = $this->container->DI($controller), $function)) {
             throw new NotFoundHttpException('The Target [' . $controller . '::' . $function . '] was not found');
         }
-        return array($controller, $function);
+
+        return array($instance, $function);
     }
 }
 

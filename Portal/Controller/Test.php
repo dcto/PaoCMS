@@ -13,7 +13,7 @@ class Test extends Controller
     {
 
 
-        echo 'ddd';
+        return true;
 
     }
 
@@ -26,6 +26,7 @@ class Test extends Controller
 
     public function haha()
     {
-        echo APP;
+        $this->checkLogin();
+        return new Response();
     }
 }
