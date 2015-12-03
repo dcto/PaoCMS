@@ -28,6 +28,16 @@ class Controller
     }
 
 
+    /**
+     * [assign 模板动态变量附值]
+     *
+     * @param      $var
+     * @param null $val
+     *
+     * @author  11
+     * @version v1
+     *
+     */
     public function assign($var, $val = null)
     {
         if(is_array($var))
@@ -48,7 +58,7 @@ class Controller
      * @param       $template
      * @param array $params
      *
-     * @author  i@pao11.com
+     * @author  11
      * @version v1
      *
      */

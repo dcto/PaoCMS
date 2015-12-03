@@ -12,7 +12,7 @@ class Test extends Controller
     public function index()
     {
         $this->assign('test', '测试');
-        return $this->view('index');
+        return $this->view('indexdd');
     }
 
 

@@ -44,14 +44,12 @@ class View
      * [twig 模板引擎]
      *
      * @return \Twig_Environment
-     * @author  11@pao11.com
+     * @author  11
      * @version v1
      *
      */
     public function twig()
     {
-
-
         $loader = new \Twig_Loader_Filesystem($this->views);
         /*example
         $loader->addPath($templateDir3);
@@ -59,8 +57,18 @@ class View
         */
         $twig  = new \Twig_Environment($loader, array(
             'cache' => $this->cache,
-            'debug' => true
+            'debug' => true,
+            'strict_variables' =>true
         ));
+        /*
+        $lexer = new \Twig_Lexer($twig, array(
+            'tag_comment' => array('{#', '#}'),
+            'tag_block' => array('{%', '%}'),
+            'tag_variable' => array('{^', '^}'),
+            'interpolation' => array('#{', '}'),
+        ));
+        $twig->setLexer($lexer);
+        */
 
         $twig->addGlobal('PAO', PAO);
         $twig->addGlobal('APP', APP);
