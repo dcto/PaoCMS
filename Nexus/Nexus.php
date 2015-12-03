@@ -60,15 +60,28 @@ class Nexus extends Container
 
     public function __construct()
     {
-        // 初始化本类
+        //注入核心类
         static::setInstance($this);
 
         $this->instance('pao', $this);
 
-        $this->instance('Container', $this);
+        ;
+        $this->registerContainerAliases();
 
     }
 
+    /**
+     * 注册核心容器中的别名
+     *
+     * @return void
+     */
+    protected function registerContainerAliases()
+    {
+        $this->aliases = [
+
+            'Illuminate\Container\Container' => 'pao',
+        ];
+    }
 
     public function Issue()
     {

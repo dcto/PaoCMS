@@ -11,10 +11,8 @@ class Test extends Controller
 
     public function index()
     {
-
-
-        return true;
-
+        $this->assign('test', '测试');
+        return $this->view('index');
     }
 
 
@@ -24,9 +22,4 @@ class Test extends Controller
     }
 
 
-    public function haha()
-    {
-        $this->checkLogin();
-        return new Response();
-    }
 }

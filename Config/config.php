@@ -16,12 +16,6 @@ return array(
             'web'=> PAO.DIRECTORY_SEPARATOR.'web', //公共资源目录
             'logs'=> PAO.DIRECTORY_SEPARATOR.'RunTime'.DIRECTORY_SEPARATOR.'Logs', //日志存放目录
             'cache'=> PAO.DIRECTORY_SEPARATOR.'RunTime'.DIRECTORY_SEPARATOR.'Cache', //缓存存放目录
-            /*
-             * 可自定义其路径
-            'controller'=>'Controller',
-            'model'=>'Model',
-            'view'=>'View'
-            */
         ),
 
         //系统相关设置
