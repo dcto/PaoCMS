@@ -163,6 +163,7 @@ class Nexus extends Container
 
         //设置抛出异常
         set_exception_handler(function ($e) {
+            //print_r($e);
             $this->DI('exception')->Exception($e);
         });
 

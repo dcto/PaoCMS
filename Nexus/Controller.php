@@ -64,15 +64,14 @@ class Controller
      */
     public function view($template, $variable = [])
     {
-
         $template = $template . $this->container->config('template.suffix');
-
+        $variable = array_merge($this->variable, $variable);
         $twig = $this->container->DI('view')->twig();
 
-        $variable = array_merge($this->variable, $variable);
-
-        return new Response($twig->render($template, $variable, true));
+        try {
+            return new Response($twig->render($template, $variable, true));
+        }catch (NotFoundHttpException $e){
+            throw new NotFoundHttpException($e->getMessage());
+        }
     }
-
-
 }

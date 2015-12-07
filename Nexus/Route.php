@@ -89,12 +89,13 @@ class Route
                 }
             }
         }
-
         try {
             return $this->container->call($this->_getCallBack(), $parameter);
-        } catch (\Exception $e) {
-            throw new NotFoundHttpException('The Target [' . implode('::'. $this->_getCallBack()) .']was error in the '. $pathInfo);
+        }catch (NotFoundHttpException $e)
+        {
+            throw new NotFoundHttpException($e->getMessage());
         }
+
     }
 
     /**

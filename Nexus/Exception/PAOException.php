@@ -27,7 +27,7 @@ class PAOException
      * @version v1
      *
      */
-    public function Exception( Exception $e)
+    public function Exception($e)
     {
         $this->container->config('config.debug') || die('SYSTEM ERROR');
 
@@ -39,12 +39,15 @@ class PAOException
 
     public function HandleError($e)
     {
+
+
         $type = 'system';
         $errorMsg = $e->getMessage();
         $trace = $e->getTrace();
         krsort($trace);
         $trace[] = array('file' => $e->getFile(), 'line' => $e->getLine(), 'function' => 'break');
         $phpMsg = array();
+
         foreach ($trace as $error) {
             if (!empty($error['function'])) {
                 $fun = '';
@@ -79,6 +82,7 @@ class PAOException
             $phpMsg[] = array('file' => str_replace(array(PAO, ''), array('', '/'), $error['file']), 'line' => $error['line'], 'function' => $error['function']);
         }
         return self::showError($type, $errorMsg, $phpMsg);
+
     }
 
 
@@ -199,6 +203,7 @@ class PAOException
 <div class='info'>$errorMsg</div>
 EOT;
 
+
             if (!empty($phpMsg)) {
                 $content .= '<div class="info">';
                 $content .= '<p><strong>PaoCMS Debug</strong></p>';
@@ -220,11 +225,12 @@ EOT;
                 $content .= '</tbody></table></div>';
             }
 
-        $content.= <<<EOT
+        $content .= <<<EOT
 </div>
 </body>
 </html>
 EOT;
+
         return $content;
     }
 
