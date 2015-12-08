@@ -14,7 +14,7 @@ return array(
         'dir'=>array(
             'pao'=> PAO , //系统根目录
             'web'=> PAO.DIRECTORY_SEPARATOR.'web', //公共资源目录
-            'logs'=> PAO.DIRECTORY_SEPARATOR.'RunTime'.DIRECTORY_SEPARATOR.'Logs', //日志存放目录
+            'log'=> PAO.DIRECTORY_SEPARATOR.'RunTime'.DIRECTORY_SEPARATOR.'Logs', //日志存放目录
             'cache'=> PAO.DIRECTORY_SEPARATOR.'RunTime'.DIRECTORY_SEPARATOR.'Cache', //缓存存放目录
         ),
 

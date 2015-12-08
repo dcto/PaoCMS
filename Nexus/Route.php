@@ -91,8 +91,7 @@ class Route
         }
         try {
             return $this->container->call($this->_getCallBack(), $parameter);
-        }catch (NotFoundHttpException $e)
-        {
+        }catch (NotFoundHttpException $e){
             throw new NotFoundHttpException($e->getMessage());
         }
 

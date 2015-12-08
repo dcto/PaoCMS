@@ -29,18 +29,16 @@ class PAOException
      */
     public function Exception($e)
     {
-        $this->container->config('config.debug') || die('SYSTEM ERROR');
-
         $HttpCode = method_exists($e, 'getHttpCode') ? $e->getHttpCode() : 500;
+        $log =  $this->container->DI('log')->error($e);
+
+        $this->container->config('config.debug') || die('SYSTEM ERROR');
         $response = new Response($this->HandleError($e), $HttpCode);
         $response->send();
     }
 
-
     public function HandleError($e)
     {
-
-
         $type = 'system';
         $errorMsg = $e->getMessage();
         $trace = $e->getTrace();

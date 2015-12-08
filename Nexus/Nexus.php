@@ -2,16 +2,12 @@
 
 namespace PAO;
 
-
-
 use PAO\Http\Request;
 use PAO\Http\Response;
 use PAO\Configure\Repository;
 use PAO\Exception\PAOException;
 use Illuminate\Container\Container;
 use PAO\Exception\SystemException;
-use PAO\Exception\ServiceException;
-use PAO\Exception\NotFoundHttpException;
 
 
 /**
@@ -53,7 +49,7 @@ class Nexus extends Container
         'request'=>'_bindingsRequest',
         'route'=>'_bindingsRoute',
         'view'=>'_bindingsView',
-
+        'log'=>'_bindingsLogs'
 
     ];
 
@@ -206,6 +202,14 @@ class Nexus extends Container
     {
         $this->singleton('view', function(){
             return new \PAO\View($this);
+        });
+    }
+
+
+    private function _bindingsLogs()
+    {
+        $this->singleton('log', function(){
+            return new \PAO\Logger($this);
         });
     }
 }

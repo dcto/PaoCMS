@@ -12,6 +12,7 @@ return array(
     'Portal\\' => array($baseDir . '/Portal'),
     'Panel\\' => array($baseDir . '/Panel'),
     'PAO\\' => array($baseDir . '/Nexus'),
+    'Monolog\\' => array($vendorDir . '/monolog/monolog/src/Monolog'),
     'Illuminate\\Support\\' => array($vendorDir . '/illuminate/support'),
     'Illuminate\\Pagination\\' => array($vendorDir . '/illuminate/pagination'),
     'Illuminate\\Events\\' => array($vendorDir . '/illuminate/events'),
