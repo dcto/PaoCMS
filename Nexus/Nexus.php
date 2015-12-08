@@ -65,7 +65,7 @@ class Nexus extends Container
         //注入核心类
         static::setInstance($this);
 
-        $this->instance('pao', $this);
+        $this->instance('PAO', $this);
 
 
         $this->registerContainerAliases();
@@ -81,7 +81,7 @@ class Nexus extends Container
     {
         $this->aliases = [
 
-            'Illuminate\Container\Container' => 'pao',
+            'Illuminate\Container\Container' => 'PAO',
         ];
     }
 
