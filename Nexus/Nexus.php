@@ -11,19 +11,24 @@ use PAO\Exception\SystemException;
 
 
 /**
- * @package Nexus
+ * [Nexus 框架核心驱动集成类]
+ *
+ * Class Nexus
+ *
+ * @package PAO
  * @version 20151123
+ * @author 11. <pao11.com>
  *
  */
+
 class Nexus extends Container
 {
-    protected $config;
 
-    protected $router;
-
-    protected $request;
-
-
+    /**
+     * 配置文件预读
+     * @var array
+     */
+    protected $config = [];
 
 
     /**
@@ -54,6 +59,7 @@ class Nexus extends Container
     ];
 
 
+
     public function __construct()
     {
         //注入核心类
@@ -61,13 +67,13 @@ class Nexus extends Container
 
         $this->instance('pao', $this);
 
-        ;
+
         $this->registerContainerAliases();
 
     }
 
     /**
-     * 注册核心容器中的别名
+     * [注册核心容器中的别名]
      *
      * @return void
      */
@@ -79,6 +85,12 @@ class Nexus extends Container
         ];
     }
 
+    /**
+     * [Issue 核心构造方法]
+     * 主要完成一些初始化构件
+     *
+     * @author 11. <pao11.com>
+     */
     public function Issue()
     {
         //注入异常模块
@@ -93,7 +105,14 @@ class Nexus extends Container
         //$timezone = $this->config('config.system.timezone');
     }
 
-
+    /**
+     * [DI 全局注入方法]
+     *
+     * @param string $abstract      [方法名称]
+     * @param array  $parameters    [方法参数]
+     * @return mixed
+     * @author 11. <pao11.com>
+     */
     public function DI($abstract, $parameters = [])
     {
         if(isset($this->systemBindings[$abstract]) &&  !isset($this->is_bindings[$this->systemBindings[$abstract]])  ){
@@ -103,8 +122,14 @@ class Nexus extends Container
         return parent::make($abstract, $parameters);
     }
 
-
-
+    /**
+     * [config 全局配置方法]
+     *
+     * @param $config [配置文件项]
+     * @return mixed
+     * @author 11. <pao11.com>
+     * @example $this->config('config.debug');
+     */
     public function config($config)
     {
         $config = trim($config,'.');
@@ -116,6 +141,11 @@ class Nexus extends Container
     }
 
 
+    /**
+     * [Navigate 路由导航]
+     *
+     * @author 11. <pao11.com>
+     */
     public function Navigate()
     {
         $response = $this->DI('route')->dispatch();
@@ -131,7 +161,12 @@ class Nexus extends Container
     }
 
 
-
+    /**
+     * [_setConfigurations 配置服务注册]
+     *
+     * @param $name
+     * @author 11. <pao11.com>
+     */
     private function _setConfigurations($name)
     {
         $PaoConfig = PAO.DIRECTORY_SEPARATOR.'Config'.DIRECTORY_SEPARATOR.strtolower($name).'.php';
@@ -148,6 +183,11 @@ class Nexus extends Container
     }
 
 
+    /**
+     * [_setExceptionHandling 异常服务注册]
+     *
+     * @author 11. <pao11.com>
+     */
     private function _setExceptionHandling()
     {
         //设置异常错误处理
@@ -167,6 +207,11 @@ class Nexus extends Container
     }
 
 
+    /**
+     * [_bindingsConfigure 配置服务绑定]
+     *
+     * @author 11. <pao11.com>
+     */
     private function _bindingsConfigure()
     {
         $this->singleton('config', function(){
@@ -175,6 +220,11 @@ class Nexus extends Container
     }
 
 
+    /**
+     * [_bindingsException 异常服务绑定]
+     *
+     * @author 11. <pao11.com>
+     */
     private function _bindingsException()
     {
         $this->singleton('exception', function(){
@@ -183,6 +233,11 @@ class Nexus extends Container
     }
 
 
+    /**
+     * [_bindingsRequest Request服务绑定]
+     *
+     * @author 11. <pao11.com>
+     */
     private function _bindingsRequest()
     {
         $this->singleton('request', function(){
@@ -191,6 +246,11 @@ class Nexus extends Container
         });
     }
 
+    /**
+     * [_bindingsRoute 路由组件绑定]
+     *
+     * @author 11. <pao11.com>
+     */
     private function _bindingsRoute()
     {
         $this->singleton('route', function(){
@@ -198,6 +258,11 @@ class Nexus extends Container
         });
     }
 
+    /**
+     * [_bindingsView 视图模块绑定]
+     *
+     * @author 11. <pao11.com>
+     */
     private function _bindingsView()
     {
         $this->singleton('view', function(){
@@ -206,6 +271,11 @@ class Nexus extends Container
     }
 
 
+    /**
+     * [_bindingsLogs 日志系统绑定]
+     *
+     * @author 11. <pao11.com>
+     */
     private function _bindingsLogs()
     {
         $this->singleton('log', function(){

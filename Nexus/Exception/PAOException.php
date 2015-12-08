@@ -29,12 +29,15 @@ class PAOException
      */
     public function Exception($e)
     {
-        $HttpCode = method_exists($e, 'getHttpCode') ? $e->getHttpCode() : 500;
-        $log =  $this->container->DI('log')->error($e);
+        if($this->container->config('config.log')){
+            $this->container->DI('log')->error($e);
+        }
 
-        $this->container->config('config.debug') || die('SYSTEM ERROR');
-        $response = new Response($this->HandleError($e), $HttpCode);
-        $response->send();
+        if($this->container->config('config.debug')) {
+            $HttpCode = method_exists($e, 'getHttpCode') ? $e->getHttpCode() : 500;
+            $response = new Response($this->HandleError($e), $HttpCode);
+            $response->send();
+        }
     }
 
     public function HandleError($e)
