@@ -2,19 +2,16 @@
 
 namespace PAO\Exception;
 
-use PAO\Exception\PAOException;
 
 /**
  * DB“Ï≥£¿‡
  */
-class DBException
+class DBException extends \RuntimeException
 {
 
     protected $sql;
 
-    public function __construct($message, $code = 0, $sql = '')
-    {
-    }
+    protected $message = 'Database Error';
 
     public function getSql()
     {

@@ -2,12 +2,15 @@
 
 namespace PAO;
 
+
 use PAO\Http\Request;
 use PAO\Http\Response;
 use PAO\Configure\Repository;
 use PAO\Exception\PAOException;
-use Illuminate\Container\Container;
 use PAO\Exception\SystemException;
+use Illuminate\Container\Container;
+use Illuminate\Support\Facades\Facade;
+use Illuminate\Support\ServiceProvider;
 
 
 /**
@@ -17,9 +20,13 @@ use PAO\Exception\SystemException;
  *
  * @package PAO
  * @version 20151123
- * @author 11. <pao11.com>
+
  *
  */
+
+version_compare(PHP_VERSION,'5.3.0','ge') || die('The php version least must 5.3.0 ');
+
+
 
 class Nexus extends Container
 {
@@ -38,11 +45,17 @@ class Nexus extends Container
     protected $is_config = [];
 
     /**
-     * 已加载的服务
+     * 已注入的模块
      * @var array
      */
     protected $is_bindings = [];
 
+
+    /**
+     * 已注册的服务
+     * @var array
+     */
+    protected $is_providers = [];
 
     /**
      * 系统默认服务
@@ -54,7 +67,8 @@ class Nexus extends Container
         'request'=>'_bindingsRequest',
         'route'=>'_bindingsRoute',
         'view'=>'_bindingsView',
-        'log'=>'_bindingsLogs'
+        'log'=>'_bindingsLogs',
+        'db'=>'_bindingsDatabase'
 
     ];
 
@@ -62,14 +76,21 @@ class Nexus extends Container
 
     public function __construct()
     {
+        $timezone = $this->config('config.system.timezone');
+
+        if ($timezone) {
+            date_default_timezone_set($timezone);
+        }
+
+
         //注入核心类
         static::setInstance($this);
 
-        $this->instance('PAO', $this);
-
+        $this->instance('app', $this);
 
         $this->registerContainerAliases();
 
+        Facade::setFacadeApplication($this);
     }
 
     /**
@@ -81,7 +102,9 @@ class Nexus extends Container
     {
         $this->aliases = [
 
-            'Illuminate\Container\Container' => 'PAO',
+            'Illuminate\Container\Container' => 'app',
+            'Illuminate\Database\DatabaseManager' => 'db',
+
         ];
     }
 
@@ -89,7 +112,6 @@ class Nexus extends Container
      * [Issue 核心构造方法]
      * 主要完成一些初始化构件
      *
-     * @author 11. <pao11.com>
      */
     public function Issue()
     {
@@ -111,11 +133,11 @@ class Nexus extends Container
      * @param string $abstract      [方法名称]
      * @param array  $parameters    [方法参数]
      * @return mixed
-     * @author 11. <pao11.com>
      */
     public function DI($abstract, $parameters = [])
     {
-        if(isset($this->systemBindings[$abstract]) &&  !isset($this->is_bindings[$this->systemBindings[$abstract]])  ){
+        if(isset($this->systemBindings[$abstract]) &&  !isset($this->is_bindings[$this->systemBindings[$abstract]])  )
+        {
             $this->{$this->systemBindings[$abstract]}();
             $this->is_bindings[$this->systemBindings[$abstract]] = true;
         }
@@ -127,7 +149,6 @@ class Nexus extends Container
      *
      * @param $config [配置文件项]
      * @return mixed
-     * @author 11. <pao11.com>
      * @example $this->config('config.debug');
      */
     public function config($config)
@@ -144,7 +165,6 @@ class Nexus extends Container
     /**
      * [Navigate 路由导航]
      *
-     * @author 11. <pao11.com>
      */
     public function Navigate()
     {
@@ -162,10 +182,32 @@ class Nexus extends Container
 
 
     /**
+     * [register 服务注册器]
+     *
+     * @param $provider
+     */
+    public function register($provider, $options = [])
+    {
+        if(!$provider instanceof ServiceProvider)
+        {
+            $provider = new $provider($this);
+        }
+
+        if(isset($this->is_providers[$providerName = get_class($provider)]))
+        {
+            return;
+        }
+
+        $this->is_providers[$providerName] = true;
+        $provider->register();
+        $provider->boot();
+    }
+
+
+    /**
      * [_setConfigurations 配置服务注册]
      *
      * @param $name
-     * @author 11. <pao11.com>
      */
     private function _setConfigurations($name)
     {
@@ -174,7 +216,8 @@ class Nexus extends Container
         if(!is_readable($PaoConfig)) throw new SystemException('The config file is not available in The '. $PaoConfig);
         $Config = (array) require($PaoConfig);
 
-        if(is_readable($AppConfig)) {
+        if(is_readable($AppConfig))
+        {
             $Config = array_replace_recursive($Config, (array) require($AppConfig));
         }
         $this->DI('config')->set($name,  $Config);
@@ -186,7 +229,6 @@ class Nexus extends Container
     /**
      * [_setExceptionHandling 异常服务注册]
      *
-     * @author 11. <pao11.com>
      */
     private function _setExceptionHandling()
     {
@@ -210,7 +252,6 @@ class Nexus extends Container
     /**
      * [_bindingsConfigure 配置服务绑定]
      *
-     * @author 11. <pao11.com>
      */
     private function _bindingsConfigure()
     {
@@ -223,7 +264,7 @@ class Nexus extends Container
     /**
      * [_bindingsException 异常服务绑定]
      *
-     * @author 11. <pao11.com>
+
      */
     private function _bindingsException()
     {
@@ -236,20 +277,17 @@ class Nexus extends Container
     /**
      * [_bindingsRequest Request服务绑定]
      *
-     * @author 11. <pao11.com>
      */
     private function _bindingsRequest()
     {
         $this->singleton('request', function(){
-            $this->request = Request::createFromGlobals();
-            return $this->request;
+            return Request::createFromGlobals();
         });
     }
 
     /**
      * [_bindingsRoute 路由组件绑定]
      *
-     * @author 11. <pao11.com>
      */
     private function _bindingsRoute()
     {
@@ -261,7 +299,6 @@ class Nexus extends Container
     /**
      * [_bindingsView 视图模块绑定]
      *
-     * @author 11. <pao11.com>
      */
     private function _bindingsView()
     {
@@ -270,11 +307,54 @@ class Nexus extends Container
         });
     }
 
+    /**
+     * [__bindingsDatabase 数据库服务]
+     */
+    private function _bindingsDatabase()
+
+    {
+        $this->singleton('db', function(){
+
+
+            return new \PAO\Database($this);
+
+/*            $connFactory = new \Illuminate\Database\Connectors\ConnectionFactory($this);
+            $resolver = new \Illuminate\Database\ConnectionResolver();
+
+            foreach($database as $db => $config)
+            {
+                $conn = $connFactory->make($config, $db);
+
+                $resolver->addConnection('default', $conn);
+            }
+
+
+            $resolver->setDefaultConnection('default');
+
+            \Illuminate\Database\Eloquent\Model::setConnectionResolver($resolver);
+            return new DatabaseManager($this, $resolver);*/
+
+
+
+        });
+
+
+
+
+
+//        class_alias('Illuminate\Database\Capsule\Manager', 'DB');
+        //class_alias('Illuminate\Support\Facades\DB', 'DB');
+//
+
+
+        //$this->register('Illuminate\Database\DatabaseServiceProvider');
+        //$this->register('Illuminate\Pagination\PaginationServiceProvider');
+
+    }
 
     /**
      * [_bindingsLogs 日志系统绑定]
      *
-     * @author 11. <pao11.com>
      */
     private function _bindingsLogs()
     {
