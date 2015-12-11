@@ -56,6 +56,7 @@ class Route
 
     public function __call($method, $params)
     {
+
         $route = $params[0];
         array_push($route[key($route)], $method);
         $this->routes = array_merge($this->routes, $route);
@@ -63,7 +64,7 @@ class Route
 
     public function dispatch()
     {
-        $request = $this->container->DI('request');
+        $request = $this->container->make('request');
         $pathInfo = $request->getPathInfo();
         $parameter = [];
 
@@ -143,7 +144,7 @@ class Route
         }
 
         //判断方法是否存在并将其实例化
-        if (!method_exists($instance = $this->container->DI($controller), $function)) {
+        if (!method_exists($instance = $this->container->make($controller), $function)) {
             throw new NotFoundHttpException('The Target [' . $controller . '::' . $function . '] was not found');
         }
 

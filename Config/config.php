@@ -7,6 +7,9 @@ return array(
 
         'log'=>true, //是否生成日志总开关
 
+        'timezone'=>'PRC', //系统时区
+        'charset'=>'utf-8', //系统编码
+
         '404'=>'404.html',
         '500'=>'500.html',
 
@@ -18,11 +21,7 @@ return array(
             'cache'=> PAO.DIRECTORY_SEPARATOR.'RunTime'.DIRECTORY_SEPARATOR.'Cache', //缓存存放目录
         ),
 
-        //系统相关设置
-        'system'=>array(
-            'timezone'=>'PRC', //系统时区
-            'charset'=>'utf-8', //系统编码
-        ),
+
 
 
 );

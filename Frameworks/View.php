@@ -73,7 +73,7 @@ class View
         $twig->addGlobal('PAO', PAO);
         $twig->addGlobal('APP', APP);
 
-        $url = new \Twig_SimpleFunction('U', array($this->container->DI('request'), 'getUri'));
+        $url = new \Twig_SimpleFunction('URL', array($this->container->make('request'), 'getUri'));
         $twig->addFunction($url);
 
         return $twig;

@@ -66,7 +66,7 @@ class Controller
     {
         $template = $template . $this->container->config('template.suffix');
         $variable = array_merge($this->variable, $variable);
-        $twig = $this->container->DI('view')->twig();
+        $twig = $this->container->make('view')->twig();
 
         try {
             return new Response($twig->render($template, $variable, true));

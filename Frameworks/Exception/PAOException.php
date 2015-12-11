@@ -30,7 +30,7 @@ class PAOException
     public function Exception($e)
     {
         if($this->container->config('config.log')){
-            $this->container->DI('log')->error($e);
+            $this->container->make('log')->error($e);
         }
 
         if($this->container->config('config.debug')) {

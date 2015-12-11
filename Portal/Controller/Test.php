@@ -6,21 +6,18 @@ namespace Portal\Controller;
 
 
 use PAO\Http\Response;
-
-use Illuminate\Support\Facades\DB;
-
-use Illuminate\Support\Facades\Config;
-
-use Illuminate\Support\Facades\Request;
-
-use Illuminate\Support\Facades\Event;
+use PAO;
+use DB;
 
 class Test extends Controller
 {
 
     public function index()
     {
-       $this->container->DI('db');
+
+        echo PAO::make('request')->getUri();
+
+       $this->container->make('db');
         DB::connection()->enableQueryLog();
        // $d = DB::insert("insert into test (test) VALUE  (?)", [ uniqid()]);
 

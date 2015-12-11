@@ -5,6 +5,6 @@ define('APP',  basename(__FILE__, '.php'));
 // Autoload 自动载入
 require('../vendor/autoload.php');
 
-$Portal = new \PAO\Nexus();
+$Portal = new \PAO\Frameworks();
 
 $Portal->Issue();

@@ -14,7 +14,7 @@
   },
   "autoload": {
     "psr-4": {
-      "PAO\\": "Nexus/",
+      "PAO\\": "Frameworks/",
       "Portal\\": "Portal/",
       "Panel\\": "Panel/"
     }

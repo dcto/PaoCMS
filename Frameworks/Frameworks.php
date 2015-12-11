@@ -28,7 +28,7 @@ version_compare(PHP_VERSION,'5.3.0','ge') || die('The php version least must 5.3
 
 
 
-class Nexus extends Container
+class Frameworks extends Container
 {
 
     /**
@@ -72,12 +72,56 @@ class Nexus extends Container
 
     ];
 
+    /**
+     * 绑定外观模式别名
+     * @var array
+     */
+    protected $facadesAlias = [
+        'Illuminate\Support\Facades\App' => 'PAO',
+        'Illuminate\Support\Facades\Request' => 'Request',
+        'Illuminate\Support\Facades\Config' => 'Config',
+        'Illuminate\Support\Facades\Event' => 'Event',
+        'Illuminate\Support\Facades\DB' => 'DB'
+    ];
 
 
-    public function __construct()
+    /**
+     * [注册核心容器中的别名]
+     *
+     * @return void
+     */
+    protected function registerContainerAliases()
     {
-        $timezone = $this->config('config.system.timezone');
+        $this->aliases = [
+            'Illuminate\Container\Container' => 'app',
+        ];
+    }
 
+
+    /**
+     * [registerFacadeAlias 批量绑定外观模式别名]
+     *
+     * @author 11.
+     */
+    protected function registerFacadeAlias()
+    {
+        foreach($this->facadesAlias as $facade => $alias)
+        {
+            class_alias($facade, $alias);
+        }
+    }
+
+    /**
+     * [Issue 核心构造方法]
+     * 主要完成一些初始化构件
+     *
+     */
+    public function Issue()
+    {
+        /**
+         * 设置系统时区
+         */
+        $timezone = $this->config('config.system.timezone');
         if ($timezone) {
             date_default_timezone_set($timezone);
         }
@@ -88,61 +132,58 @@ class Nexus extends Container
 
         $this->instance('app', $this);
 
+        /**
+         * 注册核心容器别名
+         */
         $this->registerContainerAliases();
 
+        /**
+         * 初始化外观模式
+         */
         Facade::setFacadeApplication($this);
-    }
 
-    /**
-     * [注册核心容器中的别名]
-     *
-     * @return void
-     */
-    protected function registerContainerAliases()
-    {
-        $this->aliases = [
+        /**
+         * 注册外观模式别名
+         */
+        $this->registerFacadeAlias();
 
-            'Illuminate\Container\Container' => 'app',
-            'Illuminate\Database\DatabaseManager' => 'db',
-
-        ];
-    }
-
-    /**
-     * [Issue 核心构造方法]
-     * 主要完成一些初始化构件
-     *
-     */
-    public function Issue()
-    {
         //注入异常模块
         $this->_setExceptionHandling();
 
-        $this->_setExceptionHandling();
-        $this->DI('route')->get(['/gg'=>['as'=>'index', 'to'=>'index@ddd']]);
         //起航
         $this->Navigate();
-
-
-        //$timezone = $this->config('config.system.timezone');
     }
 
     /**
-     * [DI 全局注入方法]
+     * [make 全局注入方法]
      *
      * @param string $abstract      [方法名称]
      * @param array  $parameters    [方法参数]
      * @return mixed
      */
-    public function DI($abstract, $parameters = [])
+    public function make($abstract, array $parameters = [])
     {
-        if(isset($this->systemBindings[$abstract]) &&  !isset($this->is_bindings[$this->systemBindings[$abstract]])  )
+        if(isset($this->systemBindings[$abstract]) &&  !isset($this->is_bindings[$this->systemBindings[$abstract]]))
         {
             $this->{$this->systemBindings[$abstract]}();
             $this->is_bindings[$this->systemBindings[$abstract]] = true;
         }
         return parent::make($abstract, $parameters);
     }
+
+
+    /**
+     * [Get make注入方法别名]
+     *
+     * @param       $abstract
+     * @param array $parameters
+     * @author 11.
+     */
+    public function Get($abstract, array $parameters = [])
+    {
+        return $this->make($abstract, $parameters);
+    }
+
 
     /**
      * [config 全局配置方法]
@@ -158,7 +199,7 @@ class Nexus extends Container
         if(!isset($this->is_config[$name])){
             $this->_setConfigurations($name);
         }
-        return $this->DI('config')->get($config);
+        return $this->make('config')->get($config);
     }
 
 
@@ -168,7 +209,7 @@ class Nexus extends Container
      */
     public function Navigate()
     {
-        $response = $this->DI('route')->dispatch();
+        $response = $this->make('route')->Dispatch();
 
         //重置Response响应
         if(!$response instanceof Response)
@@ -220,7 +261,7 @@ class Nexus extends Container
         {
             $Config = array_replace_recursive($Config, (array) require($AppConfig));
         }
-        $this->DI('config')->set($name,  $Config);
+        $this->make('config')->set($name,  $Config);
         $this->is_config[$name] = true;
         return;
     }
@@ -242,7 +283,7 @@ class Nexus extends Container
         //设置抛出异常
         set_exception_handler(function ($e) {
             //print_r($e);
-            $this->DI('exception')->Exception($e);
+            $this->make('exception')->Exception($e);
         });
 
 

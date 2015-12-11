@@ -13,6 +13,8 @@ return array(
 
 	'memcached' => array(
 		'host'=>'127.0.0.1',
-		'port'=>'1211'
+		'port'=>'1211',
+        'database' => 0,
+        'prefix' => ''
 	)
 );
