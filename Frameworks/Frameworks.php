@@ -3,6 +3,7 @@
 namespace PAO;
 
 
+
 use PAO\Http\Request;
 use PAO\Http\Response;
 use PAO\Configure\Repository;
@@ -359,37 +360,21 @@ class Frameworks extends Container
 
             return new \PAO\Database($this);
 
-/*            $connFactory = new \Illuminate\Database\Connectors\ConnectionFactory($this);
+            /*
+             * 工厂模式注入
+            $connFactory = new \Illuminate\Database\Connectors\ConnectionFactory($this);
             $resolver = new \Illuminate\Database\ConnectionResolver();
 
             foreach($database as $db => $config)
             {
-                $conn = $connFactory->make($config, $db);
-
-                $resolver->addConnection('default', $conn);
+                $resolver->addConnection('default', $connFactory->make($config, $db););
             }
 
-
             $resolver->setDefaultConnection('default');
-
             \Illuminate\Database\Eloquent\Model::setConnectionResolver($resolver);
-            return new DatabaseManager($this, $resolver);*/
-
-
-
+            return new DatabaseManager($this, $resolver);
+            */
         });
-
-
-
-
-
-//        class_alias('Illuminate\Database\Capsule\Manager', 'DB');
-        //class_alias('Illuminate\Support\Facades\DB', 'DB');
-//
-
-
-        //$this->register('Illuminate\Database\DatabaseServiceProvider');
-        //$this->register('Illuminate\Pagination\PaginationServiceProvider');
 
     }
 

@@ -15,25 +15,28 @@ class Test extends Controller
     public function index()
     {
 
-        echo PAO::make('request')->getUri();
 
        $this->container->make('db');
-        DB::connection()->enableQueryLog();
+
        // $d = DB::insert("insert into test (test) VALUE  (?)", [ uniqid()]);
 
-        $result = DB::select("select * from test");
+        //$result = DB::select("select * from test");
+        $result = \Portal\Model\Test::paginate(5);
 
-        print_r($result);
 
-        //DB::connection()->enableQueryLog();
 
-        print_r(DB::getQueryLog());
+        //print_r(DB::getQueryLog());
+
 
        // $db = $this->container->DI('db');
 
 
 
+
         //$test = \Portal\Model\Test::all();
+
+        DB::getSql();
+
 
 
 //DB::select('select * from test');
@@ -42,6 +45,7 @@ class Test extends Controller
 
 
         $this->assign('test', '测试');
+        $this->assign('data', $result);
         return $this->view('index');
     }
 

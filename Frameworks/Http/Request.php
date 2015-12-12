@@ -13,6 +13,21 @@ class Request extends \Symfony\Component\HttpFoundation\Request
         return $this->getUri();
     }
 
+
+    /**
+     * [input get方法别名]
+     *
+     * @param            $key
+     * @param null       $default
+     * @param bool|false $deep
+     * @return mixed
+     * @author 11.
+     */
+    public function input($key, $default = null, $deep = false)
+    {
+        return $this->get($key, $default, $deep);
+    }
+
 }
 
 
