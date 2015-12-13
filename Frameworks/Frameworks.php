@@ -69,7 +69,8 @@ class Frameworks extends Container
         'route'=>'_bindingsRoute',
         'view'=>'_bindingsView',
         'log'=>'_bindingsLogs',
-        'db'=>'_bindingsDatabase'
+        'db'=>'_bindingsDatabase',
+        'redis'=>'_bindingsRedis'
 
     ];
 
@@ -356,8 +357,6 @@ class Frameworks extends Container
 
     {
         $this->singleton('db', function(){
-
-
             return new \PAO\Database($this);
 
             /*
@@ -374,6 +373,19 @@ class Frameworks extends Container
             \Illuminate\Database\Eloquent\Model::setConnectionResolver($resolver);
             return new DatabaseManager($this, $resolver);
             */
+        });
+
+    }
+
+    /**
+     * [_bindingsRedis Redis缓存绑定]
+     *
+     * @author 11.
+     */
+    private function _bindingsRedis()
+    {
+        $this->singleton('redis', function(){
+            return new \PAO\Cache\Redis($this);
         });
 
     }

@@ -15,6 +15,11 @@ class Test extends Controller
     public function index()
     {
 
+        $redis = $this->container->make('redis');
+        $redis->set('aa','kdk');
+        //print_r($redis->info());
+echo '<hr/>';
+        //print_r($redis = $this->container->make('redis')->connection('145')->info());
 
        $this->container->make('db');
 
@@ -35,7 +40,7 @@ class Test extends Controller
 
         //$test = \Portal\Model\Test::all();
 
-        DB::getSql();
+
 
 
 
