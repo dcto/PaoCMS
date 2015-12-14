@@ -70,6 +70,8 @@ class Frameworks extends Container
         'view'=>'_bindingsView',
         'log'=>'_bindingsLogs',
         'db'=>'_bindingsDatabase',
+        'session'=>'_bindingsSession',
+        'cookie'=>'_bindingsCookie',
         'redis'=>'_bindingsRedis'
 
     ];
@@ -83,7 +85,9 @@ class Frameworks extends Container
         'Illuminate\Support\Facades\Request' => 'Request',
         'Illuminate\Support\Facades\Config' => 'Config',
         'Illuminate\Support\Facades\Event' => 'Event',
-        'Illuminate\Support\Facades\DB' => 'DB'
+        'Illuminate\Support\Facades\DB' => 'DB',
+        'Illuminate\Support\Facades\Session' => 'Session',
+        'Illuminate\Support\Facades\Cookie' => 'Cookie'
     ];
 
 
@@ -375,6 +379,25 @@ class Frameworks extends Container
             */
         });
 
+    }
+
+    /**
+     * [_bindingsSession Session注入]
+     *
+     * @author 11.
+     */
+    private function _bindingsSession()
+    {
+        $this->singleton('session', function(){
+            return new \PAO\Http\Session($this);
+        });
+    }
+
+    private function _bindingsCookie()
+    {
+        $this->singleton('cookie', function(){
+            return new \PAO\Http\Cookie($this);
+        });
     }
 
     /**

@@ -17,7 +17,7 @@
     "psr-4": {
       "PAO\\": "Frameworks/",
       "Portal\\": "Portal/",
-      "Panel\\": "Panel/"
+      "Manage\\": "Manage/"
     }
   }
 }

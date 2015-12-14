@@ -4,9 +4,10 @@ namespace PAO\Http;
 
 
 
+use Illuminate\Container\Container;
+
 class Request extends \Symfony\Component\HttpFoundation\Request
 {
-
 
     public function url()
     {
@@ -26,6 +27,12 @@ class Request extends \Symfony\Component\HttpFoundation\Request
     public function input($key, $default = null, $deep = false)
     {
         return $this->get($key, $default, $deep);
+    }
+
+
+    public function cookie($key, $default)
+    {
+        return Container::getInstance()->make('cookie')->get($key);
     }
 
 }

@@ -3,8 +3,8 @@
 namespace PAO\Cache;
 
 
-use Illuminate\Container\Container;
 use PAO\Exception\SystemException;
+use Illuminate\Container\Container;
 
 
 class Redis
@@ -29,15 +29,16 @@ class Redis
             foreach($configs as $server => $config)
             {
                 $redis = new \Redis();
-                if($config['persistent']){
+                if(isset($config['persistent']) && $config['persistent']){
                     $redis->pconnect($config['host'], $config['port'], $config['timeout']);
                 }else {
                     $redis->connect($config['host'], $config['port'], $config['timeout']);
                 }
 
-                if($password = isset($config['password']))
+                if(isset($config['password']) && !empty($config['password']))
                 {
-                    $redis->auth($password);
+                    echo 'password';
+                    $redis->auth(trim($config['password']));
                 }
 
                 $redis->select($config['database']?:0);

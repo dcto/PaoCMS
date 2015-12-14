@@ -26,8 +26,9 @@ echo '<hr/>';
        // $d = DB::insert("insert into test (test) VALUE  (?)", [ uniqid()]);
 
         //$result = DB::select("select * from test");
-        $result = \Portal\Model\Test::paginate(5);
-
+        //$result = \Portal\Model\Test::paginate(5);
+        \Portal\Model\Admin::down();
+        \Portal\Model\Admin::up();
 
 
         //print_r(DB::getQueryLog());
@@ -50,7 +51,7 @@ echo '<hr/>';
 
 
         $this->assign('test', '测试');
-        $this->assign('data', $result);
+       // $this->assign('data',$result);
         return $this->view('index');
     }
 

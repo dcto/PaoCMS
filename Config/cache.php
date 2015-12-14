@@ -9,19 +9,19 @@ return array(
             'port' => '6379',
             'timeout' => 5,
             'database' => 0,
-            'persistent' => false,
+            'persistent' => true,
             'options' =>[
-                        Redis::OPT_PREFIX => 'dd:',
+                Redis::OPT_PREFIX => 'pao:',
                         ]
 
         ),
-        '145'=>array(
+        'test'=>array(
             'host' => '10.1.10.145',
             'port' => '6379',
             'prefix' => 'pao:',
             'timeout' => 5,
             'database' => 0,
-            'pconnect' => false,
+            'persistent' => false,
             'options' => []
         )
 

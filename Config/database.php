@@ -10,7 +10,7 @@ return array(
             'database'=>'paocms',   //数据库名称
             'username'  => 'root',  //帐号
             'password'  => 'root',  //密码
-            'prefix' => '',         //表前缀
+            'prefix' => 'pao_',         //表前缀
             'charset'   => 'utf8',  //数据库编码
             'collation' => 'utf8_unicode_ci'
     ),
