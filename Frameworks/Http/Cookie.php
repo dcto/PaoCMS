@@ -71,4 +71,17 @@ class Cookie
         return $this->container->make('request')->cookies->all();
     }
 
+
+    /**
+     * [del É¾³ıcookie]
+     *
+     * @param $name
+     * @author 11.
+     */
+    public function del($name)
+    {
+        $response = new \PAO\Http\Response();
+        $response->headers->clearCookie($name);
+        $response->sendHeaders();
+    }
 }

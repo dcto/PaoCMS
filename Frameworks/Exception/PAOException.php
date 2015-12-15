@@ -6,7 +6,6 @@ namespace PAO\Exception;
 use Exception;
 use ReflectionMethod;
 use ReflectionFunction;
-use PAO\Http\Response;
 use Illuminate\Container\Container;
 
 class PAOException
@@ -35,8 +34,9 @@ class PAOException
 
         if($this->container->config('config.debug')) {
             $HttpCode = method_exists($e, 'getHttpCode') ? $e->getHttpCode() : 500;
-            $response = new Response($this->HandleError($e), $HttpCode);
-            $response->send();
+
+
+            $this->container->make('response')->make($this->HandleError($e, $HttpCode));
         }
     }
 

@@ -30,6 +30,14 @@ class Request extends \Symfony\Component\HttpFoundation\Request
     }
 
 
+    /**
+     * [cookie 重构cookie方法适应Facades调用]
+     *
+     * @param $key
+     * @param $default
+     * @return mixed
+     * @author 11.
+     */
     public function cookie($key, $default)
     {
         return Container::getInstance()->make('cookie')->get($key);

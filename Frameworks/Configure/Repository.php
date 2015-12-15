@@ -4,7 +4,9 @@ namespace PAO\Configure;
 
 use ArrayAccess;
 use Illuminate\Support\Arr;
+use Illuminate\Container\Container;
 use Illuminate\Contracts\Config\Repository as ConfigContract;
+use PAO\Exception\SystemException;
 
 class Repository implements ArrayAccess, ConfigContract
 {
@@ -46,6 +48,10 @@ class Repository implements ArrayAccess, ConfigContract
      */
     public function get($key, $default = null)
     {
+        if(!$this->has($key))
+        {
+            $this->load($key);
+        }
         return Arr::get($this->items, $key, $default);
     }
 
@@ -152,5 +158,33 @@ class Repository implements ArrayAccess, ConfigContract
     public function offsetUnset($key)
     {
         $this->set($key, null);
+    }
+
+
+    /**
+     * [load 重载文件读取]
+     *
+     * @param $name
+     * @return array
+     * @author 11.
+     */
+    private function load($key)
+    {
+        $key = trim($key,'.');
+        $name = trim(strstr($key,'.') ? strstr($key, '.', true) : $key);
+        $PaoConfig = PAO.DIRECTORY_SEPARATOR.'Config'.DIRECTORY_SEPARATOR.strtolower($name).'.php';
+        $AppConfig = PAO.DIRECTORY_SEPARATOR.APP.DIRECTORY_SEPARATOR.'Config'.DIRECTORY_SEPARATOR.strtolower($name).'.php';
+
+        if(!is_readable($PaoConfig)) throw new SystemException('The config file is not available in The '. $PaoConfig);
+
+        $Config = (array) require($PaoConfig);
+
+        if(is_readable($AppConfig))
+        {
+            $Config = array_replace_recursive($Config, (array) require($AppConfig));
+        }
+        $this->set($name, $Config);
+
+        return $Config;
     }
 }
