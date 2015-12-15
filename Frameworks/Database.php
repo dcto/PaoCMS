@@ -15,18 +15,27 @@ class Database extends  \Illuminate\Database\Capsule\Manager
 
     public function __construct(Container $container)
     {
-        parent::__construct($container);
+        /**
+         * 设置容器
+         */
+        $this->setupContainer($container);
 
+        /**
+         * 创建数据库实例
+         */
+        $this->setupManager();
+
+        /**
+         * 设置配置
+         */
         $database = $container->config('database');
-
-
 
         /**
          * 批量加数数据连接
          */
         foreach($database as $db => $config)
         {
-            if(!is_array($config)) throw new DBException ('The Database Configures Was Error!');
+            if(!is_array($config)) throw new DBException ('The database configures was error!');
             $this->addConnection($config, $db);
         }
 

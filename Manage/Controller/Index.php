@@ -6,6 +6,7 @@ namespace Manage\Controller;
 
 
 use Illuminate\Support\Facades\Cookie;
+
 use Illuminate\Support\Facades\Response;
 use Manage\Model\Member;
 use Manage\Model\Admin;
@@ -40,9 +41,10 @@ class Index extends Controller
 
         //$d= $this->container->make('config')->get('cache');
 
-        $d = \Config::get('cache');
+        $d = \Config::get('database');
 
-        var_dump($d);
+
+
         //$redis = \Redis::info();
 
         //print_r($redis);
@@ -52,7 +54,10 @@ class Index extends Controller
 
         //$this->container->make('response')->show('dwww');
 
-        Response::show('<hr />show');
+        $this->assign('class', __CLASS__);
+        echo '<hr />';
+
+        Response::view('index');
     }
 
 }

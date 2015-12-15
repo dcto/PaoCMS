@@ -207,6 +207,7 @@ class Frameworks extends Container
     {
         foreach($this->facadesAlias as $facade => $alias)
         {
+
             class_alias($facade, $alias);
         }
     }
@@ -226,7 +227,7 @@ class Frameworks extends Container
             throw new SystemException('The Response Must be Instance of PAO\Response');
         }
 
-       // $response->send();
+        $response->send();
     }
 
 
