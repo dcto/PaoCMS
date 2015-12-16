@@ -3,18 +3,25 @@
 namespace Manage\Model;
 
 
+use Illuminate\Container\Container;
 use Illuminate\Support\Facades\Schema;
 
-class Admin extends  \PAO\Model
+class Admin extends  Model
 {
 
     protected $table = 'admin';
 
+    protected $primaryKey = 'id';
+
+
+    public function group()
+    {
+        return $this->hasOne('Manage\Model\AdminGroup','id','gid');
+    }
+
 
     public function up()
     {
-
-
 
         Schema::create('admin', function($table){
             $table->increments('id')->unsigned();
@@ -39,4 +46,6 @@ class Admin extends  \PAO\Model
     {
         Schema::dropIfExists('admin');
     }
+
+
 }

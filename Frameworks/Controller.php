@@ -3,8 +3,6 @@
 namespace PAO;
 
 use Illuminate\Container\Container;
-use PAO\Exception\NotFoundHttpException;
-use PAO\Http\Response;
 
 
 class Controller
@@ -15,12 +13,6 @@ class Controller
      */
     public $container;
 
-
-    /**
-     * 模板公共预定义变量
-     * @var array
-     */
-    public $variable = [];
 
     public function __construct(Container $container)
     {
@@ -40,15 +32,7 @@ class Controller
      */
     public function assign($var, $val = null)
     {
-        if(is_array($var))
-        {
-            foreach($var as $key => $v)
-            {
-                $this->variable[$key] = $v;
-            }
-        }else{
-            $this->variable[$var] = $val;
-        }
+        $this->container->make('view')->assign($var, $val);
     }
 
 
@@ -64,14 +48,6 @@ class Controller
      */
     public function view($template, $variable = [])
     {
-        $template = $template . $this->container->config('template.suffix');
-        $variable = array_merge($this->variable, $variable);
-        $twig = $this->container->make('view')->twig();
-
-        try {
-            return new Response($twig->render($template, $variable, true));
-        }catch (NotFoundHttpException $e){
-            throw new NotFoundHttpException($e->getMessage());
-        }
+        return $this->container->make('view')->show($template, $variable);
     }
 }

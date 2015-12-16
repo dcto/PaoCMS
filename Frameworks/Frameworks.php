@@ -58,7 +58,7 @@ class Frameworks extends Container
         'db'=>'_bindingsDatabase',
         'session'=>'_bindingsSession',
         'cookie'=>'_bindingsCookie',
-        'redis'=>'_bindingsRedis'
+        'cache'=>'_bindingsCache'
 
     ];
 
@@ -75,7 +75,7 @@ class Frameworks extends Container
         'Illuminate\Support\Facades\DB' => 'DB',
         'Illuminate\Support\Facades\Cookie' => 'Cookie',
         'Illuminate\Support\Facades\Session' => 'Session',
-        //'Illuminate\Support\Facades\Redis' => 'Redis',
+        'Illuminate\Support\Facades\Cache' => 'Cache',
         'Illuminate\Support\Facades\Log' => 'Log'
     ];
 
@@ -226,7 +226,7 @@ class Frameworks extends Container
             throw new SystemException('The Response Must be Instance of PAO\Response');
         }
 
-       // $response->send();
+        $response->send();
     }
 
 
@@ -402,17 +402,17 @@ class Frameworks extends Container
         });
     }
 
+
     /**
-     * [_bindingsRedis Redis缓存绑定]
+     * [_bindingsCache 缓存系统绑定]
      *
      * @author 11.
      */
-    private function _bindingsRedis()
+    private function _bindingsCache()
     {
-        $this->singleton('redis', function(){
-            return new \PAO\Cache\Redis($this);
+        $this->singleton('cache', function(){
+           return new \PAO\Cache\Cache($this);
         });
-
     }
 
     /**

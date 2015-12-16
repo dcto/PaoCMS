@@ -4,7 +4,6 @@ namespace Manage\Model;
 
 
 use Illuminate\Support\Facades\Schema;
-use PAO\Model;
 
 class Member extends Model
 {

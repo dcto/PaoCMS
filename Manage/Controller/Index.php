@@ -6,7 +6,9 @@ namespace Manage\Controller;
 
 
 use Illuminate\Support\Facades\Cookie;
+
 use Illuminate\Support\Facades\Response;
+use Manage\Model\Config;
 use Manage\Model\Member;
 use Manage\Model\Admin;
 use Manage\Model\AdminGroup;
@@ -40,9 +42,19 @@ class Index extends Controller
 
         //$d= $this->container->make('config')->get('cache');
 
-        $d = \Config::get('cache');
+        /**
+         * @var Illuminate\Database\Eloquent\Model $config
+         */
 
-        var_dump($d);
+        //Config::create(['key' => uniqid(),'value'=>uniqid()]);
+        //Config::create(['key' => uniqid(),'value'=>uniqid()]);
+        print_r(Config::all()->toArray());
+        //print_r((new Admin)->getTable());
+        //print_r(Admin::table());
+
+      //  echo class_basename($this); //str_replace('\\', '', Str::snake(Str::plural(class_basename($this))));
+
+
         //$redis = \Redis::info();
 
         //print_r($redis);
@@ -52,7 +64,10 @@ class Index extends Controller
 
         //$this->container->make('response')->show('dwww');
 
-        Response::show('<hr />show');
+        $this->assign('class', __CLASS__);
+        echo '<hr />';
+
+        Response::view('index');
     }
 
 }

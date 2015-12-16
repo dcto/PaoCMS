@@ -3,7 +3,7 @@
 namespace PAO;
 
 use Illuminate\Container\Container;
-use PAO\Http\Response;
+use PAO\Exception\NotFoundHttpException;
 
 
 
@@ -14,6 +14,13 @@ class View
      * @var Container
      */
     protected $container;
+
+
+    /**
+     * 模板公共变量
+     * @var array
+     */
+    public $variable = [];
 
     /**
      * 模板路径
@@ -79,4 +86,59 @@ class View
         return $twig;
     }
 
+
+    /**
+     * [assign 模板变量赋值方法]
+     *
+     * @param      $var [变量名]
+     * @param null $val [变量值]
+     * @author 11.
+     */
+    public function assign($var, $val = null)
+    {
+        if(is_array($var))
+        {
+            foreach($var as $key => $v)
+            {
+                $this->variable[$key] = $v;
+            }
+        }else{
+            $this->variable[$var] = $val;
+        }
+    }
+
+
+    /**
+     * [render 模板渲染]
+     *
+     * @param $template
+     * @param $variable
+     * @return string
+     * @author 11.
+     */
+    public function render($template, $variable)
+    {
+        $template = $template . $this->container->config('template.suffix');
+
+        $variable = array_merge($this->variable, $variable);
+        try {
+            return $this->twig()->render($template, $variable);
+        }catch (NotFoundHttpException $e){
+            throw new NotFoundHttpException($e->getMessage());
+        }
+
+    }
+
+
+    /**
+     * [show 模板展示]
+     *
+     * @param $template
+     * @param $variable
+     * @author 11.
+     */
+    public function show($template, $variable)
+    {
+        return $this->container->make('response')->make($this->render($template, $variable));
+    }
 }

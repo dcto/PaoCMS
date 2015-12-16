@@ -5,9 +5,6 @@ namespace Portal\Controller;
 
 
 
-use PAO\Http\Response;
-use PAO;
-use DB;
 
 class Test extends Controller
 {
@@ -15,21 +12,21 @@ class Test extends Controller
     public function index()
     {
 
-        $redis = $this->container->make('redis');
-        $redis->set('aa','kdk');
+       // $redis = $this->container->make('redis');
+        //$redis->set('aa','kdk');
         //print_r($redis->info());
-echo '<hr/>';
+
         //print_r($redis = $this->container->make('redis')->connection('145')->info());
 
-       $this->container->make('db');
+       //$this->container->make('db');
 
        // $d = DB::insert("insert into test (test) VALUE  (?)", [ uniqid()]);
 
         //$result = DB::select("select * from test");
         //$result = \Portal\Model\Test::paginate(5);
-        \Portal\Model\Admin::down();
-        \Portal\Model\Admin::up();
 
+        //\Manage\Model\Admin::down();
+        //\Manage\Model\Admin::up();
 
         //print_r(DB::getQueryLog());
 
@@ -43,11 +40,19 @@ echo '<hr/>';
 
 
 
+        //$admin = \Manage\Model\Admin::find(1)->group;
 
 
-//DB::select('select * from test');
 
 
+
+        //DB::select('select * from test');
+
+
+        //$redis = $this->container->make('cache')->redis();
+
+        \Cache::Redis('test')->set('aa',time());
+        print_r(\Cache::Redis('test')->get('aa'));
 
 
         $this->assign('test', '测试');

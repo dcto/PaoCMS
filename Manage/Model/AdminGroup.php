@@ -7,12 +7,12 @@ use Illuminate\Support\Facades\Schema;
 
 
 
-class AdminGroup extends \PAO\Model
+class AdminGroup extends Model
 {
 
     protected $table = 'admin_group';
 
-
+    protected $primaryKey = 'id';
 
     public function up()
     {
