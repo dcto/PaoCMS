@@ -207,6 +207,7 @@ class Frameworks extends Container
     {
         foreach($this->facadesAlias as $facade => $alias)
         {
+
             class_alias($facade, $alias);
         }
     }

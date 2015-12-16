@@ -16,6 +16,8 @@ class Test extends Controller
         //$redis->set('aa','kdk');
         //print_r($redis->info());
 
+        echo '<hr/>';
+
         //print_r($redis = $this->container->make('redis')->connection('145')->info());
 
        //$this->container->make('db');
@@ -45,6 +47,8 @@ class Test extends Controller
 
 
 
+
+        //DB::select('select * from test');
 
         //DB::select('select * from test');
 

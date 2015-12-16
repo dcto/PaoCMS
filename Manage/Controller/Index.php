@@ -42,6 +42,7 @@ class Index extends Controller
 
         //$d= $this->container->make('config')->get('cache');
 
+
         /**
          * @var Illuminate\Database\Eloquent\Model $config
          */
@@ -53,6 +54,9 @@ class Index extends Controller
         //print_r(Admin::table());
 
       //  echo class_basename($this); //str_replace('\\', '', Str::snake(Str::plural(class_basename($this))));
+
+        $d = \Config::get('database');
+
 
 
         //$redis = \Redis::info();
