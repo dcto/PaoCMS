@@ -9,10 +9,10 @@ use Illuminate\Support\Facades\Cookie;
 
 use Illuminate\Support\Facades\Response;
 use Manage\Model\Category;
-use Manage\Model\Config;
 use Manage\Model\Member;
 use Manage\Model\Admin;
 use Manage\Model\AdminGroup;
+use Manage\Model\Setting;
 
 
 class Index extends Controller
@@ -62,8 +62,8 @@ class Index extends Controller
         Admin::up();
         AdminGroup::down();
         AdminGroup::up();
-        Config::down();
-        Config::up();
+        Setting::down();
+        Setting::up();
         Member::down();
         Member::up();
         Category::down();
