@@ -34,9 +34,7 @@ class PAOException
 
         if($this->container->config('config.debug')) {
             $HttpCode = method_exists($e, 'getHttpCode') ? $e->getHttpCode() : 500;
-
-
-            $this->container->make('response')->make($this->HandleError($e, $HttpCode));
+            die($this->HandleError($e, $HttpCode));
         }
     }
 

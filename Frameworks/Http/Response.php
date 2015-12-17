@@ -3,15 +3,39 @@
 namespace PAO\Http;
 
 
-use Illuminate\Container\Container;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\StreamedResponse;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
-
-class Response extends \Symfony\Component\HttpFoundation\Response //implements  \Illuminate\Contracts\Routing\ResponseFactory
+class Response  //implements  \Illuminate\Contracts\Routing\ResponseFactory
 {
+
+    /**
+     * 当前响应方法
+     *
+     * @var $response;
+     */
+    private $response;
+
+
+    /**
+     * [__call 方法响应]
+     *
+     * @param $method
+     * @param $parameters
+     * @author 11.
+     */
+    public function __call($method, $parameters)
+    {
+        /**
+         * 判断是否已实例化对象
+         */
+        if(!$this->response instanceof \Symfony\Component\HttpFoundation\Response)
+        {
+            $this->response = new \Symfony\Component\HttpFoundation\Response;
+        }
+
+        return call_user_func_array(array($this->response, $method), $parameters);
+    }
+
+
 
     /**
      * [make Response响应]
@@ -23,8 +47,9 @@ class Response extends \Symfony\Component\HttpFoundation\Response //implements  
      */
     public function make($content = '', $status = 200 , array $headers = [])
     {
-        $response = new self($content, $status, $headers);
-        $response->send();
+        $this->response = new \Symfony\Component\HttpFoundation\Response($content, $status, $headers);
+
+        return $this;
     }
 
 
@@ -38,7 +63,7 @@ class Response extends \Symfony\Component\HttpFoundation\Response //implements  
      */
     public function show($content = '', $status = 200 , array $headers = [])
     {
-        self::make($content, $status, $headers);
+       return $this->make($content, $status, $headers);
     }
 
 
@@ -52,7 +77,7 @@ class Response extends \Symfony\Component\HttpFoundation\Response //implements  
      */
     public function view($view, array $data = [], $status = 200, array $headers = [])
     {
-        self::make(Container::getInstance()->make('view')->render($view, $data), $status, $headers);
+       return $this->make(\Illuminate\Container\Container::getInstance()->make('view')->render($view, $data), $status, $headers);
     }
 
     /**
@@ -70,9 +95,9 @@ class Response extends \Symfony\Component\HttpFoundation\Response //implements  
         if ($data instanceof \Illuminate\Contracts\Support\Arrayable && ! $data instanceof \JsonSerializable) {
             $data = $data->toArray();
         }
-        $response = new JsonResponse($data, $status, $headers, $options);
+        $this->response = \Symfony\Component\HttpFoundation\JsonResponse($data, $status, $headers, $options);
 
-        $response->send();
+        return $this;
     }
 
 
@@ -103,9 +128,9 @@ class Response extends \Symfony\Component\HttpFoundation\Response //implements  
      */
     public function stream($callback, $status = 200, array $headers = [])
     {
-        $response = new StreamedResponse($callback, $status, $headers);
+        $this->response = new \Symfony\Component\HttpFoundation\StreamedResponse($callback, $status, $headers);
 
-        $response->send();
+        return $this;
     }
 
 
@@ -121,11 +146,11 @@ class Response extends \Symfony\Component\HttpFoundation\Response //implements  
      */
     public function download($file, $name = null, array $headers = [], $disposition = 'attachment')
     {
-        $response = new BinaryFileResponse($file, 200, $headers, true, $disposition);
+        $this->response = new \Symfony\Component\HttpFoundation\BinaryFileResponse($file, 200, $headers, true, $disposition);
         if (! is_null($name)) {
-             $response->setContentDisposition($disposition, $name, str_replace('%', '', \Illuminate\Support\Str::ascii($name)));
+             $this->response->setContentDisposition($disposition, $name, str_replace('%', '', \Illuminate\Support\Str::ascii($name)));
         }
-        $response->send();
+        return $this;
     }
 
 
@@ -140,13 +165,9 @@ class Response extends \Symfony\Component\HttpFoundation\Response //implements  
      */
     public function redirect($url, $status = 302, $headers = [])
     {
-        $response = new RedirectResponse($url, $status, $headers);
+        $this->response = new \Symfony\Component\HttpFoundation\RedirectResponse($url, $status, $headers);
 
-        $response->send();
+        return $this;
     }
-
-
-
-
 
 }

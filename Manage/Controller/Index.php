@@ -57,7 +57,7 @@ class Index extends Controller
       //  echo class_basename($this); //str_replace('\\', '', Str::snake(Str::plural(class_basename($this))));
 
         $d = \Config::get('database');
-
+/**
         Admin::down();
         Admin::up();
         AdminGroup::down();
@@ -68,6 +68,7 @@ class Index extends Controller
         Member::up();
         Category::down();
         Category::up();
+ * */
         //$redis = \Redis::info();
 
         //print_r($redis);
@@ -78,7 +79,6 @@ class Index extends Controller
         //$this->container->make('response')->show('dwww');
 
         $this->assign('class', __CLASS__);
-        echo '<hr />';
 
         Response::view('index');
     }

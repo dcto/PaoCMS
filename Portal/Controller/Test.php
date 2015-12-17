@@ -15,9 +15,6 @@ class Test extends Controller
        // $redis = $this->container->make('redis');
         //$redis->set('aa','kdk');
         //print_r($redis->info());
-
-        echo '<hr/>';
-
         //print_r($redis = $this->container->make('redis')->connection('145')->info());
 
        //$this->container->make('db');
@@ -55,13 +52,12 @@ class Test extends Controller
 
         //$redis = $this->container->make('cache')->redis();
 
-        \Cache::Redis('test')->set('aa',time());
-        print_r(\Cache::Redis('test')->get('aa'));
 
 
         $this->assign('test', '测试');
        // $this->assign('data',$result);
-        return $this->view('index');
+       // return $this->view('index');
+        return \Response::view('index');
     }
 
 

@@ -223,10 +223,12 @@ class Frameworks extends Container
         //重置Response响应
         if(!$response instanceof Response)
         {
-           // $response = new Response($response);
             throw new SystemException('The Response Must be Instance of PAO\Response');
         }
 
+        /**
+         * 响应请求
+         */
         $response->send();
     }
 
