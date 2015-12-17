@@ -17,7 +17,7 @@ class Config extends Model
             /** @var \Illuminate\Database\Schema\Blueprint $table */
             $table->increments('id')->unsigned();
             $table->string('key',24);
-            $table->json('value');
+            $table->json('value')->nullable();
 
         });
     }

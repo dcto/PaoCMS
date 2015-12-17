@@ -8,6 +8,7 @@ namespace Manage\Controller;
 use Illuminate\Support\Facades\Cookie;
 
 use Illuminate\Support\Facades\Response;
+use Manage\Model\Category;
 use Manage\Model\Config;
 use Manage\Model\Member;
 use Manage\Model\Admin;
@@ -49,7 +50,7 @@ class Index extends Controller
 
         //Config::create(['key' => uniqid(),'value'=>uniqid()]);
         //Config::create(['key' => uniqid(),'value'=>uniqid()]);
-        print_r(Config::all()->toArray());
+
         //print_r((new Admin)->getTable());
         //print_r(Admin::table());
 
@@ -57,8 +58,16 @@ class Index extends Controller
 
         $d = \Config::get('database');
 
-
-
+        Admin::down();
+        Admin::up();
+        AdminGroup::down();
+        AdminGroup::up();
+        Config::down();
+        Config::up();
+        Member::down();
+        Member::up();
+        Category::down();
+        Category::up();
         //$redis = \Redis::info();
 
         //print_r($redis);

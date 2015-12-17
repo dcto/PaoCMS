@@ -2,8 +2,6 @@
 
 namespace PAO;
 
-use Illuminate\Events\EventServiceProvider;
-use Illuminate\Support\Facades\Event;
 use PAO\Exception\DBException;
 use Illuminate\Container\Container;
 
