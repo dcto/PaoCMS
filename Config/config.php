@@ -10,6 +10,8 @@ return array(
         'timezone'=>'PRC', //系统时区
         'charset'=>'utf-8', //系统编码
 
+        'session'=>'files', //Session存储方式
+
         '404'=>'404.html',
         '500'=>'500.html',
 

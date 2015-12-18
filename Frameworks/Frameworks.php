@@ -394,7 +394,7 @@ class Frameworks extends Container
     private function _bindingsSession()
     {
         $this->singleton('session', function(){
-            return new \PAO\Http\Session($this);
+            return new \PAO\Http\Session();
         });
     }
 
