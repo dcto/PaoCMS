@@ -30,7 +30,7 @@ class Cookie
     {
         $cookie = new \Symfony\Component\HttpFoundation\Cookie($name, $value, $expire, $path, $domain, $secure, $httpOnly);
 
-        $response = new \PAO\Http\Response();
+        $response = new \Symfony\Component\HttpFoundation\Response;
 
         $response->headers->setCookie($cookie);
 
@@ -80,7 +80,7 @@ class Cookie
      */
     public function del($name)
     {
-        $response = new \PAO\Http\Response();
+        $response = new \Symfony\Component\HttpFoundation\Response;
         $response->headers->clearCookie($name);
         $response->sendHeaders();
     }

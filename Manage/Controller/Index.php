@@ -57,6 +57,7 @@ class Index extends Controller
       //  echo class_basename($this); //str_replace('\\', '', Str::snake(Str::plural(class_basename($this))));
 
         $d = \Config::get('database');
+        print_r($d);
 /**
         Admin::down();
         Admin::up();
@@ -80,7 +81,7 @@ class Index extends Controller
 
         $this->assign('class', __CLASS__);
 
-        Response::view('index');
+        return Response::view('index');
     }
 
 }
