@@ -5,16 +5,16 @@ namespace Manage\Model;
 
 use Illuminate\Support\Facades\Schema;
 
-class Member extends Model
+class User extends Model
 {
 
 
-    protected $table = 'member';
+    protected $table = 'user';
 
 
     public function up()
     {
-        Schema::create('member', function($table){
+        Schema::create('user', function($table){
 
             $table->increments('id')->unsigned();
             $table->integer('pid')->unsigned()->default(0)->comment('父id');
@@ -41,6 +41,6 @@ class Member extends Model
 
     public function down()
     {
-        Schema::dropIfExists('member');
+        Schema::dropIfExists('user');
     }
 }

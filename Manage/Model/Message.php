@@ -25,6 +25,11 @@ class Message extends Model
             $table->string('ip',24)->default(null)->comment('IP');
             $table->boolean('status')->default(0)->comment('0=无效,1=正常');
 
+            $table->index('by_uid');
+            $table->index('to_uid');
+            $table->index('status');
+            $table->engine = 'InnoDB';
+
         });
     }
 

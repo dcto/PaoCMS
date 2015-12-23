@@ -9,12 +9,14 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Cookie;
 
 use Illuminate\Support\Facades\Response;
+use Manage\Model\Article;
 use Manage\Model\Category;
 use Manage\Model\Member;
 use Manage\Model\Admin;
 use Manage\Model\AdminGroup;
 use Manage\Model\Message;
 use Manage\Model\Setting;
+use Manage\Model\User;
 use PAO\Cache\FileSystem;
 
 
@@ -78,6 +80,12 @@ echo '<hr />';
 
         Message::down();
         Message::up();
+
+            User::down();
+            User::up();
+
+            Article::down();
+            Article::up();
 
 /**
         Admin::down();
