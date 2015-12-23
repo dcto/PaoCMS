@@ -31,6 +31,25 @@ class Cache
     }
 
 
+
+    /**
+     * [File ÎÄ¼þ»º´æ]
+     *
+     * @param null $cache
+     * @return \PAO\Cache\FileSystem
+     * @author 11.
+     */
+    public function File($cache = 'default')
+    {
+        if(isset($this->cache['file'][$cache]))
+        {
+            return $this->cache['file'][$cache];
+        }
+
+        return $this->cache['file'][$cache] =  new FileSystem($cache);
+    }
+
+
     /**
      * [Redis ÊµÀý]
      *

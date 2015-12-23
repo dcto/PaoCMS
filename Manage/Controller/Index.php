@@ -5,6 +5,7 @@ namespace Manage\Controller;
 
 
 
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Cookie;
 
 use Illuminate\Support\Facades\Response;
@@ -13,6 +14,7 @@ use Manage\Model\Member;
 use Manage\Model\Admin;
 use Manage\Model\AdminGroup;
 use Manage\Model\Setting;
+use PAO\Cache\FileSystem;
 
 
 class Index extends Controller
@@ -56,8 +58,24 @@ class Index extends Controller
 
       //  echo class_basename($this); //str_replace('\\', '', Str::snake(Str::plural(class_basename($this))));
 
-        $d = \Config::get('database');
-        print_r($d);
+
+            $key =  'test';
+
+           //$s = \Cache::file('test')->set($key,array('a'=>0,'b'=>3));
+
+
+            //Cache::file()->set($key, array('ab'=>'test','dddd'=>12345689999));
+
+//        Cache::file('abc')->del($key);
+
+echo '<hr />';
+        var_dump(Cache::file()->get($key));
+            //print_r($cache->status());
+
+          // \Cache::file('test')->del($key);
+            //var_dump(\Cache::file('test')->has($key));
+
+
 /**
         Admin::down();
         Admin::up();
@@ -79,7 +97,7 @@ class Index extends Controller
 
         //$this->container->make('response')->show('dwww');
 
-        $this->assign('class', __CLASS__);
+        $this->assign('class', '');
 
         return Response::view('index');
     }
