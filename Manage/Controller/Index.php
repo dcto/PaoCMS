@@ -13,6 +13,7 @@ use Manage\Model\Category;
 use Manage\Model\Member;
 use Manage\Model\Admin;
 use Manage\Model\AdminGroup;
+use Manage\Model\Message;
 use Manage\Model\Setting;
 use PAO\Cache\FileSystem;
 
@@ -75,6 +76,8 @@ echo '<hr />';
           // \Cache::file('test')->del($key);
             //var_dump(\Cache::file('test')->has($key));
 
+        Message::down();
+        Message::up();
 
 /**
         Admin::down();
