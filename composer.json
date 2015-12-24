@@ -1,10 +1,10 @@
 {
   "require": {
-    "illuminate/container": "^5.1",
-    "illuminate/support": "^5.1",
-    "illuminate/events": "^5.1",
-    "illuminate/database": "^5.1",
-    "illuminate/pagination": "^5.1",
+    "illuminate/container": "^5.2",
+    "illuminate/support": "^5.2",
+    "illuminate/events": "^5.2",
+    "illuminate/database": "^5.2",
+    "illuminate/pagination": "^5.2",
     "symfony/http-foundation": "^2.7",
     "monolog/monolog": "^1.17",
     "twig/twig": "^1.23"
@@ -19,5 +19,6 @@
       "Portal\\": "Portal/",
       "Manage\\": "Manage/"
     }
+
   }
 }

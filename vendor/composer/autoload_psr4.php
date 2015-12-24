@@ -10,7 +10,6 @@ return array(
     'Symfony\\Polyfill\\Mbstring\\' => array($vendorDir . '/symfony/polyfill-mbstring'),
     'Symfony\\Component\\Translation\\' => array($vendorDir . '/symfony/translation'),
     'Symfony\\Component\\HttpFoundation\\' => array($vendorDir . '/symfony/http-foundation'),
-    'Stringy\\' => array($vendorDir . '/danielstjules/stringy/src'),
     'Portal\\' => array($baseDir . '/Portal'),
     'PAO\\' => array($baseDir . '/Frameworks'),
     'Monolog\\' => array($vendorDir . '/monolog/monolog/src/Monolog'),

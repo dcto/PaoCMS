@@ -3,20 +3,7 @@
 namespace Manage\Controller;
 
 
-
-
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Cookie;
-
-use Illuminate\Support\Facades\Response;
-use Manage\Model\Article;
-use Manage\Model\Category;
-use Manage\Model\Member;
-use Manage\Model\Admin;
-use Manage\Model\AdminGroup;
-use Manage\Model\Message;
-use Manage\Model\Setting;
-use Manage\Model\User;
+use Model\Message;
 use PAO\Cache\FileSystem;
 
 
@@ -38,9 +25,9 @@ class Index extends Controller
 
        // Session::set('11','2l2l22222222222');
 
-        Cookie::set('ddd',date('Y-m-d H:i:s'));
+       // \Cookie::set('ddd',date('Y-m-d H:i:s'));
 
-        Cookie::del('ddd');
+      //  \Cookie::del('ddd');
 //        print_r(Cookie::all());
 
         //$redis = $this->container->make('redis');
@@ -72,7 +59,7 @@ class Index extends Controller
 //        Cache::file('abc')->del($key);
 
 echo '<hr />';
-        var_dump(Cache::file()->get($key));
+       // var_dump(Cache::file()->get($key));
             //print_r($cache->status());
 
           // \Cache::file('test')->del($key);

@@ -6,8 +6,7 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    $vendorDir . '/danielstjules/stringy/src/Create.php',
-    $vendorDir . '/illuminate/support/helpers.php',
     $vendorDir . '/symfony/polyfill-mbstring/bootstrap.php',
+    $vendorDir . '/illuminate/support/helpers.php',
     $vendorDir . '/symfony/polyfill-php54/bootstrap.php',
 );

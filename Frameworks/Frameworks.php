@@ -2,11 +2,13 @@
 
 namespace PAO;
 
+
 use PAO\Http\Request;
 use PAO\Http\Response;
 use PAO\Configure\Repository;
 use PAO\Exception\PAOException;
 use PAO\Exception\SystemException;
+
 use Illuminate\Container\Container;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
@@ -208,7 +210,7 @@ class Frameworks extends Container
         foreach($this->facadesAlias as $facade => $alias)
         {
 
-            class_alias($facade, $alias);
+          //  class_alias($facade, $alias);
         }
     }
 
