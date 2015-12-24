@@ -36,6 +36,10 @@ class Admin extends  Model
             $table->string('last_ip',15)->nullable()->comment('最后登陆IP');
 
             $table->boolean('status')->default(0)->comment('0=停用,1=正常');
+
+            $table->index('gid');
+            $table->index('username');
+            $table->index('status');
             $table->engine = 'InnoDB';
 
         });

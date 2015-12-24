@@ -16,9 +16,11 @@ class Setting extends Model
         Schema::create('setting', function($table){
             /** @var \Illuminate\Database\Schema\Blueprint $table */
             $table->increments('id')->unsigned();
-            $table->string('key',24);
-            $table->json('value')->nullable();
+            $table->string('key',24)->comment('¼ü');
+            $table->json('value')->nullable()->comment('Öµ');
 
+            $table->index('key');
+            $table->engine = 'innodb';
         });
     }
 

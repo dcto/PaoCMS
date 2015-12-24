@@ -21,6 +21,9 @@ class AdminGroup extends Model
             $table->string('name',48)->comment('组名称');
             $table->text('permission')->comment('组权限');
             $table->boolean('status')->comment('状态');
+
+            $table->index('status');
+            $table->engine = 'innodb';
         });
     }
 

@@ -20,6 +20,8 @@ class Category extends Model
             $table->string('name',64)->comment('名称');
             $table->boolean('status')->default(0)->comment('0=停用,1=正常');
 
+            $table->index('pid');
+            $table->index('status');
             $table->engine = 'InnoDB';
 
         });
