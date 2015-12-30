@@ -4,8 +4,6 @@ namespace PAO\Http;
 
 
 
-use Illuminate\Container\Container;
-
 class Request extends \Symfony\Component\HttpFoundation\Request
 {
 
@@ -38,9 +36,13 @@ class Request extends \Symfony\Component\HttpFoundation\Request
      * @return mixed
      * @author 11.
      */
-    public function cookie($key, $default)
+    public function cookie($key = null)
     {
-        return Container::getInstance()->make('cookie')->get($key);
+        if($key) {
+            return $this->cookies->get($key);
+        }else{
+            return $this->cookies->all();
+        }
     }
 
 }

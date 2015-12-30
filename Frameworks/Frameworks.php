@@ -3,12 +3,9 @@
 namespace PAO;
 
 
-use PAO\Http\Request;
-use PAO\Http\Response;
-use PAO\Configure\Repository;
-use PAO\Exception\PAOException;
-use PAO\Exception\SystemException;
 
+use PAO\Http\Response;
+use PAO\Exception\SystemException;
 use Illuminate\Container\Container;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
@@ -137,7 +134,7 @@ class Frameworks extends Container
             'exception'=>'PAO\Exception\PAOException',
             'db'=>'PAO\Database',
             'view'=>'PAO\View',
-            'cache'=>'PAO\Cache',
+            'cache'=>'PAO\Cache\Cache',
             'log'=>'PAO\Logger',
             //'Illuminate\Contracts\Routing\ResponseFactory' => 'PAO\Http\Response'
         ];

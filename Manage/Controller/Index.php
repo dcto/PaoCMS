@@ -3,8 +3,13 @@
 namespace Manage\Controller;
 
 
-
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Session;
 use Manage\Model\Message;
 use PAO\Cache\FileSystem;
 
@@ -16,6 +21,9 @@ class Index extends Controller
     public function index()
     {
 
+            echo '<pre>';
+            print_r(Config::get('config'));
+            echo '<hr/>';
 /*        Admin::down();
         Admin::up();
 
@@ -25,18 +33,22 @@ class Index extends Controller
         Member::down();
         Member::up();*/
 
-       // Session::set('11','2l2l22222222222');
+        Session::set('11','2l2l22222222222');
 
-       // \Cookie::set('ddd',date('Y-m-d H:i:s'));
+            print_r(Session::get('11'));
+            echo '<br />';
+        $this->container->make('cookie')->set('as',date('Y-m-d H:i:s'));
 
       //  \Cookie::del('ddd');
-//        print_r(Cookie::all());
+            $d = $this->container->make('cookie')->has('as');
+            var_dump($d);
+        print_r($this->container->make('cookie')->all());
+            echo '<Br />';
 
         //$redis = $this->container->make('redis');
 
 
         //$d= $this->container->make('config')->get('cache');
-
 
         /**
          * @var Illuminate\Database\Eloquent\Model $config
@@ -53,7 +65,7 @@ class Index extends Controller
 
             $key =  'test';
 
-           //$s = \Cache::file('test')->set($key,array('a'=>0,'b'=>3));
+          // $s = Cache::file('test')->set($key,array('a'=>0,'b'=>3));
 
 
             //Cache::file()->set($key, array('ab'=>'test','dddd'=>12345689999));
@@ -61,14 +73,14 @@ class Index extends Controller
 //        Cache::file('abc')->del($key);
 
 
-       // var_dump(Cache::file()->get($key));
+        //var_dump(Cache::file()->get($key));
             //print_r($cache->status());
 
           // \Cache::file('test')->del($key);
             //var_dump(\Cache::file('test')->has($key));
 
-        //Message::down();
-        //Message::up();
+        Message::down();
+        Message::up();
 
 /**
         Admin::down();
@@ -90,6 +102,8 @@ class Index extends Controller
         //('response')->show('ddd');
 
         //$this->container->make('response')->show('dwww');
+
+            Log::to('test')->info(__METHOD__.'='.date('Y-m-d H:i:s'));
 
         $this->assign('class', __METHOD__);
             return $this->container->make('response')->view('index');
