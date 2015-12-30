@@ -42,12 +42,20 @@ class Index extends Controller
       //  \Cookie::del('ddd');
             $d = $this->container->make('cookie')->has('as');
             var_dump($d);
-        print_r($this->container->make('cookie')->all());
+        print_r($this->container->make('cookie')->get('as'));
             echo '<Br />';
+        print_r($this->container->make('request')->getRealMethod());
+        echo '<br />';
 
+        print_r($this->container->make('request')->method());
+
+//        print_r($this->container->make('request'));
         //$redis = $this->container->make('redis');
 
 
+
+
+        echo '<hr/>';
         //$d= $this->container->make('config')->get('cache');
 
         /**
@@ -61,7 +69,6 @@ class Index extends Controller
         //print_r(Admin::table());
 
       //  echo class_basename($this); //str_replace('\\', '', Str::snake(Str::plural(class_basename($this))));
-
 
             $key =  'test';
 
@@ -79,8 +86,8 @@ class Index extends Controller
           // \Cache::file('test')->del($key);
             //var_dump(\Cache::file('test')->has($key));
 
-        Message::down();
-        Message::up();
+        //Message::down();
+       // Message::up();
 
 /**
         Admin::down();
@@ -103,7 +110,7 @@ class Index extends Controller
 
         //$this->container->make('response')->show('dwww');
 
-            Log::to('test')->info(__METHOD__.'='.date('Y-m-d H:i:s'));
+           // Log::to('test')->info(__METHOD__.'='.date('Y-m-d H:i:s'));
 
         $this->assign('class', __METHOD__);
             return $this->container->make('response')->view('index');
