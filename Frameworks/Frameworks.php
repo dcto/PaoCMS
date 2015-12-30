@@ -165,11 +165,7 @@ class Frameworks extends Container
     {
         if(!isset($this->is_bindings[$abstract]) && $this->isAlias($abstract) )
         {
-            $objective = $this->getAlias($abstract);
-            $this->singleton($abstract, function()use($objective){
-                return new $objective;
-            });
-
+            $this->singleton($abstract, $this->getAlias($abstract));
             $this->is_bindings[$abstract] = true;
         }
 
