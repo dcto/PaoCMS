@@ -2,16 +2,23 @@
 
 namespace PAO\Http;
 
-use Illuminate\Contracts\Container\Container;
+
+use Illuminate\Container\Container;
 
 class Cookie
 {
 
+    /**
+     * ÈİÆ÷
+     * @var static
+     */
     protected $container;
 
-    public function __construct(Container $container)
+
+
+    public function __construct()
     {
-        $this->container = $container;
+        $this->container = Container::getInstance();
     }
 
     /**

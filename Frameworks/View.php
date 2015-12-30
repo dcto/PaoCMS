@@ -35,9 +35,9 @@ class View
     protected $cache;
 
 
-    public function __construct(Container $container)
+    public function __construct()
     {
-        $this->container = $container;
+        $this->container = Container::getInstance();
         $view = $this->container->config('config.dir.view');
         $this->views = $view ? PAO.DIRECTORY_SEPARATOR.APP.DIRECTORY_SEPARATOR.$view : PAO.DIRECTORY_SEPARATOR.APP.DIRECTORY_SEPARATOR.'View';
         $this->cache = $this->container->config('template.dir.cache');

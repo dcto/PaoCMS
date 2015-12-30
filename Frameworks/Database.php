@@ -2,6 +2,7 @@
 
 namespace PAO;
 
+
 use PAO\Exception\DBException;
 use Illuminate\Container\Container;
 
@@ -11,12 +12,12 @@ use Illuminate\Container\Container;
 class Database extends  \Illuminate\Database\Capsule\Manager
 {
 
-    public function __construct(Container $container)
+    public function __construct()
     {
         /**
          * 设置容器
          */
-        $this->setupContainer($container);
+        $this->setupContainer(Container::getInstance());
 
         /**
          * 创建数据库实例
@@ -26,7 +27,7 @@ class Database extends  \Illuminate\Database\Capsule\Manager
         /**
          * 设置配置
          */
-        $database = $container->config('database');
+        $database = $this->getContainer()->make('config')->get('database');
 
         /**
          * 批量加数数据连接
@@ -40,7 +41,7 @@ class Database extends  \Illuminate\Database\Capsule\Manager
         /**
          * 注册数据库监听
          */
-        $this->setEventDispatcher(new \Illuminate\Events\Dispatcher($container));
+        $this->setEventDispatcher(new \Illuminate\Events\Dispatcher($this->getContainer()));
 
         /**
          * 设置默认数据库为default
@@ -60,7 +61,7 @@ class Database extends  \Illuminate\Database\Capsule\Manager
         /**
          * 判断是否打开调式sql模式
          */
-        if($container->config('config.debug')) {
+        if($this->getContainer()->config('config.debug')) {
             $this->connection()->enableQueryLog();
         }
 

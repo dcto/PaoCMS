@@ -5,7 +5,7 @@ return array(
 
         'debug'=>true, //debug模式
 
-        'log'=>true, //是否生成日志总开关
+        'log'=>false, //是否生成日志总开关
 
         'timezone'=>'PRC', //系统时区
         'charset'=>'utf-8', //系统编码

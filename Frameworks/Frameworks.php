@@ -28,7 +28,11 @@ use Illuminate\Events\EventServiceProvider;
 version_compare(PHP_VERSION,'5.5.0','ge') || die('The php version least must 5.5.0 ');
 
 
-
+/**
+ * 核心框架
+ * Class Frameworks
+ * @package PAO
+ */
 class Frameworks extends Container
 {
 
@@ -45,24 +49,6 @@ class Frameworks extends Container
      */
     private $is_providers = [];
 
-    /**
-     * 系统默认服务
-     * @var array
-     */
-    private $systemBindings = [
-        'config' => '_bindingsConfigure',
-        'exception'=>'_bindingsException',
-        'response'=>'_bindingsResponse',
-        'request'=>'_bindingsRequest',
-        'route'=>'_bindingsRoute',
-        'view'=>'_bindingsView',
-        'log'=>'_bindingsLogs',
-        'db'=>'_bindingsDatabase',
-        'session'=>'_bindingsSession',
-        'cookie'=>'_bindingsCookie',
-        'cache'=>'_bindingsCache'
-
-    ];
 
     /**
      * 绑定外观模式别名
@@ -83,29 +69,19 @@ class Frameworks extends Container
 
 
     /**
-     * [Issue 核心构造方法]
-     * 主要完成一些初始化构件
-     *
+     * [Issue 核心应用构造方法]
      */
     public function Issue()
     {
-        /**
-         * 设置系统时区
-         */
-        $timezone = $this->config('config.system.timezone');
-        if ($timezone) {
-            date_default_timezone_set($timezone);
-        }
 
         /**
-         * 注册静态核心
+         * 核心框架注入
          */
         static::setInstance($this);
 
-        /**
-         * 注册动态核心
-         */
         $this->instance('app', $this);
+
+        $this->instance('Illuminate\Container\Container', $this);
 
         /**
          * 注册核心容器别名
@@ -121,6 +97,11 @@ class Frameworks extends Container
          * 异常模块注入
          */
         $this->registerExceptionHandling();
+
+        /**
+         * 初始化配置系统环境
+         */
+        $this->registerSystemEnvironment();
 
         /**
          * 初始化外观模式
@@ -139,6 +120,42 @@ class Frameworks extends Container
     }
 
 
+    /**
+     * [注册核心容器中的别名]
+     *
+     * @return void
+     */
+    private function registerContainerAliases()
+    {
+        $this->aliases = [
+            'route'=>'PAO\Route',
+            'request'=>'PAO\Http\Request',
+            'response'=>'PAO\Http\Response',
+            'cookie'=>'PAO\Http\Cookie',
+            'session'=>'PAO\Http\Session',
+            'config'=>'PAO\Configure\Repository',
+            'exception'=>'PAO\Exception\PAOException',
+            'db'=>'PAO\Database',
+            'view'=>'PAO\View',
+            'cache'=>'PAO\Cache',
+            'log'=>'PAO\Logger',
+            //'Illuminate\Contracts\Routing\ResponseFactory' => 'PAO\Http\Response'
+        ];
+    }
+
+    /**
+     * [registerFacadeAlias 批量绑定外观模式别名]
+     *
+     * @author 11.
+     */
+    private function registerFacadeAlias()
+    {
+        foreach($this->facadesAlias as $facade => $alias)
+        {
+
+            //  class_alias($facade, $alias);
+        }
+    }
 
     /**
      * [make 全局注入方法]
@@ -149,11 +166,16 @@ class Frameworks extends Container
      */
     public function make($abstract, array $parameters = [])
     {
-        if(isset($this->systemBindings[$abstract]) &&  !isset($this->is_bindings[$abstract]))
+        if(!isset($this->is_bindings[$abstract]) && $this->isAlias($abstract) )
         {
-            $this->{$this->systemBindings[$abstract]}();
+            $objective = $this->getAlias($abstract);
+            $this->singleton($abstract, function()use($objective){
+                return new $objective;
+            });
+
             $this->is_bindings[$abstract] = true;
         }
+
         return parent::make($abstract, $parameters);
     }
 
@@ -184,36 +206,6 @@ class Frameworks extends Container
         return $this->make('config')->get($config);
     }
 
-
-
-    /**
-     * [注册核心容器中的别名]
-     *
-     * @return void
-     */
-    private function registerContainerAliases()
-    {
-        $this->aliases = [
-            'Illuminate\Container\Container' => 'app',
-            'Illuminate\Contracts\Routing\ResponseFactory' => 'PAO\Http\Response'
-        ];
-    }
-
-
-    /**
-     * [registerFacadeAlias 批量绑定外观模式别名]
-     *
-     * @author 11.
-     */
-    private function registerFacadeAlias()
-    {
-        foreach($this->facadesAlias as $facade => $alias)
-        {
-
-          //  class_alias($facade, $alias);
-        }
-    }
-
     /**
      * [Navigate 路由导航]
      *
@@ -222,7 +214,7 @@ class Frameworks extends Container
     {
         $response = $this->make('route')->Dispatch();
 
-        //重置Response响应
+        //重置Response
         if(!$response instanceof Response)
         {
             throw new SystemException('The Response Must be Instance of PAO\Response');
@@ -256,8 +248,6 @@ class Frameworks extends Container
         $provider->boot();
     }
 
-
-
     /**
      * [registerExceptionHandling 异常服务注册]
      *
@@ -275,12 +265,10 @@ class Frameworks extends Container
         set_exception_handler(function ($e) {
             $this->make('exception')->Exception($e);
         });
-
-
     }
 
     /**
-     * [registerBaseServiceProviders 其本服务注册]
+     * [registerBaseServiceProviders 事件服务注册]
      *
      * @author 11.
      */
@@ -289,145 +277,21 @@ class Frameworks extends Container
         $this->register(new EventServiceProvider($this));
     }
 
-    /**
-     * [_bindingsConfigure 配置服务绑定]
-     *
-     */
-    private function _bindingsConfigure()
-    {
-        $this->singleton('config', function(){
-            return new Repository();
-        });
-    }
-
 
     /**
-     * [_bindingsException 异常服务绑定]
-     *
-
-     */
-    private function _bindingsException()
-    {
-        $this->singleton('exception', function(){
-            return new PAOException($this);
-        });
-    }
-
-    /**
-     * [_bindingsRequest Request服务绑定]
-     *
-     */
-    private function _bindingsRequest()
-    {
-        $this->singleton('request', function(){
-            return Request::createFromGlobals();
-        });
-    }
-
-
-    /**
-     * [_bindingsResponse 注入响应方法]
+     * [registerSystemEnvironment 初始化配置系统环境]
      *
      * @author 11.
      */
-    private function _bindingsResponse()
+    private function registerSystemEnvironment()
     {
-        $this->singleton($this->getAlias('response'), function () {
-            return new \PAO\Http\Response();
-        });
+        /**
+         * 设置系统时区
+         */
+        $timezone = $this->config('config.system.timezone');
+        if ($timezone) {
+            date_default_timezone_set($timezone);
+        }
 
-    }
-
-
-    /**
-     * [_bindingsRoute 路由组件绑定]
-     *
-     */
-    private function _bindingsRoute()
-    {
-        $this->singleton('route', function(){
-            return new \PAO\Route($this);
-        });
-    }
-
-    /**
-     * [_bindingsView 视图模块绑定]
-     *
-     */
-    private function _bindingsView()
-    {
-        $this->singleton('view', function(){
-            return new \PAO\View($this);
-        });
-    }
-
-    /**
-     * [__bindingsDatabase 数据库服务]
-     */
-    private function _bindingsDatabase()
-
-    {
-        $this->singleton('db', function(){
-            return new \PAO\Database($this);
-
-            /*
-             * 工厂模式注入
-            $connFactory = new \Illuminate\Database\Connectors\ConnectionFactory($this);
-            $resolver = new \Illuminate\Database\ConnectionResolver();
-
-            foreach($database as $db => $config)
-            {
-                $resolver->addConnection('default', $connFactory->make($config, $db););
-            }
-
-            $resolver->setDefaultConnection('default');
-            \Illuminate\Database\Eloquent\Model::setConnectionResolver($resolver);
-            return new DatabaseManager($this, $resolver);
-            */
-        });
-
-    }
-
-    /**
-     * [_bindingsSession Session注入]
-     *
-     * @author 11.
-     */
-    private function _bindingsSession()
-    {
-        $this->singleton('session', function(){
-            return new \PAO\Http\Session();
-        });
-    }
-
-    private function _bindingsCookie()
-    {
-        $this->singleton('cookie', function(){
-            return new \PAO\Http\Cookie($this);
-        });
-    }
-
-
-    /**
-     * [_bindingsCache 缓存系统绑定]
-     *
-     * @author 11.
-     */
-    private function _bindingsCache()
-    {
-        $this->singleton('cache', function(){
-           return new \PAO\Cache\Cache($this);
-        });
-    }
-
-    /**
-     * [_bindingsLogs 日志系统绑定]
-     *
-     */
-    private function _bindingsLogs()
-    {
-        $this->singleton('log', function(){
-            return new \PAO\Logger($this);
-        });
     }
 }

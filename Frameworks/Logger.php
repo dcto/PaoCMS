@@ -17,7 +17,7 @@ class Logger extends \Monolog\Logger  {
 
     protected $container;
 
-    public function __construct(Container $container)
+    public function __construct()
     {
         $this->name = APP;
 
@@ -25,7 +25,7 @@ class Logger extends \Monolog\Logger  {
 
         $this->processors = [];
 
-        $this->container = $container;
+        $this->container = Container::getInstance();
 
         $this->logger = $this->container->config('config.dir.log').DIRECTORY_SEPARATOR;
 

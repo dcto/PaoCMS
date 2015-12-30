@@ -24,9 +24,9 @@ class Cache
      * ³õÊ¼»¯»º´æ
      * @param \Illuminate\Container\Container $container
      */
-    public function __construct(Container $container)
+    public function __construct()
     {
-        $this->container = $container;
+        $this->container = Container::getInstance();
 
     }
 

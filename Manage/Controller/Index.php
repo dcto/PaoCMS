@@ -3,7 +3,9 @@
 namespace Manage\Controller;
 
 
-use Model\Message;
+
+use Illuminate\Support\Facades\Response;
+use Manage\Model\Message;
 use PAO\Cache\FileSystem;
 
 
@@ -58,21 +60,15 @@ class Index extends Controller
 
 //        Cache::file('abc')->del($key);
 
-echo '<hr />';
+
        // var_dump(Cache::file()->get($key));
             //print_r($cache->status());
 
           // \Cache::file('test')->del($key);
             //var_dump(\Cache::file('test')->has($key));
 
-        Message::down();
-        Message::up();
-
-            User::down();
-            User::up();
-
-            Article::down();
-            Article::up();
+        //Message::down();
+        //Message::up();
 
 /**
         Admin::down();
@@ -95,9 +91,9 @@ echo '<hr />';
 
         //$this->container->make('response')->show('dwww');
 
-        $this->assign('class', '');
-
-        return Response::view('index');
+        $this->assign('class', __METHOD__);
+            return $this->container->make('response')->view('index');
+        //return Response::view('index');
     }
 
 }
