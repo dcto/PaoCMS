@@ -90,12 +90,12 @@ class Response  //implements  \Illuminate\Contracts\Routing\ResponseFactory
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      * @author 11.
      */
-    public function json($data = [], $status = 200, array $headers = [], $options = 0)
+    public function json($data = [], $status = 200, array $headers = [])
     {
         if ($data instanceof \Illuminate\Contracts\Support\Arrayable && ! $data instanceof \JsonSerializable) {
             $data = $data->toArray();
         }
-        $this->response = \Symfony\Component\HttpFoundation\JsonResponse($data, $status, $headers, $options);
+        $this->response = new \Symfony\Component\HttpFoundation\JsonResponse($data, $status, $headers);
 
         return $this;
     }
@@ -111,9 +111,9 @@ class Response  //implements  \Illuminate\Contracts\Routing\ResponseFactory
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      * @author 11.
      */
-    public function jsonp($callback, $data = [], $status = 200, array $headers = [], $options = 0)
+    public function jsonp($callback, $data = [], $status = 200, array $headers = [])
     {
-        return $this->json($data, $status, $headers, $options)->setCallback($callback);
+        return $this->json($data, $status, $headers)->setCallback($callback);
     }
 
 
