@@ -47,30 +47,12 @@ class Frameworks extends Container
     private $is_providers = [];
 
 
-    /**
-     * 绑定外观模式别名
-     * @var array
-     */
-    private $facadesAlias = [
-        'Illuminate\Support\Facades\App' => 'PAO',
-        'Illuminate\Support\Facades\Config' => 'Config',
-        'Illuminate\Support\Facades\Request' => 'Request',
-        'Illuminate\Support\Facades\Response' => 'Response',
-        'Illuminate\Support\Facades\Event' => 'Event',
-        'Illuminate\Support\Facades\DB' => 'DB',
-        'Illuminate\Support\Facades\Cookie' => 'Cookie',
-        'Illuminate\Support\Facades\Session' => 'Session',
-        'Illuminate\Support\Facades\Cache' => 'Cache',
-        'Illuminate\Support\Facades\Log' => 'Log'
-    ];
-
 
     /**
      * [Issue 核心应用构造方法]
      */
     public function Issue()
     {
-
         /**
          * 核心框架注入
          */
@@ -136,7 +118,7 @@ class Frameworks extends Container
             'view'=>'PAO\View',
             'cache'=>'PAO\Cache\Cache',
             'log'=>'PAO\Logger',
-            //'Illuminate\Contracts\Routing\ResponseFactory' => 'PAO\Http\Response'
+            'Illuminate\Contracts\Routing\ResponseFactory' => 'PAO\Http\Response'
         ];
     }
 
@@ -147,10 +129,21 @@ class Frameworks extends Container
      */
     private function registerFacadeAlias()
     {
-        foreach($this->facadesAlias as $facade => $alias)
+        $facadesAlias = [
+            'PAO' => 'Illuminate\Support\Facades\App',
+            'Config' => 'Illuminate\Support\Facades\Config',
+            'Request' => 'Illuminate\Support\Facades\Request',
+            'Response' => 'Illuminate\Support\Facades\Response',
+            'Event' => 'Illuminate\Support\Facades\Event',
+            'DB' => 'Illuminate\Support\Facades\DB',
+            'Cookie' => 'Illuminate\Support\Facades\Cookie',
+            'Session' => 'Illuminate\Support\Facades\Session',
+            'Cache' => 'Illuminate\Support\Facades\Cache',
+            'Log' => 'Illuminate\Support\Facades\Log'
+        ];
+        foreach($facadesAlias as $alias => $facade)
         {
-
-            //  class_alias($facade, $alias);
+              class_alias($facade, $alias);
         }
     }
 
