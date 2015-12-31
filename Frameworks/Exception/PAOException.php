@@ -22,7 +22,7 @@ class PAOException
      *
      * @param Exception $e [Òì³£¶ÔÏó]
      *
-     * @author  11#pao11.com
+     * @author  11
      * @version v1
      *
      */
@@ -41,11 +41,11 @@ class PAOException
     public function HandleError($e)
     {
         $type = 'system';
-        $errorMsg = $e->getMessage();
+        $message = $e->getMessage();
         $trace = $e->getTrace();
         krsort($trace);
         $trace[] = array('file' => $e->getFile(), 'line' => $e->getLine(), 'function' => 'break');
-        $phpMsg = array();
+        $errorExplain = array();
 
         foreach ($trace as $error) {
             if (!empty($error['function'])) {
@@ -78,9 +78,9 @@ class PAOException
             if (!isset($error['line'])) {
                 continue;
             }
-            $phpMsg[] = array('file' => str_replace(array(PAO, ''), array('', '/'), $error['file']), 'line' => $error['line'], 'function' => $error['function']);
+            $errorExplain[] = array('file' => str_replace(array(PAO, ''), array('', '/'), $error['file']), 'line' => $error['line'], 'function' => $error['function']);
         }
-        return self::showError($type, $errorMsg, $phpMsg);
+        return $this->display($type, $message, $errorExplain);
 
     }
 
@@ -139,16 +139,15 @@ class PAOException
      * @param string $errorMsg
      * @param string $phpMsg
      */
-    public static function showError($type, $errorMsg, $phpMsg = '')
+    public function display($type, $message, $errorExplain = '')
     {
         //ob_end_clean();
-        $host = $_SERVER['HTTP_HOST'];
         $title = $type == 'db' ? 'Database' : 'System';
         $content = <<<EOT
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html">
 <html>
 <head>
- <title>$host - $title Error</title>
+ <title>{$_SERVER['REQUEST_URI']} - {$title} Error</title>
  <meta http-equiv="Content-Type" content="text/html; charset="utf-8" />
  <meta name="robots" content="NOINDEX,NOFOLLOW,NOARCHIVE" />
  <style type="text/css">
@@ -198,28 +197,26 @@ class PAOException
 </head>
 <body>
 <div id="container">
-<h1>$title Error</h1>
-<div class='info'>$errorMsg</div>
+<h1>{$title} Error</h1>
+<div class='info'>{$message}</div>
 EOT;
-
-
-            if (!empty($phpMsg)) {
+            if (!empty($errorExplain)) {
                 $content .= '<div class="info">';
-                $content .= '<p><strong>PaoCMS Debug</strong></p>';
+                $content .= '<p><strong>PAO Debug</strong></p>';
                 $content .= '<table cellpadding="5" cellspacing="1" width="100%" class="table"><tbody>';
-                if (is_array($phpMsg)) {
+                if (is_array($errorExplain)) {
                     $content .= '<tr class="bg2"><td>No.</td><td>File</td><td>Line</td><td>Code</td></tr>';
-                    foreach ($phpMsg as $k => $msg) {
+                    foreach ($errorExplain as $k => $error) {
                         $k++;
                         $content .= '<tr class="bg1">';
                         $content .= '<td>' . $k . '</td>';
-                        $content .= '<td>' . $msg['file'] . '</td>';
-                        $content .= '<td>' . $msg['line'] . '</td>';
-                        $content .= '<td>' . $msg['function'] . '</td>';
+                        $content .= '<td>' . $error['file'] . '</td>';
+                        $content .= '<td>' . $error['line'] . '</td>';
+                        $content .= '<td>' . $error['function'] . '</td>';
                         $content .= '</tr>';
                     }
                 } else {
-                    $content .= '<tr><td><ul>' . $phpMsg . '</ul></td></tr>';
+                    $content .= '<tr><td><ul>' . $errorExplain . '</ul></td></tr>';
                 }
                 $content .= '</tbody></table></div>';
             }
@@ -229,7 +226,6 @@ EOT;
 </body>
 </html>
 EOT;
-
         return $content;
     }
 

@@ -251,6 +251,19 @@ class Frameworks extends Container
         set_exception_handler(function ($e) {
             $this->make('exception')->Exception($e);
         });
+
+        //致命错误处理
+        register_shutdown_function(function(){
+
+            $e = error_get_last();
+
+            if(in_array($e['type'], [E_ERROR, E_CORE_ERROR, E_COMPILE_ERROR, E_PARSE]))
+            {
+                $e['function'] = $e['type'];
+                $error[] = $e;
+                die($this->make('exception')->display($e['type'], $e['message'], $error));
+            }
+        });
     }
 
     /**
@@ -271,6 +284,15 @@ class Frameworks extends Container
      */
     private function registerSystemEnvironment()
     {
+
+        /**
+         * 设置错误报告
+         */
+        if(!$this->config('config.debug'))
+        {
+            error_reporting(0);
+        }
+
         /**
          * 设置系统时区
          */
