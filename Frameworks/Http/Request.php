@@ -4,6 +4,8 @@ namespace PAO\Http;
 
 
 
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
 class Request extends \Symfony\Component\HttpFoundation\Request
@@ -32,56 +34,6 @@ class Request extends \Symfony\Component\HttpFoundation\Request
         }
     }
 
-
-    public function url()
-    {
-        return rtrim(preg_replace('/\?.*/', '', $this->getUri()), '/');
-    }
-
-
-    /**
-     * [input get方法别名]
-     *
-     * @param            $key
-     * @param null       $default
-     * @param bool|false $deep
-     * @return mixed
-     * @author 11.
-     */
-    public function input($key, $default = null, $deep = false)
-    {
-        return $this->get($key, $default, $deep);
-    }
-
-
-    /**
-     * [cookie 重构cookie方法适应Facades调用]
-     *
-     * @param $key
-     * @param $default
-     * @return mixed
-     * @author 11.
-     */
-    public function cookie($key = null)
-    {
-        if($key) {
-            return $this->cookies->get($key);
-        }else{
-            return $this->cookies->all();
-        }
-    }
-
-    /**
-     * [method 获取当前请求方式]
-     *
-     * @return string
-     * @author 11.
-     */
-    public function method()
-    {
-        return $this->getMethod();
-    }
-
     /**
      * [is 判断当前路径是否匹配]
      *
@@ -98,6 +50,167 @@ class Request extends \Symfony\Component\HttpFoundation\Request
 
         return false;
     }
+
+    /**
+     * [url 获取当前URL]
+     *
+     * @return string
+     * @author 11.
+     */
+    public function url()
+    {
+        return rtrim(preg_replace('/\?.*/', '', $this->getUri()), '/');
+    }
+
+    /**
+     * [all 返回所有]
+     *
+     * @return array
+     * @author 11.
+     */
+    public function all()
+    {
+        return array_replace_recursive($this->input(), $this->files->all());
+    }
+
+
+    /**
+     * [has 是否存在]
+     *
+     * @param $key
+     * @return bool
+     * @author 11.
+     */
+    public function has($key)
+    {
+        $keys = is_array($key) ? $key : func_get_args();
+
+        $input = $this->all();
+
+        foreach ($keys as $value) {
+            if (! array_key_exists($value, $input)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * [input get方法别名]
+     *
+     * @param            $key
+     * @param null       $default
+     * @return mixed
+     * @author 11.
+     */
+    public function input($key = null, $default = null)
+    {
+        $input = $this->getInputSource()->all() + $this->query->all();
+
+        return Arr::get($input, $key, $default);
+    }
+
+
+    /**
+     * [header]
+     *
+     * @param null $key
+     * @param null $default
+     * @return mixed
+     * @author 11.
+     */
+    public function header($key = null, $default = null)
+    {
+        return $this->retrieve('headers', $key, $default);
+    }
+
+    /**
+     * [server 获取server]
+     *
+     * @param null $key
+     * @param null $default
+     * @return mixed
+     * @author 11.
+     */
+    public function server($key = null, $default =null)
+    {
+        return $this->retrieve('server', $key, $default);
+    }
+
+    /**
+     * [file 获取上传文件]
+     *
+     * @param null $key
+     * @param null $default
+     * @return mixed
+     * @author 11.
+     */
+    public function file($key = null, $default = null)
+    {
+        return Arr::get($this->files->all(), $key, $default);
+    }
+
+    /**
+     * [cookie 重构cookie方法适应Facades调用]
+     *
+     * @param $key
+     * @param $default
+     * @return mixed
+     * @author 11.
+     */
+    public function cookie($key = null)
+    {
+        if ($key) {
+            return $this->cookies->get($key);
+        } else {
+            return $this->cookies->all();
+        }
+    }
+
+    /**
+     * [isJson 判断是否为json]
+     *
+     * @return bool
+     * @author 11.
+     */
+    public function isJson()
+    {
+        return Str::contains($this->header('CONTENT_TYPE'), '/json');
+    }
+
+    /**
+     * [json 获取JSON数组]
+     *
+     * @param null $key
+     * @param null $default
+     * @return mixed|\Symfony\Component\HttpFoundation\ParameterBag
+     * @author 11.
+     */
+    public function json($key = null, $default = null)
+    {
+        if (!isset($this->json)) {
+            $this->json = new ParameterBag((array)json_decode($this->getContent(), true));
+        }
+
+        if (is_null($key)) {
+            return $this->json;
+        }
+
+        return Arr::get($this->json->all(), $key, $default);
+    }
+
+    /**
+     * [method 获取当前请求方式]
+     *
+     * @return string
+     * @author 11.
+     */
+    public function method()
+    {
+        return $this->getMethod();
+    }
+
 
     /**
      * [ip 获取客户端IP]
@@ -143,7 +256,81 @@ class Request extends \Symfony\Component\HttpFoundation\Request
      */
     public function root()
     {
-        return rtrim($this->getSchemeAndHttpHost().$this->getBaseUrl(), '/');
+        return rtrim($this->getSchemeAndHttpHost() . $this->getBaseUrl(), '/');
+    }
+
+
+    /**
+     * [segment 根据索引获取path]
+     *
+     * @param      $index [从1开始]
+     * @param null $default
+     * @return mixed
+     * @author 11.
+     */
+    public function segment($index, $default = null)
+    {
+        return Arr::get($this->segments(), $index - 1, $default);
+    }
+
+    /**
+     * [segments 分解PATH]
+     *
+     * @return array
+     * @author 11.
+     */
+    public function segments()
+    {
+        $segments = explode('/', $this->path());
+        return array_values(array_filter($segments, function ($v) { return $v != ''; }));
+    }
+
+
+
+    /**
+     * [secure 判断是否是安全请求]
+     *
+     * @return bool
+     * @author 11.
+     */
+    public function secure()
+    {
+        return $this->isSecure();
+    }
+
+
+    /**
+     * [retrieve]
+     *
+     * @param $source
+     * @param $key
+     * @param $default
+     * @return mixed
+     * @author 11.
+     */
+    protected function retrieve($source, $key, $default)
+    {
+        if (is_null($key)) {
+            return $this->$source->all();
+        }
+
+        return $this->$source->get($key, $default, true);
+    }
+
+
+    /**
+     * [getInputSource 获取请求方法]
+     *
+     * @return mixed|\Symfony\Component\HttpFoundation\ParameterBag
+     * @author 11.
+     */
+    protected function getInputSource()
+    {
+        if ($this->isJson()) {
+            return $this->json();
+        }
+
+        return $this->method() == 'GET' ? $this->query : $this->request;
     }
 }
 
