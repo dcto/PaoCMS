@@ -41,7 +41,7 @@ class Captcha {
         $this->width = $width;
         $this->height = $height;
         $this->token = 'pao_captcha_key';
-        $this->fonts = $fonts ?: array('Exo-Bold.otf', 'MetalMania-Regular.ttf', 'Syncopate-Bold.ttf', 'VastShadow-Regular.ttf');
+        $this->fonts = $fonts ?: array('CherrySwash-Bold.ttf','Syncopate-Bold.ttf', 'VastShadow-Regular.ttf');
     }
 
     /**
