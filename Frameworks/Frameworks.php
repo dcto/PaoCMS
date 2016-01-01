@@ -112,6 +112,7 @@ class Frameworks extends Container
             'response'=>'PAO\Http\Response',
             'cookie'=>'PAO\Http\Cookie',
             'session'=>'PAO\Http\Session',
+            'captcha'=>'PAO\Captcha\Captcha',
             'config'=>'PAO\Configure\Repository',
             'exception'=>'PAO\Exception\PAOException',
             'db'=>'PAO\Database',

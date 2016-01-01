@@ -17,6 +17,10 @@ use PAO\Cache\FileSystem;
 class Index extends Controller
 {
 
+    public function captcha()
+    {
+        return $this->container->make('captcha')->make();
+    }
 
     public function index()
     {
@@ -53,6 +57,7 @@ class Index extends Controller
         //$redis = $this->container->make('redis');
 
 
+        print_r(Session::all());
 
 
         echo '<hr/>';
