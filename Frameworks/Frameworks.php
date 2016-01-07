@@ -18,7 +18,6 @@ use Illuminate\Events\EventServiceProvider;
  *
  * @package PAO
  * @version 20151123
-
  *
  */
 

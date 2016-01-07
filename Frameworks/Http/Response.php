@@ -48,7 +48,6 @@ class Response  //implements  \Illuminate\Contracts\Routing\ResponseFactory
     public function make($content = '', $status = 200 , array $headers = [])
     {
         $this->response = new \Symfony\Component\HttpFoundation\Response($content, $status, $headers);
-
         return $this;
     }
 
