@@ -97,6 +97,21 @@ class Request extends \Symfony\Component\HttpFoundation\Request
     }
 
     /**
+     * [get get方法别名]
+     *
+     * @param            $key
+     * @param null       $default
+     * @return mixed
+     * @author 11.
+     */
+    public function get($key = null, $default = null)
+    {
+        $input = $this->getInputSource()->all() + $this->query->all();
+
+        return Arr::get($input, $key, $default);
+    }
+
+    /**
      * [input get方法别名]
      *
      * @param            $key
@@ -106,11 +121,8 @@ class Request extends \Symfony\Component\HttpFoundation\Request
      */
     public function input($key = null, $default = null)
     {
-        $input = $this->getInputSource()->all() + $this->query->all();
-
-        return Arr::get($input, $key, $default);
+        return $this->get($key, $default);
     }
-
 
     /**
      * [header]
@@ -243,7 +255,7 @@ class Request extends \Symfony\Component\HttpFoundation\Request
      */
     public function path()
     {
-        $pattern = trim($this->getPathInfo(), '/');
+        $pattern = $this->getPathInfo();
 
         return $pattern == '' ? '/' : $pattern;
     }

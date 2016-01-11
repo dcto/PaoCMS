@@ -296,9 +296,18 @@ class Frameworks extends Container
         /**
          * 设置系统时区
          */
-        $timezone = $this->config('config.system.timezone');
+        $timezone = $this->config('config.timezone');
         if ($timezone) {
             date_default_timezone_set($timezone);
+        }
+
+        /**
+         * 设置字符编码
+         * @var [type]
+         */
+        $charset = $this->config('config.charset');
+        if ($charset) {
+            mb_internal_encoding($charset);
         }
 
     }

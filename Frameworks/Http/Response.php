@@ -4,7 +4,7 @@ namespace PAO\Http;
 
 
 
-class Response  //implements  \Illuminate\Contracts\Routing\ResponseFactory
+class Response //implements  \Illuminate\Contracts\Routing\ResponseFactory
 {
 
     /**

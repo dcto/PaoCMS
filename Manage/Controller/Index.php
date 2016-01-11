@@ -25,6 +25,9 @@ class Index extends Controller
     public function index()
     {
 
+        print_r(Request::path());
+        echo '<br />';
+
             echo '<pre>';
             print_r(Config::get('config'));
             echo '<hr/>';
@@ -118,7 +121,7 @@ class Index extends Controller
            // Log::to('test')->info(__METHOD__.'='.date('Y-m-d H:i:s'));
 
         $this->assign('class', __METHOD__);
-            return $this->container->make('response')->view('index');
+          return $this->container->make('response')->view('index');
         //return Response::view('index');
     }
 

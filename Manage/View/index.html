@@ -4,6 +4,7 @@
 {{URL}}
 <hr/>
 
-{% set a = 'abcdeefggg'%}
-{{a|ext}}
-<img src="http://192.168.11.11/PaoCMS/web/admin.php/captcha" />
+{% set a = '我是中国人abcdefghijkl'%}
+{{a|cutstr(2,'...')}}
+
+<img src="http://localhost/PaoCMS/web/admin.php/captcha" />

@@ -6,7 +6,6 @@ use Illuminate\Container\Container;
 use PAO\Exception\NotFoundHttpException;
 
 
-
 class View
 {
     /**
@@ -26,7 +25,7 @@ class View
      * 模板路径
      * @var
      */
-    protected $views;
+    protected $templates;
 
     /**
      * 模板缓存路径
@@ -39,11 +38,9 @@ class View
     {
         $this->container = Container::getInstance();
         $view = $this->container->config('config.dir.view');
-        $this->views = $view ? PAO.DIRECTORY_SEPARATOR.APP.DIRECTORY_SEPARATOR.$view : PAO.DIRECTORY_SEPARATOR.APP.DIRECTORY_SEPARATOR.'View';
-        $this->cache = $this->container->config('template.dir.cache');
-        $this->debug =  $this->container->config('config.debug');
-
-
+        $this->templates = $this->container->config('config.dir.view')
+        ? PAO.DIRECTORY_SEPARATOR.APP.DIRECTORY_SEPARATOR.$view
+        : PAO.DIRECTORY_SEPARATOR.APP.DIRECTORY_SEPARATOR.'View';
     }
 
 
@@ -57,7 +54,7 @@ class View
      */
     public function twig()
     {
-        $loader = new \Twig_Loader_Filesystem($this->views);
+        $loader = new \Twig_Loader_Filesystem($this->templates);
         /*
          * 添加模板路径
         $loader->addPath($templateDir3);
@@ -66,13 +63,13 @@ class View
         $twig  = new \Twig_Environment($loader, array(
 
             //用来保存编译后模板的绝对路径，缺省值为false，也就是关闭缓存。
-            'cache' => $this->cache,
+            'cache' => $this->container->config('template.dir.cache')?:false,
 
             //生成的模板会有一个__toString()方法，可以用来显示生成的Node（缺省为false）
-            'debug' => $this->debug,
+            'debug' => $this->container->config('config.debug')?:false,
 
             //当用Twig开发时，是有必要在每次模板变更之后都重新编译的。如果不提供一个auto_reload参数，他会从debug选项中取值
-            'auto_reload' => $this->debug,
+            'auto_reload' => $this->container->config('config.debug')?:false,
 
             //模板的字符集，缺省为utf-8。
             'charset' => $this->container->config('config.charset'),
@@ -114,16 +111,43 @@ class View
         /**
          * 注册方法
          */
-        $url = new \Twig_SimpleFunction('server', array($this->container->make('request'),'server'));
-        $twig->addFunction($url);
+        $server = new \Twig_SimpleFunction('SERVER', array($this->container->make('request'),'server'));
+        $twig->addFunction($server);
+
+        $request = new \Twig_SimpleFunction('REQUEST', array($this->container->make('request'), 'get'));
+        $twig->addFunction($request);
+
+        /**
+         * [$dump 注册调试函数]
+         * @var [type]
+         */
+        $dump = function($variable){
+                exit("<pre>".var_dump($variable)."</pre>");
+        };
+
+        $twig->addFunction(new \Twig_SimpleFunction('dump', $dump));
+
+        /**
+         * [$debug 注册debug函数]
+         * @var [type]
+         */
+        $debug = function($variable){
+            '<pre>'.print_r($variable)."</pre>";
+        };
+
+        $twig->addFunction(new \Twig_SimpleFunction('debug', $dump));
 
         /**
          * 注册过滤器
          */
-        $null = new \Twig_SimpleFilter('ext', function($string){
-           return $string.'...';
-        });
-        $twig->addFilter($null);
+        $twig->addFilter(new \Twig_SimpleFilter('dump', $dump));
+
+        $twig->addFilter('cutstr', new \Twig_Filter_Function(function($string, $length, $suffix = false){
+            return $string = mb_strlen($string)>$length
+            ? ($suffix ? mb_substr($string, 0, $length).$suffix : mb_substr($string, 0, $length))
+            : $string;
+        }));
+
 
         return $twig;
     }
@@ -149,7 +173,6 @@ class View
         }
     }
 
-
     /**
      * [render 模板渲染]
      *
@@ -170,7 +193,6 @@ class View
         }
 
     }
-
 
     /**
      * [show 模板展示]

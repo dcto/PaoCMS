@@ -65,11 +65,10 @@ class Route
     public function dispatch()
     {
         $request = $this->container->make('request');
-        $pathInfo = $request->getPathInfo();
         $parameter = [];
 
-        if (isset($this->routes[$pathInfo])) {
-            $route = $this->routes[$pathInfo];
+        if (isset($this->routes[$request->path()])) {
+            $route = $this->routes[$request->path()];
             $this->_getVerifyMethod($request, $route[0]);
             $this->callback = $route['to'];
         } else {
@@ -77,7 +76,7 @@ class Route
                 $pattern = strstr($map, ':');
                 if ($pattern) {
                     $map = str_replace(array_keys($this->patterns), array_values($this->patterns), $map);
-                    if (preg_match('#^' . $map . '$#', $pathInfo, $parameter)) {
+                    if (preg_match('#^' . $map . '$#', $request->path(), $parameter)) {
                         array_shift($parameter);//remove the first parameter
                         $this->_getVerifyMethod($request, $route[0]);
                         $this->callback = $route['to'];
@@ -127,7 +126,7 @@ class Route
 
     protected function _getCallBack()
     {
-        if(!$this->callback) throw new NotFoundHttpException('The route was not found');
+        if(!$this->callback) throw new NotFoundHttpException('The route was not found check your pathInfo Please!');
 
         //如果是自定义闭包
         if($this->callback instanceof \Closure) return $this->callback;
