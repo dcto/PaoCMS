@@ -118,6 +118,7 @@ class Frameworks extends Container
             'view'=>'PAO\View',
             'cache'=>'PAO\Cache\Cache',
             'log'=>'PAO\Logger',
+            'translator'=>'PAO\Translator',
             'Illuminate\Contracts\Routing\ResponseFactory' => 'PAO\Http\Response'
         ];
     }

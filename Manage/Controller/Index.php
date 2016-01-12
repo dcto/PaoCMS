@@ -119,6 +119,14 @@ class Index extends Controller
         //$this->container->make('response')->show('dwww');
 
            // Log::to('test')->info(__METHOD__.'='.date('Y-m-d H:i:s'));
+        echo '<hr />';
+
+        echo $this->container->make('translator')->get('title');
+
+        echo $this->container->make('translator')->get('user.register');
+
+        echo '<hr />';
+
 
         $this->assign('class', __METHOD__);
           return $this->container->make('response')->view('index');
