@@ -2,18 +2,14 @@
 defined('PAO') || die('The PaoCMS Load Error');
 
 return array(
-
         'debug' => true, //debug模式
-
         'log' => true, //是否生成日志总开关
-
         'token'=> 'PaoSystem', //网站标识
-
         'timezone'=>'PRC', //系统时区
         'charset'=>'utf-8', //系统编码
+        'language'=>'zh-cn',
 
         'session'=>'files', //Session存储方式
-
         '404'=>'404.html',
         '500'=>'500.html',
 
