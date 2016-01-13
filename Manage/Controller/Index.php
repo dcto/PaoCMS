@@ -126,6 +126,8 @@ class Index extends Controller
         echo $this->container->make('translator')->get('user.register');
 
         echo '<hr />';
+        echo $this->container->make('route')->get('reg',array('abcd','erere'));
+        echo '<hr />';
 
 
         $this->assign('class', __METHOD__);

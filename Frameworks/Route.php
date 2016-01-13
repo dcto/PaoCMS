@@ -19,13 +19,7 @@ class Route
      * 已构建的路由数组
      * @var array
      */
-    protected $routes = [];
-
-    /**
-     * 请求对象
-     * @var array
-     */
-    protected $request = null;
+    protected $routes = null;
 
     /**
      * 路由对应的控制器回调
@@ -47,10 +41,7 @@ class Route
     public function __construct()
     {
         $this->container = Container::getInstance();
-
-        if (empty($this->routes)) {
-            $this->_setRoutesByDefault();
-        }
+        $this->routes = $this->container->config('route');
     }
 
 
@@ -62,6 +53,29 @@ class Route
         $this->routes = array_merge($this->routes, $route);
     }
 
+    /**
+     * [get get route path by alias]
+     * @param  [type] $alias [description]
+     * @return [type]        [description]
+     */
+    public function get($alias, $parameters = null)
+    {
+        foreach ( (array) $this->routes as $path => $route) {
+            if($route['as'] == $alias)
+            {
+                if(!is_array($parameters)) return $path;
+                return preg_replace_callback('/:\w+/', function($matches) use (&$parameters) {
+                    return array_shift($parameters);
+                }, str_replace(array('(',')'),'',$path));
+            }
+        }
+        throw new NotFoundHttpException("The alias [$alias] route was not found!");
+    }
+
+    /**
+     * [dispatch route despatch]
+     * @return callback;
+     */
     public function dispatch()
     {
         $request = $this->container->make('request');
@@ -96,19 +110,6 @@ class Route
         }
 
     }
-
-    /**
-     * [_setRoutesByDefault initialization The Routing Map]
-     *
-     * @author  dc
-     * @version v1
-     *
-     */
-    protected function _setRoutesByDefault()
-    {
-        $this->routes = array_merge( $this->routes, $this->container->config('route') );
-    }
-
 
     protected function _getIsSafeCallable($callback)
     {

@@ -125,6 +125,14 @@ class View
         $twig->addFunction($config);
 
         /**
+         * 注册路由调用方法
+         * @example [route(alias, ['a','b'])]
+         * @var [type]
+         */
+        $route = new \Twig_SimpleFunction('route', array($this->container->make('route'), 'get'));
+        $twig->addFunction($route);
+
+        /**
          * 注册语言包调用方法
          * @var [type]
          */
