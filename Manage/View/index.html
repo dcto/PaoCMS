@@ -1,10 +1,16 @@
+<html>
+<head>
+<title>{{e('title')}}</title>
+<meta charset="{{config('config.charset')}}">
+</head>
 {{class}}
 <hr/>
-
-{{URL}}
+{{make('config').get('config.charset')}}
 <hr/>
-
 {% set a = '我是中国人abcdefghijkl'%}
 {{a|cutstr(2,'...')}}
-
+<hr>
+{{request.server('SCRIPT_NAME')}}
+<hr>
+{{e('user.login')}}
 <img src="http://localhost/PaoCMS/web/admin.php/captcha" />

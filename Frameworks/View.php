@@ -106,16 +106,31 @@ class View
          */
         $twig->addGlobal('PAO', PAO);
         $twig->addGlobal('APP', APP);
-        $twig->addGlobal('URL', $this->container->make('request')->url());
+        $twig->addGlobal('request', $this->container->make('request'));
+        /**
+         * 注册全局make方法
+         * @example   [make('class').function]
+         * @var [type]
+         */
+        $make = new \Twig_SimpleFunction('make', function($alias, $parameters = []){
+            return $this->container->make($alias, $parameters);
+        });
+        $twig->addFunction($make);
 
         /**
-         * 注册方法
+         * 注册config方法
+         * @var [type]
          */
-        $server = new \Twig_SimpleFunction('SERVER', array($this->container->make('request'),'server'));
-        $twig->addFunction($server);
+        $config = new \Twig_SimpleFunction('config', array($this->container->make('config'), 'get'));
+        $twig->addFunction($config);
 
-        $request = new \Twig_SimpleFunction('REQUEST', array($this->container->make('request'), 'get'));
-        $twig->addFunction($request);
+        /**
+         * 注册语言包调用方法
+         * @var [type]
+         */
+        $language = new \Twig_SimpleFunction('e', array($this->container->make('translator'), 'get'));
+        $twig->addFunction($language);
+
 
         /**
          * [$dump 注册调试函数]
@@ -142,6 +157,10 @@ class View
          */
         $twig->addFilter(new \Twig_SimpleFilter('dump', $dump));
 
+        /**
+         * [$suffix 截取字符串]
+         * @var [type]
+         */
         $twig->addFilter('cutstr', new \Twig_Filter_Function(function($string, $length, $suffix = false){
             return $string = mb_strlen($string)>$length
             ? ($suffix ? mb_substr($string, 0, $length).$suffix : mb_substr($string, 0, $length))

@@ -28,6 +28,10 @@ class Translator
 	protected $items;
 
 
+	/**
+	 * 初始化语言对象
+	 * @param [type] $items [预加载语言]
+	 */
 	public function __construct( $items = null)
 	{
 		$this->container = Container::getInstance();
