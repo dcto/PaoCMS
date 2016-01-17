@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
 use Manage\Model\Message;
-use PAO\Cache\FileSystem;
 
 
 class Index extends Controller
@@ -23,6 +22,11 @@ class Index extends Controller
     }
 
     public function index()
+    {
+        return Response::view('index');
+    }
+
+    public function test()
     {
 
         print_r(Request::path());

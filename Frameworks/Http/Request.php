@@ -268,9 +268,13 @@ class Request extends \Symfony\Component\HttpFoundation\Request
      */
     public function root()
     {
-        return rtrim($this->getSchemeAndHttpHost() . $this->getBaseUrl(), '/');
+        return rtrim($this->getSchemeAndHttpHost() . $this->getBasePath(), '/');
     }
 
+    public function baseurl()
+    {
+        return rtrim($this->getSchemeAndHttpHost() . $this->getBaseUrl(), '/');
+    }
 
     /**
      * [segment 根据索引获取path]

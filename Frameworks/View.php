@@ -100,7 +100,13 @@ class View
         ));
         $twig->setLexer($lexer);
         */
-
+        /**
+         * 注册扩展方法
+         * @var Twig_Environment
+         *
+         * $twig = new Twig_Environment($loader,array('debug'=>true));
+         * $twig->addExtension(new Twig_Extension_Debug());
+         */
         /**
          * 注册全局变量
          */
@@ -123,6 +129,16 @@ class View
          */
         $config = new \Twig_SimpleFunction('config', array($this->container->make('config'), 'get'));
         $twig->addFunction($config);
+
+        /**
+         * 设置web路径
+         * @var [type]
+         */
+        $asset = new \Twig_SimpleFunction('asset', function($assets){
+            $web = $this->container->config('config.web')?:$this->container->make('request')->root().'/';
+            return $web . trim($assets, '/');
+        });
+        $twig->addFunction($asset);
 
         /**
          * 注册路由调用方法
