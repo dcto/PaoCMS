@@ -271,7 +271,7 @@ class Request extends \Symfony\Component\HttpFoundation\Request
         return rtrim($this->getSchemeAndHttpHost() . $this->getBasePath(), '/');
     }
 
-    public function baseurl()
+    public function baseUrl()
     {
         return rtrim($this->getSchemeAndHttpHost() . $this->getBaseUrl(), '/');
     }

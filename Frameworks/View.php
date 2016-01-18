@@ -112,6 +112,7 @@ class View
          */
         $twig->addGlobal('PAO', PAO);
         $twig->addGlobal('APP', APP);
+        $twig->addGlobal('config', $this->container->config('config'));
         $twig->addGlobal('request', $this->container->make('request'));
         $twig->addGlobal('timezone', date_default_timezone_get());
         /**
@@ -150,6 +151,23 @@ class View
         $twig->addFunction($route);
 
         /**
+         * 路由及url构建方法
+         * @example [url('@as'), url('/path/path2')]
+         * @var [type]
+         */
+        $url = new \Twig_Function_Function(function($url){
+            $baseUrl = $this->container->make('request')->baseUrl().'/';
+            if(strstr($url, '@'))
+            {
+                $route = $this->container->make('route')->get(ltrim($url,'@'));
+                return $baseUrl.ltrim($route, '/');
+            }
+
+            return $baseUrl.trim($url, '/');
+        });
+        $twig->addFunction('url', $url);
+
+        /**
          * 注册语言包调用方法
          * @var [type]
          */
@@ -186,7 +204,7 @@ class View
          */
         $twig->addFunction('size', new \Twig_Function_Function(function($size){
             $units = array('b','kb','mb','gb','tb','pb');
-            return round($size/pow(1024,($i=floor(log($size,1024)))),2).' '.$units[$i];
+            return round($size/pow(1024,($i=floor(log($size,1024)))),2).$units[$i];
         }));
 
         /**
