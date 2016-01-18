@@ -113,6 +113,7 @@ class View
         $twig->addGlobal('PAO', PAO);
         $twig->addGlobal('APP', APP);
         $twig->addGlobal('request', $this->container->make('request'));
+        $twig->addGlobal('timezone', date_default_timezone_get());
         /**
          * 注册全局make方法
          * @example   [make('class').function]
@@ -175,6 +176,18 @@ class View
         };
 
         $twig->addFunction(new \Twig_SimpleFunction('debug', $dump));
+
+        $twig->addFunction('microtime', new \Twig_Function_Function('microtime'));
+
+        $twig->addFunction('memory_get_usage', new \Twig_Function_Function('memory_get_usage'));
+
+        /**
+         * 单位转换
+         */
+        $twig->addFunction('size', new \Twig_Function_Function(function($size){
+            $units = array('b','kb','mb','gb','tb','pb');
+            return round($size/pow(1024,($i=floor(log($size,1024)))),2).' '.$units[$i];
+        }));
 
         /**
          * 注册过滤器
