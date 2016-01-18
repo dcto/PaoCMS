@@ -12,7 +12,7 @@ class Request extends \Symfony\Component\HttpFoundation\Request
 {
 
     /**
-     * ÖØ¹¹Request·½·¨
+     * é‡æ„Requestæ–¹æ³•
      */
     public function __construct()
     {
@@ -35,7 +35,7 @@ class Request extends \Symfony\Component\HttpFoundation\Request
     }
 
     /**
-     * [is ÅĞ¶Ïµ±Ç°Â·¾¶ÊÇ·ñÆ¥Åä]
+     * [is åˆ¤æ–­å½“å‰è·¯å¾„æ˜¯å¦åŒ¹é…]
      *
      * @return bool
      * @author 11.
@@ -52,7 +52,7 @@ class Request extends \Symfony\Component\HttpFoundation\Request
     }
 
     /**
-     * [url »ñÈ¡µ±Ç°URL]
+     * [url è·å–å½“å‰URL]
      *
      * @return string
      * @author 11.
@@ -63,7 +63,7 @@ class Request extends \Symfony\Component\HttpFoundation\Request
     }
 
     /**
-     * [all ·µ»ØËùÓĞ]
+     * [all è¿”å›æ‰€æœ‰]
      *
      * @return array
      * @author 11.
@@ -75,7 +75,7 @@ class Request extends \Symfony\Component\HttpFoundation\Request
 
 
     /**
-     * [has ÊÇ·ñ´æÔÚ]
+     * [has æ˜¯å¦å­˜åœ¨]
      *
      * @param $key
      * @return bool
@@ -97,7 +97,7 @@ class Request extends \Symfony\Component\HttpFoundation\Request
     }
 
     /**
-     * [get get·½·¨±ğÃû]
+     * [get getæ–¹æ³•åˆ«å]
      *
      * @param            $key
      * @param null       $default
@@ -112,7 +112,7 @@ class Request extends \Symfony\Component\HttpFoundation\Request
     }
 
     /**
-     * [input get·½·¨±ğÃû]
+     * [input getæ–¹æ³•åˆ«å]
      *
      * @param            $key
      * @param null       $default
@@ -138,7 +138,7 @@ class Request extends \Symfony\Component\HttpFoundation\Request
     }
 
     /**
-     * [server »ñÈ¡server]
+     * [server è·å–server]
      *
      * @param null $key
      * @param null $default
@@ -151,7 +151,7 @@ class Request extends \Symfony\Component\HttpFoundation\Request
     }
 
     /**
-     * [file »ñÈ¡ÉÏ´«ÎÄ¼ş]
+     * [file è·å–ä¸Šä¼ æ–‡ä»¶]
      *
      * @param null $key
      * @param null $default
@@ -164,7 +164,7 @@ class Request extends \Symfony\Component\HttpFoundation\Request
     }
 
     /**
-     * [cookie ÖØ¹¹cookie·½·¨ÊÊÓ¦Facadesµ÷ÓÃ]
+     * [cookie é‡æ„cookieæ–¹æ³•é€‚åº”Facadesè°ƒç”¨]
      *
      * @param $key
      * @param $default
@@ -181,7 +181,7 @@ class Request extends \Symfony\Component\HttpFoundation\Request
     }
 
     /**
-     * [isJson ÅĞ¶ÏÊÇ·ñÎªjson]
+     * [isJson åˆ¤æ–­æ˜¯å¦ä¸ºjson]
      *
      * @return bool
      * @author 11.
@@ -192,7 +192,7 @@ class Request extends \Symfony\Component\HttpFoundation\Request
     }
 
     /**
-     * [json »ñÈ¡JSONÊı×é]
+     * [json è·å–JSONæ•°ç»„]
      *
      * @param null $key
      * @param null $default
@@ -213,7 +213,7 @@ class Request extends \Symfony\Component\HttpFoundation\Request
     }
 
     /**
-     * [method »ñÈ¡µ±Ç°ÇëÇó·½Ê½]
+     * [method è·å–å½“å‰è¯·æ±‚æ–¹å¼]
      *
      * @return string
      * @author 11.
@@ -225,7 +225,7 @@ class Request extends \Symfony\Component\HttpFoundation\Request
 
 
     /**
-     * [ip »ñÈ¡¿Í»§¶ËIP]
+     * [ip è·å–å®¢æˆ·ç«¯IP]
      *
      * @return string
      * @author 11.
@@ -236,7 +236,7 @@ class Request extends \Symfony\Component\HttpFoundation\Request
     }
 
     /**
-     * [ips »ñÈ¡¿Í»§¶ËËùÓĞIP]
+     * [ips è·å–å®¢æˆ·ç«¯æ‰€æœ‰IP]
      *
      * @return array
      * @author 11.
@@ -248,7 +248,7 @@ class Request extends \Symfony\Component\HttpFoundation\Request
 
 
     /**
-     * [path »ñÈ¡µ±Ç°pathInfo]
+     * [path è·å–å½“å‰pathInfo]
      *
      * @return string
      * @author 11.
@@ -261,7 +261,7 @@ class Request extends \Symfony\Component\HttpFoundation\Request
     }
 
     /**
-     * [root »ñÈ¡¸ùÂ·¾¶]
+     * [root è·å–æ ¹è·¯å¾„]
      *
      * @return string
      * @author 11.
@@ -271,15 +271,38 @@ class Request extends \Symfony\Component\HttpFoundation\Request
         return rtrim($this->getSchemeAndHttpHost() . $this->getBasePath(), '/');
     }
 
+    /**
+     * [baseUrl è·å–æ ¹URL]
+     * @return [type] [description]
+     */
     public function baseUrl()
     {
         return rtrim($this->getSchemeAndHttpHost() . $this->getBaseUrl(), '/');
     }
 
     /**
-     * [segment ¸ù¾İË÷Òı»ñÈ¡path]
+     * [scheme è·å–è¯·æ±‚æ–¹å¼]
+     * @return [type] [description]
+     */
+    public function scheme()
+    {
+        return $this->isSecure() ? 'https' : 'http';
+    }
+
+    /**
+     * [domain è·å–å½“å‰åŸŸå]
+     * @return [type] [description]
+     */
+    public function domain($http = false)
+    {
+        $host = parse_url($this->getSchemeAndHttpHost(), PHP_URL_HOST);
+        return $http ? $this->scheme() .'://'.$host : $host;
+    }
+
+    /**
+     * [segment æ ¹æ®ç´¢å¼•è·å–path]
      *
-     * @param      $index [´Ó1¿ªÊ¼]
+     * @param      $index [ä»1å¼€å§‹]
      * @param null $default
      * @return mixed
      * @author 11.
@@ -290,7 +313,7 @@ class Request extends \Symfony\Component\HttpFoundation\Request
     }
 
     /**
-     * [segments ·Ö½âPATH]
+     * [segments åˆ†è§£PATH]
      *
      * @return array
      * @author 11.
@@ -304,7 +327,7 @@ class Request extends \Symfony\Component\HttpFoundation\Request
 
 
     /**
-     * [secure ÅĞ¶ÏÊÇ·ñÊÇ°²È«ÇëÇó]
+     * [secure åˆ¤æ–­æ˜¯å¦æ˜¯å®‰å…¨è¯·æ±‚]
      *
      * @return bool
      * @author 11.
@@ -335,7 +358,7 @@ class Request extends \Symfony\Component\HttpFoundation\Request
 
 
     /**
-     * [getInputSource »ñÈ¡ÇëÇó·½·¨]
+     * [getInputSource è·å–è¯·æ±‚æ–¹æ³•]
      *
      * @return mixed|\Symfony\Component\HttpFoundation\ParameterBag
      * @author 11.

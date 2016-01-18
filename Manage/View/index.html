@@ -3,7 +3,7 @@
 {%block content%}
     <div class="welinfo">
     <span><img src="{{asset('images')}}/sun.png" alt="天气" /></span>
-    <b>Admin早上好，欢迎使用信息管理系统</b>(admin@uimaker.com)
+    <b>admin您好! 欢迎进入{{config.name}}</b>({{make('request').domain()}})
     <a href="#">帐号设置</a>
     </div>
 

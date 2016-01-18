@@ -23,6 +23,7 @@ class Index extends Controller
 
     public function index()
     {
+        echo Request::domain(true);
         return Response::view('index');
     }
 
