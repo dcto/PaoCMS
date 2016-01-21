@@ -16,8 +16,8 @@ class Setting extends Model
         Schema::create('setting', function($table){
             /** @var \Illuminate\Database\Schema\Blueprint $table */
             $table->increments('id')->unsigned();
-            $table->string('key',24)->comment('¼ü');
-            $table->json('value')->nullable()->comment('Öµ');
+            $table->string('key',24)->comment('é”®');
+            $table->string('value')->nullable()->comment('å€¼');
 
             $table->index('key');
             $table->engine = 'innodb';

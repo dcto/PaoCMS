@@ -175,13 +175,17 @@ class Repository implements ArrayAccess, ConfigContract
         $PaoConfig = PAO.DIRECTORY_SEPARATOR.'Config'.DIRECTORY_SEPARATOR.strtolower($name).'.php';
         $AppConfig = PAO.DIRECTORY_SEPARATOR.APP.DIRECTORY_SEPARATOR.'Config'.DIRECTORY_SEPARATOR.strtolower($name).'.php';
 
-        if(!is_readable($PaoConfig)) throw new SystemException('The config file is not available in The '. $PaoConfig);
+        $Config = array();
 
-        $Config = (array) require($PaoConfig);
+        if(is_readable($PaoConfig)){
+            $Config = (array) require($PaoConfig);
+        }
 
         if(is_readable($AppConfig))
         {
             $Config = array_replace_recursive($Config, (array) require($AppConfig));
+        }else{
+
         }
         $this->set($name, $Config);
 

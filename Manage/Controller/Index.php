@@ -23,7 +23,18 @@ class Index extends Controller
 
     public function index()
     {
-        echo Request::domain(true);
+        /*
+        \Manage\Model\Admin::down();
+        \Manage\Model\Admin::up();
+        \Manage\Model\AdminGroup::down();
+        \Manage\Model\AdminGroup::up();
+        \Manage\Model\Setting::down();
+        \Manage\Model\Setting::up();
+        \Manage\Model\User::down();
+        \Manage\Model\User::up();
+        \Manage\Model\Category::down();
+        \Manage\Model\Category::up();
+        */
         return Response::view('index');
     }
 

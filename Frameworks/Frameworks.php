@@ -62,6 +62,11 @@ class Frameworks extends Container
         $this->instance('Illuminate\Container\Container', $this);
 
         /**
+         * 异常模块注入
+         */
+        $this->registerExceptionHandling();
+
+        /**
          * 注册核心容器别名
          */
         $this->registerContainerAliases();
@@ -70,11 +75,6 @@ class Frameworks extends Container
          * 基本服务注册
          */
         $this->registerBaseServiceProviders();
-
-        /**
-         * 异常模块注入
-         */
-        $this->registerExceptionHandling();
 
         /**
          * 初始化配置系统环境
@@ -121,6 +121,14 @@ class Frameworks extends Container
             'translator'=>'PAO\Translator',
             'Illuminate\Contracts\Routing\ResponseFactory' => 'PAO\Http\Response'
         ];
+
+        $aliases = (array) $this->config('service');
+        if($alias = array_intersect_key($this->aliases, $aliases))
+        {
+            $duplicates = implode(',', array_keys($aliases));
+            throw new SystemException("The Service Alias [$duplicates] Was Duplicate!");
+        }
+        $this->aliases = array_merge($this->aliases, $aliases);
     }
 
     /**

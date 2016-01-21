@@ -47,7 +47,6 @@ class Route
 
     public function __call($method, $params)
     {
-
         $route = $params[0];
         array_push($route[key($route)], $method);
         $this->routes = array_merge($this->routes, $route);
@@ -70,6 +69,15 @@ class Route
             }
         }
         throw new NotFoundHttpException("The alias [$alias] route was not found!");
+    }
+
+    /**
+     * [all get all routes]
+     * @return array
+     */
+    public function all()
+    {
+        return $this->routes;
     }
 
     /**
@@ -138,7 +146,7 @@ class Route
         list($controller, $function) = explode('@', $this->callback);
             $appController = $this->container->config('config.dir.controller');
         if(is_string($appController)) {
-            $controller = APP . '\\' . $appController . '\\' . $controller;
+            $controller = APP.'\\'.$appController.'\\'.$controller;
         }else {
             $controller = APP.'\\Controller\\'.$controller;
         }

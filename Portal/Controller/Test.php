@@ -53,10 +53,10 @@ class Test extends Controller
         //$redis = $this->container->make('cache')->redis();
 
 
-
-        $this->assign('test', '测试');
+      //$this->container->make('test');
+        $this->assign('test', '');
        // $this->assign('data',$result);
-       // return $this->view('index');
+        //return $this->view('index');
         \Response::view('index')->send();
     }
 
