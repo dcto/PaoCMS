@@ -152,7 +152,7 @@ class Frameworks extends Container
         ];
         foreach($facadesAlias as $alias => $facade)
         {
-             // class_alias($facade, $alias);
+            class_alias($facade, $alias);
         }
     }
 

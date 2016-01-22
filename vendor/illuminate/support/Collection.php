@@ -153,7 +153,7 @@ class Collection implements ArrayAccess, Arrayable, Countable, IteratorAggregate
 
         $position = 0;
 
-        foreach ($this->items as $key => $item) {
+        foreach ($this->items as $item) {
             if ($position % $step === $offset) {
                 $new[] = $item;
             }
@@ -1093,6 +1093,8 @@ class Collection implements ArrayAccess, Arrayable, Countable, IteratorAggregate
             return $items->toArray();
         } elseif ($items instanceof Jsonable) {
             return json_decode($items->toJson(), true);
+        } elseif ($items instanceof JsonSerializable) {
+            return $items->jsonSerialize();
         }
 
         return (array) $items;

@@ -8,17 +8,13 @@
     "symfony/http-foundation": "^2.7",
     "monolog/monolog": "^1.17",
     "twig/twig": "^1.23"
-
-
-
-
   },
+
   "autoload": {
     "psr-4": {
       "PAO\\": "Frameworks/",
       "Portal\\": "Portal/",
       "Manage\\": "Manage/"
     }
-
   }
 }

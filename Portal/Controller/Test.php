@@ -4,8 +4,6 @@ namespace Portal\Controller;
 
 
 
-
-
 class Test extends Controller
 {
 
@@ -52,12 +50,11 @@ class Test extends Controller
 
         //$redis = $this->container->make('cache')->redis();
 
-      print_r(get_included_files());
       //$this->container->make('test');
         $this->assign('test', '');
        // $this->assign('data',$result);
-        return $this->view('index');
-        //\Response::view('index')->send();
+        //return $this->view('index');
+        \Response::view('index')->send();
     }
 
 
