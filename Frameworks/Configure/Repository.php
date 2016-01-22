@@ -162,7 +162,7 @@ class Repository implements ArrayAccess, ConfigContract
 
 
     /**
-     * [load 重载文件读取]
+     * [load load config file]
      *
      * @param $name
      * @return array

@@ -8,15 +8,32 @@ use Illuminate\Container\Container;
 class Controller
 {
     /**
-     * 容器
+     * 全局容器
      * @var Container
      */
-    public $container;
+    protected $container;
+
+    /**
+     * [$controller 当前控制器]
+     * @var [type]
+     */
+    protected $controller = null;
+
+    /**
+     * [$action 当前控制器方法]
+     * @var [type]
+     */
+    protected $action = null;
 
 
     public function __construct(Container $container)
     {
+
         $this->container = $container;
+
+        $this->controller = $this->container->make('route')->getController();
+
+        $this->action = $this->container->make('route')->getAction();
     }
 
 

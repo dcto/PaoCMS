@@ -16,6 +16,18 @@ class Route
     protected $container;
 
     /**
+     * 当前请求控制器
+     * @var [type]
+     */
+    protected $controller = null;
+
+    /**
+     * 当前请求方法
+     * @var [type]
+     */
+    protected $action = null;
+
+    /**
      * 已构建的路由数组
      * @var array
      */
@@ -81,6 +93,24 @@ class Route
     }
 
     /**
+     * [getController get Current Controoler]
+     * @return [string]
+     */
+    public function getController()
+    {
+        return $this->controller;
+    }
+
+    /**
+     * [getAction get Current Action]
+     * @return [string]
+     */
+    public function getAction()
+    {
+        return $this->action;
+    }
+
+    /**
      * [dispatch route despatch]
      * @return callback;
      */
@@ -143,7 +173,9 @@ class Route
         //验证回调方法
         $this->_getIsSafeCallable($this->callback);
 
-        list($controller, $function) = explode('@', $this->callback);
+        list($controller, $action) = explode('@', $this->callback);
+            $this->controller = class_basename($controller);
+            $this->action = $action;
             $appController = $this->container->config('config.dir.controller');
         if(is_string($appController)) {
             $controller = APP.'\\'.$appController.'\\'.$controller;
@@ -152,11 +184,11 @@ class Route
         }
 
         //判断方法是否存在并将其实例化
-        if (!method_exists($instance = $this->container->make($controller), $function)) {
-            throw new NotFoundHttpException('The Target [' . $controller . '::' . $function . '] was not found');
+        if (!method_exists($instance = $this->container->make($controller), $action)) {
+            throw new NotFoundHttpException('The Target [' . $controller . '::' . $action . '] was not found');
         }
 
-        return array($instance, $function);
+        return array($instance, $action);
     }
 }
 
