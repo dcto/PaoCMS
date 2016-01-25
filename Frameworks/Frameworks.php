@@ -219,7 +219,7 @@ class Frameworks extends Container
         {
             throw new SystemException('The Response Must be Instance of PAO\Response');
         }
-        print_r(get_included_files());
+
         /**
          * 响应请求
          */

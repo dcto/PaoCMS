@@ -37,10 +37,7 @@ class View
     public function __construct()
     {
         $this->container = Container::getInstance();
-        $view = $this->container->config('config.dir.view');
-        $this->templates = $this->container->config('config.dir.view')
-        ? PAO.DIRECTORY_SEPARATOR.APP.DIRECTORY_SEPARATOR.$view
-        : PAO.DIRECTORY_SEPARATOR.APP.DIRECTORY_SEPARATOR.'View';
+        $this->templates = $this->container->config('template.dir')?:PAO.DIRECTORY_SEPARATOR.APP.DIRECTORY_SEPARATOR.'View';
     }
 
 
@@ -63,7 +60,7 @@ class View
         $twig  = new \Twig_Environment($loader, array(
 
             //用来保存编译后模板的绝对路径，缺省值为false，也就是关闭缓存。
-            'cache' => $this->container->config('template.dir.cache')?:false,
+            'cache' => $this->container->config('template.cache')?:false,
 
             //生成的模板会有一个__toString()方法，可以用来显示生成的Node（缺省为false）
             'debug' => $this->container->config('config.debug')?:false,
