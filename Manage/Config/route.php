@@ -6,6 +6,9 @@ return array(
     '/' => ['GET','as'=>'index', 'to'=>'Index@index'],
     '/auth/login' =>[['GET','POST'], 'as'=>'login', 'to'=>'auth@login'],
     '/auth/logout' =>['GET', 'as'=>'logout', 'to'=>'auth@logout'],
+    '/admin' => ['GET', 'as'=>'admin', 'to'=>'admin@index'],
+    '/admin/passowrd' => ['GET', 'as'=>'admin', 'to'=>'admin@password'],
+    '/admin/group' => ['GET', 'as'=>'admin', 'to'=>'admin@group'],
 
     '/user/publish' =>['GET', 'as'=>'user_publish', 'to'=>'user@publish'],
     '/user/modify/(:num)' =>['GET', 'as'=>'user_modify', 'to'=>'user@modify'],

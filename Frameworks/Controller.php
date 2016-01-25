@@ -25,6 +25,12 @@ class Controller
      */
     protected $action = null;
 
+    /**
+     * [$var 预置公共变量]
+     * @var array
+     */
+    protected $assign = [];
+
 
     public function __construct(Container $container)
     {
@@ -34,6 +40,8 @@ class Controller
         $this->controller = $this->container->make('route')->getController();
 
         $this->action = $this->container->make('route')->getAction();
+
+        $this->assign($this->assign);
     }
 
 

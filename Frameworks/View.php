@@ -14,24 +14,17 @@ class View
      */
     protected $container;
 
-
     /**
      * 模板公共变量
      * @var array
      */
-    public $variable = [];
+    public $variables = [];
 
     /**
      * 模板路径
      * @var
      */
     protected $templates;
-
-    /**
-     * 模板缓存路径
-     * @var
-     */
-    protected $cache;
 
 
     public function __construct()
@@ -237,10 +230,10 @@ class View
         {
             foreach($var as $key => $v)
             {
-                $this->variable[$key] = $v;
+                $this->variables[$key] = $v;
             }
         }else{
-            $this->variable[$var] = $val;
+            $this->variables[$var] = $val;
         }
     }
 
@@ -252,13 +245,13 @@ class View
      * @return string
      * @author 11.
      */
-    public function render($template, $variable)
+    public function render($template, $variables)
     {
         $template = $template . $this->container->config('template.suffix');
 
-        $variable = array_merge($this->variable, $variable);
+        $variables = array_merge($this->variables, $variables);
         try {
-            return $this->twig()->render($template, $variable);
+            return $this->twig()->render($template, $variables);
         }catch (NotFoundHttpException $e){
             throw new NotFoundHttpException($e->getMessage());
         }
@@ -272,8 +265,8 @@ class View
      * @param $variable
      * @author 11.
      */
-    public function show($template, $variable)
+    public function show($template, $variables)
     {
-        return $this->container->make('response')->make($this->render($template, $variable));
+        return $this->container->make('response')->make($this->render($template, $variables));
     }
 }
