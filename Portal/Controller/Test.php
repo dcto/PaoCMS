@@ -54,7 +54,7 @@ class Test extends Controller
         $this->assign('test', '');
        // $this->assign('data',$result);
         //return $this->view('index');
-        \Response::view('index')->send();
+        return \Response::view('index');
     }
 
 

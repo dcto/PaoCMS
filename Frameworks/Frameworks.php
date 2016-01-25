@@ -114,21 +114,26 @@ class Frameworks extends Container
             'captcha'=>'PAO\Captcha\Captcha',
             'config'=>'PAO\Configure\Repository',
             'exception'=>'PAO\Exception\PAOException',
+            'translator'=>'PAO\Translator',
             'db'=>'PAO\Database',
             'view'=>'PAO\View',
             'cache'=>'PAO\Cache\Cache',
             'log'=>'PAO\Logger',
-            'translator'=>'PAO\Translator',
             'Illuminate\Contracts\Routing\ResponseFactory' => 'PAO\Http\Response'
         ];
 
-        $aliases = (array) $this->config('service');
-        if($alias = array_intersect_key($this->aliases, $aliases))
+        //注册自定义服务别名
+        if($aliases = (array) $this->config('service'))
         {
-            $duplicates = implode(',', array_keys($aliases));
-            throw new SystemException("The Service Alias [$duplicates] Was Duplicate!");
+            if($alias = array_intersect_key($this->aliases, $aliases))
+            {
+                $duplicates = implode(',', array_keys($aliases));
+                throw new SystemException("The Service Alias [$duplicates] Was Duplicate!");
+            }else{
+                $this->aliases = array_merge($this->aliases, $aliases);
+            }
         }
-        $this->aliases = array_merge($this->aliases, $aliases);
+
     }
 
     /**
@@ -214,7 +219,7 @@ class Frameworks extends Container
         {
             throw new SystemException('The Response Must be Instance of PAO\Response');
         }
-
+        print_r(get_included_files());
         /**
          * 响应请求
          */
@@ -223,7 +228,7 @@ class Frameworks extends Container
 
 
     /**
-     * [register 服务注册器]
+     * [register 服务提供者注册器]
      *
      * @param $provider
      */
@@ -305,17 +310,15 @@ class Frameworks extends Container
         /**
          * 设置系统时区
          */
-        $timezone = $this->config('config.timezone');
-        if ($timezone) {
+        if ($timezone = $this->config('config.timezone')) {
             date_default_timezone_set($timezone);
         }
 
         /**
-         * 设置字符编码
+         * 设置环境编码
          * @var [type]
          */
-        $charset = $this->config('config.charset');
-        if ($charset) {
+        if ($charset = $this->config('config.charset')) {
             mb_internal_encoding($charset);
         }
 
