@@ -113,6 +113,7 @@ class Frameworks extends Container
             'session'=>'PAO\Http\Session',
             'captcha'=>'PAO\Captcha\Captcha',
             'config'=>'PAO\Configure\Repository',
+            'encrypter'=>'PAO\Encrypter',
             'exception'=>'PAO\Exception\PAOException',
             'translator'=>'PAO\Translator',
             'db'=>'PAO\Database',
@@ -153,6 +154,7 @@ class Frameworks extends Container
             'Cookie' => 'Illuminate\Support\Facades\Cookie',
             'Session' => 'Illuminate\Support\Facades\Session',
             'Cache' => 'Illuminate\Support\Facades\Cache',
+            'Crypt' => 'Illuminate\Support\Facades\Crypt',
             'Log' => 'Illuminate\Support\Facades\Log'
         ];
         foreach($facadesAlias as $alias => $facade)

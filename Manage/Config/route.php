@@ -10,8 +10,8 @@ return array(
     '/admin/passowrd' => ['GET', 'as'=>'admin', 'to'=>'admin@password'],
     '/admin/group' => ['GET', 'as'=>'admin', 'to'=>'admin@group'],
 
-    '/user/publish' =>['GET', 'as'=>'user_publish', 'to'=>'user@publish'],
-    '/user/modify/(:num)' =>['GET', 'as'=>'user_modify', 'to'=>'user@modify'],
+    '/user/insert' =>['GET', 'as'=>'user_publish', 'to'=>'user@insert'],
+    '/user/update/(:num)' =>['GET', 'as'=>'user_modify', 'to'=>'user@update'],
     '/user/delete/(:num)' =>['GET', 'as'=>'user_delete', 'to'=>'user@delete'],
     '/user/password/(:num)' =>['GET', 'as'=>'user_password', 'to'=>'user@password']
 );
