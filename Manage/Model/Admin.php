@@ -30,6 +30,7 @@ class Admin extends  Model
             $table->string('password', 32)->comment('密码');
             $table->string('email',96)->nullable()->comment('电子邮件');
             $table->string('phone',15)->nullable()->comment('电话');
+            $table->integer('times')->default(0)->comment('登录次数');
             $table->datetime('join_time')->nullable()->comment('注册时间');
             $table->datetime('last_time')->nullable()->comment('最后登陆时间');
             $table->string('join_ip',15)->nullable()->comment('注册IP');

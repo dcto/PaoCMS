@@ -2,23 +2,19 @@
 defined('PAO') || die('The PaoCMS Load Error');
 
 return array(
-        'debug' => true, //debugÄ£Ê½
-        'log' => true, //ÊÇ·ñÉú³ÉÈÕÖ¾×Ü¿ª¹Ø
-        'token'=> 'PaoSystem', //ÍøÕ¾±êÊ¶
-        'timezone'=>'PRC', //ÏµÍ³Ê±Çø
-        'charset'=>'utf-8', //ÏµÍ³±àÂë
-        'language'=>'zh-cn',
-        'session'=>'files', //Session´æ´¢·½Ê½
+        'debug' => true, //debugæ¨¡å¼
+        'log' => true, //æ˜¯å¦ç”Ÿæˆæ—¥å¿—æ€»å¼€å…³
+        'token'=> 'pao_kekekdks', //ç½‘ç«™æ ‡è¯†
+        'timezone'=>'PRC', //ç³»ç»Ÿæ—¶åŒº
+        'charset'=>'utf-8', //ç³»ç»Ÿç¼–ç 
+        'language'=>'zh-cn', //é»˜è®¤è¯­è¨€åŒ…
+        'session'=>'files', //Sessionå­˜å‚¨æ–¹å¼
 
-        //ÏµÍ³Ïà¹ØÄ¿Â¼
+        //ç³»ç»Ÿç›¸å…³ç›®å½•
         'dir'=>array(
-            'pao'=> PAO , //ÏµÍ³¸ùÄ¿Â¼
-            'web'=> PAO.DIRECTORY_SEPARATOR.'web', //¹«¹²×ÊÔ´Ä¿Â¼
-            'log'=> PAO.DIRECTORY_SEPARATOR.'RunTime'.DIRECTORY_SEPARATOR.'Logs', //ÈÕÖ¾´æ·ÅÄ¿Â¼
-            'cache'=> PAO.DIRECTORY_SEPARATOR.'RunTime'.DIRECTORY_SEPARATOR.'Cache', //»º´æ´æ·ÅÄ¿Â¼
-        ),
-
-
-
-
+            'pao'=> PAO , //ç³»ç»Ÿæ ¹ç›®å½•
+            'web'=> PAO.DIRECTORY_SEPARATOR.'web', //å…¬å…±èµ„æºç›®å½•
+            'log'=> PAO.DIRECTORY_SEPARATOR.'RunTime'.DIRECTORY_SEPARATOR.'Logs', //æ—¥å¿—å­˜æ”¾ç›®å½•
+            'cache'=> PAO.DIRECTORY_SEPARATOR.'RunTime'.DIRECTORY_SEPARATOR.'Cache', //ç¼“å­˜å­˜æ”¾ç›®å½•
+        )
 );
