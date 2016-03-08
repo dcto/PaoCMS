@@ -14,7 +14,7 @@ class Request extends \Symfony\Component\HttpFoundation\Request
     /**
      * 重构Request方法
      */
-    public function __construct()
+    public function __construct(array $query = array(), array $request = array(), array $attributes = array(), array $cookies = array(), array $files = array(), array $server = array(), $content = null)
     {
         if ('cli-server' === php_sapi_name()) {
             if (array_key_exists('HTTP_CONTENT_LENGTH', $_SERVER)) {
@@ -104,7 +104,7 @@ class Request extends \Symfony\Component\HttpFoundation\Request
      * @return mixed
      * @author 11.
      */
-    public function get($key = null, $default = null)
+    public function get($key = null, $default = null, $deep = false)
     {
         $input = $this->getInputSource()->all() + $this->query->all();
 
