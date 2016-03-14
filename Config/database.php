@@ -5,7 +5,7 @@ defined('PAO') || die('The PaoCMS Load Error');
 return array(
     'default'=>array(
             'driver'=>'mysql',      //数据库类型( MySQL = mysql | SQL Server = sqlsrv | SQLite = sqlite | pgSql = pgsql)
-            'host'=>'192.168.9.240',    //连接地址
+            'host'=>'localhost',    //连接地址
             'port'=>'3306',         //端口
             'database'=>'paocms',   //数据库名称
             'username'  => 'root',  //帐号

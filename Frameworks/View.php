@@ -145,15 +145,17 @@ class View
          * @example [url('@as'), url('/path/path2')]
          * @var [type]
          */
-        $url = new \Twig_Function_Function(function($url){
-            $baseUrl = $this->container->make('request')->baseUrl().'/';
-            if(strstr($url, '@'))
-            {
+        $url = new \Twig_SimpleFunction('url', function($url = null){
+            $request = $this->container->make('request');
+            $baseUrl = $request->baseUrl().'/';
+            if(strstr($url, '@')) {
                 $route = $this->container->make('route')->get(ltrim($url,'@'));
                 return $baseUrl.ltrim($route, '/');
+            }else if(strstr($url, '/')){
+                return $baseUrl.trim($url, '/');
+            }else{
+                return $request->url();
             }
-
-            return $baseUrl.trim($url, '/');
         });
         $twig->addFunction('url', $url);
 
