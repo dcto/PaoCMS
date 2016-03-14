@@ -7,8 +7,7 @@ return array(
     '/auth/login' =>[['GET','POST'], 'as'=>'login', 'to'=>'auth@login'],
     '/auth/logout' =>['GET', 'as'=>'logout', 'to'=>'auth@logout'],
     '/admin' => ['GET', 'as'=>'admin', 'to'=>'admin@index'],
-    '/admin/passowrd' => ['GET', 'as'=>'admin', 'to'=>'admin@password'],
-    '/admin/group' => ['GET', 'as'=>'admin', 'to'=>'admin@group'],
+    '/admin/(:all)' => ['GET', 'as'=>'admin-create', 'to'=>'admin@='],
 
     '/user/insert' =>['GET', 'as'=>'user_publish', 'to'=>'user@insert'],
     '/user/update/(:num)' =>['GET', 'as'=>'user_modify', 'to'=>'user@update'],

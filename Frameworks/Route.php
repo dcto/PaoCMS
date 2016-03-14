@@ -122,7 +122,7 @@ class Route
         if (isset($this->routes[$request->path()])) {
             $route = $this->routes[$request->path()];
             $this->_getVerifyMethod($request, $route[0]);
-            $this->callback = $route['to'];
+            $this->callback = isset($route['to'])? $route['to'] : null;
         } else {
             foreach ($this->routes as $map => $route) {
                 $pattern = strstr($map, ':');
@@ -131,7 +131,7 @@ class Route
                     if (preg_match('#^' . $map . '$#', $request->path(), $parameter)) {
                         array_shift($parameter);//remove the first parameter
                         $this->_getVerifyMethod($request, $route[0]);
-                        $this->callback = $route['to'];
+                        $this->callback = isset($route['to'])? $route['to'] : null;
                         break;
                     } else {
                         continue;
@@ -172,11 +172,14 @@ class Route
 
         //验证回调方法
         $this->_getIsSafeCallable($this->callback);
-
         list($controller, $action) = explode('@', $this->callback);
-            $this->controller = class_basename($controller);
-            $this->action = $action;
-            $appController = $this->container->config('config.dir.controller');
+        if(!$this->callback || $action=='='){
+            list($controller, $action) = explode('/', trim($this->container->make('request')->path(),'/'));
+        }
+
+        $this->controller = class_basename($controller);
+        $this->action = $action;
+        $appController = $this->container->config('config.dir.controller');
         if(is_string($appController)) {
             $controller = APP.'\\'.$appController.'\\'.$controller;
         }else {
