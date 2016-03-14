@@ -63,6 +63,24 @@ class Request extends \Symfony\Component\HttpFoundation\Request
     }
 
     /**
+     * [uri 获取当前url包含所有参数]
+     * @param null $cast [排除或抽取批定URL参数]
+     */
+    public function uri($cast = null)
+    {
+        $queryString = $this->all();
+        if($cast){
+            if(substr($cast, 0, 1) == '!') {
+                unset($queryString[ltrim($cast, '!')]);
+            }else{
+                $queryString = array_key_exists($cast, $queryString) ? array($cast=>$queryString[$cast]) : null;
+            }
+        }
+        $uri = $this->all() ? '?'. http_build_query($queryString) : '';
+        return $uri = $this->url().$uri;
+    }
+
+    /**
      * [all 返回所有]
      *
      * @return array
