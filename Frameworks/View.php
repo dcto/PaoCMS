@@ -145,16 +145,16 @@ class View
          * @example [url('@as'), url('/path/path2')]
          * @var [type]
          */
-        $url = new \Twig_SimpleFunction('url', function($url = null){
+        $url = new \Twig_SimpleFunction('url', function($cast = null){
             $request = $this->container->make('request');
             $baseUrl = $request->baseUrl().'/';
-            if(strstr($url, '@')) {
-                $route = $this->container->make('route')->get(ltrim($url,'@'));
+            if(strstr($cast, '@')) {
+                $route = $this->container->make('route')->get(ltrim($cast,'@'));
                 return $baseUrl.ltrim($route, '/');
-            }else if(strstr($url, '/')){
-                return $baseUrl.trim($url, '/');
+            }else if(strstr($cast, '/')){
+                return $baseUrl.trim($cast, '/');
             }else{
-                return $request->url();
+                return $request->uri($cast);
             }
         });
         $twig->addFunction('url', $url);
@@ -194,7 +194,7 @@ class View
         /**
          * 单位转换
          */
-        $twig->addFunction('size', new \Twig_Function_Function(function($size){
+        $twig->addFunction('size', new \Twig_SimpleFunction('size', function($size){
             $units = array('b','kb','mb','gb','tb','pb');
             return round($size/pow(1024,($i=floor(log($size,1024)))),2).$units[$i];
         }));
