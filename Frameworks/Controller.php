@@ -44,6 +44,16 @@ class Controller
         $this->assign($this->assign);
     }
 
+    /**
+     * make方法
+     * @param $abstract
+     * @param array $parameters
+     * @return mixed
+     */
+    public function make($abstract, array $parameters = [])
+    {
+        return $this->container->make($abstract, $parameters);
+    }
 
     /**
      * [assign 模板动态变量附值]
