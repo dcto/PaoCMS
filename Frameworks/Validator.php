@@ -39,7 +39,8 @@ class Validator
      */
     public function is($is)
     {
-        return !self::$Error ? true : false;
+        if(!is_bool($is)) throw new SystemException('The Validator function [is] argument must be an boolean');
+        return !self::$Error == $is ? true :false;
     }
 
     /**
