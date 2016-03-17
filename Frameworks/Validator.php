@@ -18,7 +18,7 @@ class Validator
 
     private $regular = [
         'username'=>'/^[a-z0-9_]{4,16}$/',
-        'password'=>'/((?=.*\d)(?=.*[a-z]).{8,})/',
+        'password'=>'/^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,16}$/',
         'chinese'=>'/\p{Han}+/u',
         'english'=>'/^\w+$/',
         'price'=>'/(\d+\.\d{1,2})/',
