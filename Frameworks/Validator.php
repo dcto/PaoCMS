@@ -39,7 +39,7 @@ class Validator
      */
     public function is($is)
     {
-        return self::$Error==$is ? true : false;
+        return !self::$Error ? true : false;
     }
 
     /**
