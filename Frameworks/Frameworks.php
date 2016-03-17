@@ -114,6 +114,7 @@ class Frameworks extends Container
             'captcha'=>'PAO\Captcha\Captcha',
             'config'=>'PAO\Configure\Repository',
             'encrypter'=>'PAO\Encrypter',
+            'validator'=>'PAO\Validator',
             'exception'=>'PAO\Exception\PAOException',
             'translator'=>'PAO\Translator',
             'db'=>'PAO\Database',

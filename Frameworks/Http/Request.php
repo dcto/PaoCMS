@@ -73,7 +73,7 @@ class Request extends \Symfony\Component\HttpFoundation\Request
             if(substr($cast, 0, 1) == '!') {
                 unset($queryString[ltrim($cast, '!')]);
             }else{
-                $queryString = array_key_exists($cast, $queryString) ? array($cast=>$queryString[$cast]) : null;
+                $queryString = array_key_exists($cast, $queryString) ? array($cast=>$queryString[$cast]) : array();
             }
         }
         $uri = $this->all() ? '?'. http_build_query($queryString) : '';
