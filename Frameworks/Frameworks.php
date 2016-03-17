@@ -107,13 +107,14 @@ class Frameworks extends Container
     {
         $this->aliases = [
             'route'=>'PAO\Route',
+            'config'=>'PAO\Configure\Repository',
             'request'=>'PAO\Http\Request',
             'response'=>'PAO\Http\Response',
             'cookie'=>'PAO\Http\Cookie',
             'session'=>'PAO\Http\Session',
+            'crypt'=>'PAO\Crypt\Crypt',
+            'encrypter'=>'PAO\Crypt\Crypt',
             'captcha'=>'PAO\Captcha\Captcha',
-            'config'=>'PAO\Configure\Repository',
-            'encrypter'=>'PAO\Encrypter',
             'validator'=>'PAO\Validator',
             'exception'=>'PAO\Exception\PAOException',
             'translator'=>'PAO\Translator',
@@ -148,15 +149,18 @@ class Frameworks extends Container
         $facadesAlias = [
             'PAO' => 'Illuminate\Support\Facades\App',
             'Config' => 'Illuminate\Support\Facades\Config',
+            'Input' => 'Illuminate\Support\Facades\Request',
             'Request' => 'Illuminate\Support\Facades\Request',
             'Response' => 'Illuminate\Support\Facades\Response',
             'Event' => 'Illuminate\Support\Facades\Event',
             'DB' => 'Illuminate\Support\Facades\DB',
+            'Log' => 'Illuminate\Support\Facades\Log',
+            'Lang' => 'Illuminate\Support\Facades\Lang',
+            'Validator' => 'Illuminate\Support\Facades\Validator',
+            'Crypt' => 'Illuminate\Support\Facades\Crypt',
             'Cookie' => 'Illuminate\Support\Facades\Cookie',
             'Session' => 'Illuminate\Support\Facades\Session',
             'Cache' => 'Illuminate\Support\Facades\Cache',
-            'Crypt' => 'Illuminate\Support\Facades\Crypt',
-            'Log' => 'Illuminate\Support\Facades\Log'
         ];
         foreach($facadesAlias as $alias => $facade)
         {

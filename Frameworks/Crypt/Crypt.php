@@ -1,13 +1,13 @@
 <?php
 
-namespace PAO;
+namespace PAO\Crypt;
 
 /**
 * DES加密解密类库
 * @author  11
 * @version  1.1
 */
-class Encrypter
+class Crypt
 {
 	/**
 	 * [$key 密钥]
