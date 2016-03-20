@@ -8,7 +8,7 @@ class Response //implements  \Illuminate\Contracts\Routing\ResponseFactory
 {
 
     /**
-     * µ±Ç°ÏìÓ¦·½·¨
+     * å…¨å±€å“åº”
      *
      * @var $response;
      */
@@ -16,7 +16,7 @@ class Response //implements  \Illuminate\Contracts\Routing\ResponseFactory
 
 
     /**
-     * [__call ·½·¨ÏìÓ¦]
+     * [__call]
      *
      * @param $method
      * @param $parameters
@@ -24,9 +24,6 @@ class Response //implements  \Illuminate\Contracts\Routing\ResponseFactory
      */
     public function __call($method, $parameters)
     {
-        /**
-         * ÅÐ¶ÏÊÇ·ñÒÑÊµÀý»¯¶ÔÏó
-         */
         if(!$this->response instanceof \Symfony\Component\HttpFoundation\Response)
         {
             $this->response = new \Symfony\Component\HttpFoundation\Response;
@@ -38,11 +35,11 @@ class Response //implements  \Illuminate\Contracts\Routing\ResponseFactory
 
 
     /**
-     * [make ResponseÏìÓ¦]
+     * [make Response]
      *
-     * @param string $content
-     * @param int    $status
-     * @param array  $headers
+     * @param string $content [å“åº”å†…å®¹]
+     * @param int    $status [çŠ¶æ€å€¼]
+     * @param array  $headers [header]
      * @author 11.
      */
     public function make($content = '', $status = 200 , array $headers = [])
@@ -53,7 +50,7 @@ class Response //implements  \Illuminate\Contracts\Routing\ResponseFactory
 
 
     /**
-     * [show make±ðÃû]
+     * [show makeåˆ«å]
      *
      * @param string $content
      * @param int    $status
@@ -67,11 +64,11 @@ class Response //implements  \Illuminate\Contracts\Routing\ResponseFactory
 
 
     /**
-     * [view ´øÄ£°åÏìÓ¦]
+     * [view è§†å›¾å“åº”]
      *
-     * @param array $data Êý¾ÝÊý×é
-     * @param int   $status ÏìÓ¦×´Ì¬
-     * @param array $headers Í·²¿ÏìÓ¦
+     * @param array $data [ä¼ å…¥å€¼]
+     * @param int   $status [çŠ¶åœ¨å€¼]
+     * @param array $headers [header]
      * @author 11.
      */
     public function view($view, array $data = [], $status = 200, array $headers = [])
@@ -80,12 +77,12 @@ class Response //implements  \Illuminate\Contracts\Routing\ResponseFactory
     }
 
     /**
-     * [json Json¸ñÊ½ÏìÓ¦]
+     * [json Jsonæ ¼å¼å“åº”]
      *
-     * @param array $data Êý¾ÝÊý×é
-     * @param int   $status ÏìÓ¦×´Ì¬
-     * @param array $headers Í·²¿ÏìÓ¦
-     * @param int   $options Ïà¹Ø²ÎÊý
+     * @param array $data [ä¼ å…¥å€¼]
+     * @param int   $status [çŠ¶æ€å€¼]
+     * @param array $headers [header]
+     * @param int   $options [å…¶ä»–è®¾ç½®]
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      * @author 11.
      */
@@ -101,12 +98,12 @@ class Response //implements  \Illuminate\Contracts\Routing\ResponseFactory
 
 
     /**
-     * [jsonp Jsonp¸ñÊ½ÏìÓ¦]
+     * [jsonp Jsonpå“åº”æ ¼å¼]
      *
-     * @param array $data Êý¾ÝÊý×é
-     * @param int   $status ÏìÓ¦×´Ì¬
-     * @param array $headers Í·²¿ÏìÓ¦
-     * @param int   $options Ïà¹Ø²ÎÊý
+     * @param array $data [ä¼ å…¥å€¼]
+     * @param int   $status [çŠ¶æ€å€¼]
+     * @param array $headers [header]
+     * @param int   $options [å…¶ä»–è®¾ç½®]
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      * @author 11.
      */
@@ -117,11 +114,11 @@ class Response //implements  \Illuminate\Contracts\Routing\ResponseFactory
 
 
     /**
-     * [stream Êý¾Ý¿â¸ñÊ½ÏìÓ¦]
+     * [stream æ•°æ®æµå“åº”]
      *
-     * @param \Closure $callback
-     * @param int      $status
-     * @param array    $headers
+     * @param \Closure $callback [å›žè°ƒ]
+     * @param int      $status [çŠ¶æ€å€¼]
+     * @param array    $headers [header]
      * @return \Symfony\Component\HttpFoundation\StreamedResponse
      * @author 11.
      */
@@ -134,12 +131,12 @@ class Response //implements  \Illuminate\Contracts\Routing\ResponseFactory
 
 
     /**
-     * [download ÎÄ¼þÏÂÔØ]
+     * [download å“åº”ä¸‹è½½]
      *
-     * @param \SplFileInfo|string $file ÏÂÔØÎÄ¼þ
-     * @param null                $name ÎÄ¼þÃû
-     * @param array               $headers Í·²¿
-     * @param string              $disposition ÃèÊõ
+     * @param \SplFileInfo|string $file [æ–‡ä»¶åœ°å€]
+     * @param null                $name [æ–‡ä»¶å]
+     * @param array               $headers header
+     * @param string              $disposition
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
      * @author 11.
      */
@@ -154,11 +151,11 @@ class Response //implements  \Illuminate\Contracts\Routing\ResponseFactory
 
 
     /**
-     * [redirect ÏìÓ¦Ìø×ª]
+     * [redirect è·³è½¬]
      *
-     * @param       $url Ìø×ªÍøÖ·
-     * @param int   $status ×´Ì¬
-     * @param array $headers Í·²¿
+     * @param       $url [åœ°å€]
+     * @param int   $status [çŠ¶æ€å€¼]
+     * @param array $headers [header]
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      * @author 11.
      */
