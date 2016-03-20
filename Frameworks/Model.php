@@ -8,21 +8,21 @@ class Model extends \Illuminate\Database\Eloquent\Model
 {
 
     /**
-     * ×Ö¶ÎºÚÃûµ¥(¿ÉÒÔ×èÖ¹±»ÅúÁ¿¸³Öµ)
+     * å­—æ®µé»‘åå•(å¯ä»¥é˜»æ­¢è¢«æ‰¹é‡èµ‹å€¼)
      *
      * @var array
      */
     protected $guarded = ['id'];
 
     /**
-     * ×Ö¶Î°×Ãûµ¥  ÊôĞÔÖ¸¶¨ÁËÄÄĞ©×Ö¶ÎÖ§³ÖÅúÁ¿¸³Öµ ¡£¿ÉÒÔÉè¶¨ÔÚÀàµÄÊôĞÔÀï»òÊÇÊµÀı»¯ºóÉè¶¨¡£
+     * å­—æ®µç™½åå•  å±æ€§æŒ‡å®šäº†å“ªäº›å­—æ®µæ”¯æŒæ‰¹é‡èµ‹å€¼ ã€‚å¯ä»¥è®¾å®šåœ¨ç±»çš„å±æ€§é‡Œæˆ–æ˜¯å®ä¾‹åŒ–åè®¾å®šã€‚
      *
      * @var null
      */
     protected $fillable = [];
 
     /**
-     * updated_at ºÍ created_at Êı¾İ¿âÊÇ·ñ°üº¬¸ÃÁ½¸ö×Ö¶Î£¬Ä¬ÈÏÎŞfalse
+     * updated_at å’Œ created_at æ•°æ®åº“æ˜¯å¦åŒ…å«è¯¥ä¸¤ä¸ªå­—æ®µï¼Œé»˜è®¤æ— false
      *
      * @var bool
      */
@@ -30,14 +30,14 @@ class Model extends \Illuminate\Database\Eloquent\Model
 
 
     /**
-     * Ä¬ÈÏÈÕÆÚ¸ñÊ½
+     * é»˜è®¤æ—¥æœŸæ ¼å¼
      * @var string
      */
     public $dateFormat = 'U';
 
 
     /**
-     * [table »ñÈ¡±íÃû·½·¨]
+     * [table è·å–è¡¨åæ–¹æ³•]
      *
      * @return mixed
      * @author 11.
@@ -50,7 +50,7 @@ class Model extends \Illuminate\Database\Eloquent\Model
 
 
     /**
-     * [boot Æô¶¯ÊÂ¼ş¹Û²ìÆ÷]
+     * [boot å¯åŠ¨äº‹ä»¶è§‚å¯Ÿå™¨]
      *
      * @author 11.
      */
@@ -61,7 +61,7 @@ class Model extends \Illuminate\Database\Eloquent\Model
         Container::getInstance()->make('db');
 
         /**
-         * ´´½¨ÊÂ¼ş
+         * åˆ›å»ºäº‹ä»¶
          */
         static::creating(function($event)
         {
@@ -69,31 +69,31 @@ class Model extends \Illuminate\Database\Eloquent\Model
         });
 
         /**
-         * ÒÑ´´½¨ÊÂ¼ş
+         * å·²åˆ›å»ºäº‹ä»¶
          */
         static::created(function($event)
         {
-           // exit('created');
+           //exit('created');
         });
 
         /**
-         * ¸üĞÂÊÂ¼ş
+         * æ›´æ–°äº‹ä»¶
          */
         static::updating(function($event)
         {
-            exit('updating');
+            //exit('updating');
         });
 
         /**
-         * ÒÑ¸üĞÂÊÂ¼ş
+         * å·²æ›´æ–°äº‹ä»¶
          */
         static::updated(function($event)
         {
-            exit('updated');
+            //exit('updated');
         });
 
         /**
-         * ±£´æÊÂ¼ş
+         * ä¿å­˜äº‹ä»¶
          */
         static::saving(function($event)
         {
@@ -101,7 +101,7 @@ class Model extends \Illuminate\Database\Eloquent\Model
         });
 
         /**
-         * ÒÑ±£´æÊÂ¼ş
+         * å·²ä¿å­˜äº‹ä»¶
          */
         static::saved(function ($event)
         {
@@ -111,7 +111,7 @@ class Model extends \Illuminate\Database\Eloquent\Model
         });
 
         /**
-         * É¾³ıÊÂ¼ş
+         * åˆ é™¤äº‹ä»¶
          */
         static::deleting(function($event)
         {
@@ -119,7 +119,7 @@ class Model extends \Illuminate\Database\Eloquent\Model
         });
 
         /**
-         * ÒÑÉ¾³ıÊÂ¼ş
+         * å·²åˆ é™¤äº‹ä»¶
          */
         static::deleted(function($event)
         {
