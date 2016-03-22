@@ -4,12 +4,14 @@ namespace PAO;
 
 
 
+
 use PAO\Http\Response;
 use PAO\Exception\SystemException;
 use Illuminate\Container\Container;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Events\EventServiceProvider;
+use Illuminate\Pagination\PaginationServiceProvider;
 
 /**
  * [Nexus 框架核心驱动集成类]
@@ -294,7 +296,15 @@ class Frameworks extends Container
      */
     private function registerBaseServiceProviders()
     {
+        /**
+         * 事件服务
+         */
         $this->register(new EventServiceProvider($this));
+
+        /**
+         * 分页服务
+         */
+        $this->register(new PaginationServiceProvider($this));
     }
 
 
