@@ -120,6 +120,7 @@ class Frameworks extends Container
             'validator'=>'PAO\Validator',
             'exception'=>'PAO\Exception\PAOException',
             'translator'=>'PAO\Translator',
+            'lang'=>'PAO\Translator',
             'db'=>'PAO\Database',
             'view'=>'PAO\View',
             'cache'=>'PAO\Cache\Cache',
@@ -290,7 +291,7 @@ class Frameworks extends Container
     }
 
     /**
-     * [registerBaseServiceProviders 事件服务注册]
+     * [registerBaseServiceProviders 基本服务注册]
      *
      * @author 11.
      */

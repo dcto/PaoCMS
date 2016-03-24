@@ -105,6 +105,7 @@ class View
         $twig->addGlobal('config', $this->container->config('config'));
         $twig->addGlobal('request', $this->container->make('request'));
         $twig->addGlobal('timezone', date_default_timezone_get());
+        $twig->addGlobal('lang', $this->container->make('lang')->all());
         /**
          * 注册全局make方法
          * @example   [make('class').function]
