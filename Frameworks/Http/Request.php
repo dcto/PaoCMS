@@ -4,6 +4,7 @@ namespace PAO\Http;
 
 
 
+use Illuminate\Container\Container;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\ParameterBag;
@@ -11,11 +12,16 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 class Request extends \Symfony\Component\HttpFoundation\Request
 {
 
+    private $container;
+
     /**
      * 重构Request方法
      */
     public function __construct(array $query = array(), array $request = array(), array $attributes = array(), array $cookies = array(), array $files = array(), array $server = array(), $content = null)
     {
+
+        $this->container = Container::getInstance();
+
         if ('cli-server' === php_sapi_name()) {
             if (array_key_exists('HTTP_CONTENT_LENGTH', $_SERVER)) {
                 $_SERVER['CONTENT_LENGTH'] = $_SERVER['HTTP_CONTENT_LENGTH'];
@@ -52,14 +58,28 @@ class Request extends \Symfony\Component\HttpFoundation\Request
     }
 
     /**
-     * [url 获取当前URL]
-     *
+     * [获取当前 URL]
+     * @param null $do [构建 URL 参数 @=获了路由, #=根据当前控制器,控制器方法获取 url,]
+     * @example url('@index')
+     * @example url('#controller');
+     * @example url('/index/abc');
+     * @example url();
      * @return string
-     * @author 11.
      */
-    public function url()
+    public function url($do = null)
     {
-        return rtrim(preg_replace('/\?.*/', '', $this->getUri()), '/');
+        if(is_null($do)) {
+            return rtrim(preg_replace('/\?.*/', '', $this->getUri()), '/');
+        }else if($do[0]=='@') {
+            $route = $this->container->make('route')->get(ltrim($do, '@'));
+            return $this->baseUrl().ltrim($route, '/');
+        }else if($do[0]=='$') {
+            $route = $this->container->make('route');
+            $url = str_replace(array('$controller', '$action'), array($route->getController(), $route->getAction()), $do);
+            return trim($this->baseUrl(),'/').'/'.trim($url,'/');
+        }else{
+            return $this->baseUrl().trim($do, '/');
+        }
     }
 
     /**

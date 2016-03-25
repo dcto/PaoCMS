@@ -142,23 +142,29 @@ class View
         $twig->addFunction($route);
 
         /**
-         * 路由及url构建方法
-         * @example [url('@as'), url('/path/path2')]
-         * @var [type]
+         * [获取当前 URL]
+         * @param null $do [构建 URL 参数 @=获了路由, #=根据当前控制器,控制器方法获取 url,]
+         * @example url('@index')
+         * @example url('#controller');
+         * @example url('/index/abc');
+         * @example url();
+         * @return string
          */
         $url = new \Twig_SimpleFunction('url', function($cast = null){
-            $request = $this->container->make('request');
-            $baseUrl = $request->baseUrl().'/';
-            if(strstr($cast, '@')) {
-                $route = $this->container->make('route')->get(ltrim($cast,'@'));
-                return $baseUrl.ltrim($route, '/');
-            }else if(strstr($cast, '/')){
-                return $baseUrl.trim($cast, '/');
-            }else{
-                return $request->uri($cast);
-            }
+            return $this->container->make('request')->url($cast);
+
         });
         $twig->addFunction('url', $url);
+
+        /**
+         * [uri 获取当前url包含所有参数]
+         * @param null $cast [排除或抽取批定URL参数]
+         */
+        $uri = new \Twig_SimpleFunction('uri', function($cast = null){
+            return $this->container->make('request')->uri($cast);
+
+        });
+        $twig->addFunction('uri', $uri);
 
         /**
          * 注册语言包调用方法
