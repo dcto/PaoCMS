@@ -59,7 +59,7 @@ class Request extends \Symfony\Component\HttpFoundation\Request
 
     /**
      * [获取当前 URL]
-     * @param null $do [构建 URL 参数 @=获了路由, #=根据当前控制器,控制器方法获取 url,]
+     * @param null $cast [构建 URL 参数 @=获了路由, #=根据当前控制器,控制器方法获取 url,]
      * @example url('@index')
      * @example url('#controller');
      * @example url('/index/abc');

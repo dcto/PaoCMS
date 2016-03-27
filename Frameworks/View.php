@@ -189,14 +189,18 @@ class View
          * @var [type]
          */
         $debug = function($variable){
-            '<pre>'.print_r($variable)."</pre>";
+            "<pre>".print_r($variable)."</pre>";
         };
 
-        $twig->addFunction(new \Twig_SimpleFunction('debug', $dump));
+        $twig->addFunction(new \Twig_SimpleFunction('debug', $debug));
 
-        $twig->addFunction('microtime', new \Twig_Function_Function('microtime'));
+        $twig->addFunction(new \Twig_SimpleFunction('microtime', function($parameters){
+            return microtime($parameters);}
+        ));
 
-        $twig->addFunction('memory_get_usage', new \Twig_Function_Function('memory_get_usage'));
+        $twig->addFunction(new \Twig_SimpleFunction('memory_get_usage', function($parameters){
+            return memory_get_usage($parameters);
+        }));
 
         /**
          * 单位转换
@@ -215,7 +219,7 @@ class View
          * [$suffix 截取字符串]
          * @var [type]
          */
-        $twig->addFilter('cutstr', new \Twig_Filter_Function(function($string, $length, $suffix = false){
+        $twig->addFilter(new \Twig_SimpleFilter('len',function($string, $length, $suffix = false){
             return $string = mb_strlen($string)>$length
             ? ($suffix ? mb_substr($string, 0, $length).$suffix : mb_substr($string, 0, $length))
             : $string;
