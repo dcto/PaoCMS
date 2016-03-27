@@ -106,11 +106,24 @@ class Request extends \Symfony\Component\HttpFoundation\Request
      * @return array
      * @author 11.
      */
-    public function all()
+    public function all($do = null)
     {
+        if($do[0]=='!') {
+            return $this->not(ltrim($do,'!'));
+        }
         return array_replace_recursive($this->input(), $this->files->all());
     }
 
+    /**
+     * [not 排除返回]
+     * @param $key
+     * @return array
+     */
+    public function not($key = null)
+    {
+        //return array_diff_key($this->all(), array_fill_keys($key, null));
+        return Arr::except($this->all(), $key);
+    }
 
     /**
      * [has 是否存在]
@@ -130,7 +143,6 @@ class Request extends \Symfony\Component\HttpFoundation\Request
                 return false;
             }
         }
-
         return true;
     }
 
@@ -147,6 +159,21 @@ class Request extends \Symfony\Component\HttpFoundation\Request
         $input = $this->getInputSource()->all() + $this->query->all();
 
         return Arr::get($input, $key, $default);
+    }
+
+
+    /**
+     * [take get方法加强版,支持数组]
+     * @param $key
+     * @return array|mixed
+     */
+    public function take($key)
+    {
+        if(is_array($key)){
+            return array_intersect_key($this->all(), array_fill_keys($key, null));
+        }else{
+            return $this->get($key);
+        }
     }
 
     /**
@@ -406,7 +433,6 @@ class Request extends \Symfony\Component\HttpFoundation\Request
         if ($this->isJson()) {
             return $this->json();
         }
-
         return $this->method() == 'GET' ? $this->query : $this->request;
     }
 }
