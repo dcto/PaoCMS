@@ -66,19 +66,20 @@ class Request extends \Symfony\Component\HttpFoundation\Request
      * @example url();
      * @return string
      */
-    public function url($do = null)
+    public function url($cast = null)
     {
-        if(is_null($do)) {
-            return rtrim(preg_replace('/\?.*/', '', $this->getUri()), '/');
-        }else if($do[0]=='@') {
-            $route = $this->container->make('route')->get(ltrim($do, '@'));
-            return $this->baseUrl().ltrim($route, '/');
-        }else if($do[0]=='$') {
+        if(is_null($cast)) return rtrim(preg_replace('/\?.*/', '', $this->getUri()), '/');
+
+        $baseUrl = trim($this->baseUrl(), '/').'/';
+        if($cast[0]=='@') {
+            $route = $this->container->make('route')->get(ltrim($cast, '@'));
+            return $baseUrl.trim($route, '/');
+        }else if($cast[0]=='$') {
             $route = $this->container->make('route');
-            $url = str_replace(array('$controller', '$action'), array($route->getController(), $route->getAction()), $do);
-            return trim($this->baseUrl(),'/').'/'.trim($url,'/');
+            $url = str_replace(array('$controller', '$action'), array($route->getController(), $route->getAction()), $cast);
+            return $baseUrl.trim($url,'/');
         }else{
-            return $this->baseUrl().trim($do, '/');
+            return $baseUrl.trim($cast, '/');
         }
     }
 
