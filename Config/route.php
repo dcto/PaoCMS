@@ -2,21 +2,21 @@
 defined('PAO') || die('The PaoCMS Load Error');
 
 /**
- * ¸ñÊ½ËµÃ÷
- * /test Â·ÓÉ¸ñÊ½ /test/(²ÎÊı:any|:num|:str|:all)
- * GET = ÇëÇó·½Ê½ GET|POST|ANY|ALL
- * as = Â·ÓÉ±ğÃû
- * to = ¿ØÖÆÆ÷@·½·¨Ãû
+ * ï¿½ï¿½Ê½Ëµï¿½ï¿½
+ * /test Â·ï¿½É¸ï¿½Ê½ /test/(ï¿½ï¿½ï¿½ï¿½:any|:num|:str|:all)
+ * GET = ï¿½ï¿½ï¿½ï¿½Ê½ GET|POST|ANY|ALL
+ * as = Â·ï¿½É±ï¿½ï¿½ï¿½
+ * to = ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
  *
  * '/test' => ['GET','as'=>'index', 'to'=>'Test@index'],
  * '/test/(:str)' => ['GET','as'=>'index', 'to'=>'Test@testStr'],
  */
 
 return array(
-
-    '/' => ['GET','as'=>'index', 'to'=>'Index@index'],
-    '/captcha' => ['GET','as'=>'captcha', 'to'=>'Index@captcha'],
-    '/test'=> ['ANY', 'as'=>'test', 'to'=>'Test@index'],
-    '/reg/(:str)/(:num)' =>['GET', 'as'=>'reg', 'to'=>'Test@reg']
-
+    '/'=>array(
+        '/' => ['GET','as'=>'index', 'to'=>'Index@index'],
+        '/captcha' => ['GET','as'=>'captcha', 'to'=>'Index@captcha'],
+        '/test'=> ['ANY', 'as'=>'test', 'to'=>'Test@index'],
+        '/reg/(:str)/(:num)' =>['GET', 'as'=>'reg', 'to'=>'Test@reg']
+    )
 );

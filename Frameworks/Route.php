@@ -53,7 +53,7 @@ class Route
     public function __construct()
     {
         $this->container = Container::getInstance();
-        $this->routes = $this->container->config('route');
+        $this->routes();
     }
 
 
@@ -61,7 +61,7 @@ class Route
     {
         $route = $params[0];
         array_push($route[key($route)], $method);
-        $this->routes = array_merge($this->routes, $route);
+        $this->routes($route);
     }
 
     /**
@@ -83,17 +83,33 @@ class Route
         throw new NotFoundHttpException("The alias [$alias] route was not found!");
     }
 
+
     /**
-     * [all get all routes]
-     * @return array
+     * [get the route config]
+     * @return mixed
      */
-    public function all()
+    public function config()
     {
-        return $this->routes;
+        return (array) $this->container->config('route');
     }
 
     /**
-     * [getController get Current Controoler]
+     * [routes init format routes]
+     * @return array
+     */
+    public function routes($route = array())
+    {
+        $config = $this->config();
+        $routes =array_merge($route);
+        array_walk($config, function($value, $group) use (&$routes){
+            $routes = array_merge($routes, $value);
+        });
+
+        return $this->routes = $routes;
+    }
+
+    /**
+     * [getController get Current Controller]
      * @return [string]
      */
     public function getController()
@@ -111,7 +127,7 @@ class Route
     }
 
     /**
-     * [dispatch route despatch]
+     * [dispatch route dispatch]
      * @return callback;
      */
     public function dispatch()
