@@ -32,10 +32,9 @@ class Controller
     protected $assign = [];
 
 
-    public function __construct(Container $container)
+    public function __construct()
     {
-
-        $this->container = $container;
+        $this->container = Container::getInstance();
 
         $this->controller = $this->container->make('route')->getController();
 
