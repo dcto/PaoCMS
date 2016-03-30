@@ -102,7 +102,8 @@ class Route
         $config = $this->config();
         $routes =array_merge($route);
         array_walk($config, function($value, $group) use (&$routes){
-            $routes = array_merge($routes, $value);
+            $route = isset($value['route']) ? $value['route'] : $value;
+            $routes = array_merge($routes, $route);
         });
 
         return $this->routes = $routes;
@@ -157,12 +158,7 @@ class Route
                 }
             }
         }
-        try {
             return $this->container->call($this->_getCallBack(), $parameter);
-        }catch (NotFoundHttpException $e){
-            throw new NotFoundHttpException($e->getMessage());
-        }
-
     }
 
     protected function _getIsSafeCallable($callback)
@@ -204,7 +200,8 @@ class Route
 
         //判断方法是否存在并将其实例化
         if (!method_exists($instance = $this->container->make($controller), $action)) {
-            throw new NotFoundHttpException('The Target [' . $controller . '::' . $action . '] was not found');
+           throw new NotFoundHttpException  ('The target [' . $controller . '::' . $action . '] does not exist!');
+
         }
 
         return array($instance, $action);
