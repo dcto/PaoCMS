@@ -2,19 +2,9 @@
 
 namespace PAO\Exception;
 
-class NotFoundHttpException extends \RuntimeException
+class NotFoundHttpException extends \Exception
 {
+    protected $code = 404;
+
     protected $message = '404 Not Found';
-
-
-    public function getHttpCode()
-    {
-        return 404;
-    }
-
-    public function getHeaders()
-    {
-        return null;
-    }
-
 }

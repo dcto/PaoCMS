@@ -2,20 +2,9 @@
 
 namespace PAO\Exception;
 
-
-
-class SystemException extends \RuntimeException
+class SystemException extends \Exception
 {
-    protected $message = '500 The System Was Error';
+    protected $code = 500;
 
-    public function getHttpCode()
-    {
-        return 500;
-    }
-
-    public function getHeaders()
-    {
-        return null;
-    }
-
+    protected $message = '500 The PaoCMS System Was Error';
 }

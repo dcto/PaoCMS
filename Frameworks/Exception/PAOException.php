@@ -18,24 +18,24 @@ class PAOException
     }
 
     /**
-     * [Exception 异常输出]
+     * [Exception 锟届常锟斤拷锟絔
      *
-     * @param Exception $e [异常对象]
+     * @param Exception $e [锟届常锟斤拷锟斤拷]
      *
      * @author  11
      * @version v1
      *
      */
-    public function Exception($e)
+    public function Exception(Exception $e)
     {
         if($this->container->config('config.log')){
             $this->container->make('log')->error($e);
         }
-
+        http_response_code($e->getCode());
         if($this->container->config('config.debug')) {
-            $HttpCode = method_exists($e, 'getHttpCode') ? $e->getHttpCode() : 500;
-            die($this->HandleError($e, $HttpCode));
+            die($this->HandleError($e));
         }
+        die($e->getMessage());
     }
 
     public function HandleError($e)
@@ -86,7 +86,7 @@ class PAOException
 
 
     /**
-     * [debugBacktrace 代码执行过程回溯信息]
+     * [debugBacktrace 锟斤拷锟斤拷执锟叫癸拷锟教伙拷锟斤拷锟斤拷息]
      *
      *
      */
@@ -99,7 +99,7 @@ class PAOException
         ksort($debugBacktrace);
         foreach ($debugBacktrace as $k => $error) {
             if (!isset($error['file'])) {
-                // 利用反射API来获取方法/函数所在的文件和行数
+                // 锟斤拷锟矫凤拷锟斤拷API锟斤拷锟斤拷取锟斤拷锟斤拷/锟斤拷锟斤拷锟斤拷锟节碉拷锟侥硷拷锟斤拷锟斤拷锟斤拷
                 try {
                     if (isset($error['class'])) {
                         $reflection = new ReflectionMethod($error['class'], $error['function']);
@@ -131,11 +131,11 @@ class PAOException
 
 
     /**
-     * 显示错误
+     * 锟斤拷示锟斤拷锟斤拷
      *
      * @static
      * @access public
-     * @param string $type 错误类型 db,system
+     * @param string $type 锟斤拷锟斤拷锟斤拷锟斤拷 db,system
      * @param string $errorMsg
      * @param string $phpMsg
      */
