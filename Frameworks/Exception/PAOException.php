@@ -26,7 +26,7 @@ class PAOException
      * @version v1
      *
      */
-    public function Exception(Exception $e)
+    public function Exception($e)
     {
         if($this->container->config('config.log')){
             $this->container->make('log')->error($e);
