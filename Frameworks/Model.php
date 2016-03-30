@@ -37,6 +37,19 @@ class Model extends \Illuminate\Database\Eloquent\Model
 
 
     /**
+     * 预定义分页数
+     * @var int
+     */
+    public $perPage = 10;
+
+
+    /**
+     * 预定义联查
+     * @var array
+     */
+    public $with = [];
+
+    /**
      * [table 获取表名方法]
      *
      * @return mixed
