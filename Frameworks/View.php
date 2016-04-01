@@ -64,9 +64,8 @@ class View
             //模板的字符集，缺省为utf-8。
             'charset' => $this->container->config('config.charset'),
 
-
             //如果设置为false，Twig会忽略无效的变量（无效指的是不存在的变量或者属性/方法），并将其替换为null。如果这个选项设置为true，那么遇到这种情况的时候，Twig会抛出异常。
-            'strict_variables' =>true,
+            'strict_variables' =>false,
 
             /**
              * 如果设置为true, 则会为所有模板缺省启用自动转义（缺省为true）。
@@ -179,7 +178,7 @@ class View
          * @var [type]
          */
         $dump = function($variable){
-                exit("<pre>".var_dump($variable)."</pre>");
+               echo "<pre>".var_dump($variable)."</pre>";
         };
 
         $twig->addFunction(new \Twig_SimpleFunction('dump', $dump));
@@ -189,7 +188,7 @@ class View
          * @var [type]
          */
         $debug = function($variable){
-            "<pre>".print_r($variable)."</pre>";
+            echo "<pre>".print_r($variable)."</pre>";
         };
 
         $twig->addFunction(new \Twig_SimpleFunction('debug', $debug));
@@ -214,6 +213,7 @@ class View
          * 注册过滤器
          */
         $twig->addFilter(new \Twig_SimpleFilter('dump', $dump));
+        $twig->addFilter(new \Twig_SimpleFilter('debug', $debug));
 
         /**
          * [$suffix 截取字符串]
