@@ -87,7 +87,11 @@ class Translator
      */
 	public function get($key, $default = null)
 	{
-        return Arr::get($this->items, $key, $default);
+        $lang = Arr::get($this->items, $key, $default);
+        if(is_string($lang)){
+            return $lang;
+        }
+        return $default ?: $key;
 	}
 
     /**
