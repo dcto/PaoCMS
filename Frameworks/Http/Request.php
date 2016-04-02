@@ -59,9 +59,9 @@ class Request extends \Symfony\Component\HttpFoundation\Request
 
     /**
      * [获取当前 URL]
-     * @param null $cast [构建 URL 参数 @=获了路由, #=根据当前控制器,控制器方法获取 url,]
-     * @example url('@index')
-     * @example url('#controller');
+     * @param null $cast [构建 URL 参数 @=获得路由, $=根据当前url,获取控制器url,]
+     * @example url('@index');
+     * @example url('$controller');
      * @example url('/index/abc');
      * @example url();
      * @return string
@@ -161,7 +161,6 @@ class Request extends \Symfony\Component\HttpFoundation\Request
 
         return Arr::get($input, $key, $default);
     }
-
 
     /**
      * [take get方法加强版,支持数组]
