@@ -31,7 +31,7 @@ class PAOException
         if($this->container->config('config.log')){
             $this->container->make('log')->error($e);
         }
-        http_response_code($e->getCode());
+        http_response_code(intval($e->getCode()));
         if($this->container->config('config.debug')) {
             die($this->HandleError($e));
         }
