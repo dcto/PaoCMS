@@ -2,8 +2,9 @@
 
 namespace PAO;
 
-use Illuminate\Container\Container;
+
 use Illuminate\Support\Str;
+use Illuminate\Container\Container;
 use PAO\Exception\NotFoundHttpException;
 
 
@@ -128,10 +129,11 @@ class View
          * @var [type]
          */
         $asset = new \Twig_SimpleFunction('asset', function($path = null){
+            $url = trim($this->container->make('request')->root(),'/').'/';
            if(Str::startsWith('/', $path)){
-               return str_replace('//','/', trim($this->container->make('request')->root().'/'.$path, '/'));
+               return $url.str_replace('//','/', trim($path, '/'));
            }else{
-               return str_replace('//', '/', trim($this->container->config('config.web').'/'.$path, '/'));
+               return $url.str_replace('//', '/', trim(strtolower(APP).'/'.$path, '/'));
            }
         });
         $twig->addFunction($asset);
