@@ -2,16 +2,15 @@
 
 namespace PAO;
 
-
-
-
 use PAO\Http\Response;
 use PAO\Exception\SystemException;
+use PAO\Services\SystemServiceProvider;
 use Illuminate\Container\Container;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Events\EventServiceProvider;
 use Illuminate\Pagination\PaginationServiceProvider;
+
 
 /**
  * [Nexus 框架核心驱动集成类]
@@ -22,6 +21,7 @@ use Illuminate\Pagination\PaginationServiceProvider;
  * @version 20151123
  *
  */
+defined('APP') || die('You must define APP name in your current script.');
 
 version_compare(PHP_VERSION,'5.5.0','ge') || die('The php version least must 5.5.0 ');
 
@@ -297,6 +297,11 @@ class Frameworks extends Container
      */
     private function registerBaseServiceProviders()
     {
+        /**
+         * 系统服务
+         */
+        $this->register(new SystemServiceProvider($this));
+
         /**
          * 事件服务
          */
