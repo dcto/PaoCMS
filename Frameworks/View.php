@@ -130,7 +130,7 @@ class View
          */
         $asset = new \Twig_SimpleFunction('asset', function($path = null){
             $url = trim($this->container->make('request')->root(),'/').'/';
-           if(Str::startsWith('/', $path)){
+           if(Str::startsWith($path, '/')){
                return $url.str_replace('//','/', trim($path, '/'));
            }else{
                return $url.str_replace('//', '/', trim(strtolower(APP).'/'.$path, '/'));
