@@ -2,8 +2,9 @@
 
 namespace PAO;
 
-use ArrayAccess;
+use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Illuminate\Container\Container;
 use PAO\Exception\SystemException;
 
@@ -32,70 +33,37 @@ class Translator
 	 * 初始化语言对象
 	 * @param [type] $items [预加载语言]
 	 */
-	public function __construct( $items = null)
+	public function __construct( $items = [])
 	{
 		$this->container = Container::getInstance();
 
-		$language = $this->container->config('config.language');
+        $this->items = $items;
 
-        $PaoLanguage = PAO.DIRECTORY_SEPARATOR.'Language'.DIRECTORY_SEPARATOR.$language.'.ini';
+		$this->language = $this->container->config('config.language');
 
-        $AppLanguage = PAO.DIRECTORY_SEPARATOR.APP.DIRECTORY_SEPARATOR.'Language'.DIRECTORY_SEPARATOR.$language.'.ini';
-
-        $readable = false;
-
-        if(is_readable($PaoLanguage))
-        {
-        	$this->items = (array) parse_ini_file($PaoLanguage, true);
-
-        	$readable = true;
-		}
-
-        if(is_readable($AppLanguage))
-        {
-            $this->items = array_replace_recursive($this->items, (array) parse_ini_file($AppLanguage, true));
-
-            $readable = true;
-        }
-
-        if(!$readable) throw new SystemException('The ['.$language.'] language was not readable!');
-
-
-        if(is_array($items))
-        {
-        	$this->items = array_replace_recursive($this->items, $items);
-        }
+        $this->parseLanguage();
 	}
 
-    /**
-     * Determine if the given Languageuration option exists.
-     *
-     * @param  string  $key
-     * @return bool
-     */
-    public function offsetExists($key)
-    {
-        return $this->has($key);
-    }
 
     /**
-     * Get the specified Languageuration value.
-     *
-     * @param  string  $key
-     * @param  mixed   $default
-     * @return mixed
+     * Get the specified language value.
+     * @return mixed|string
      */
-	public function get($key, $default = null)
+	public function get()
 	{
-        $lang = Arr::get($this->items, $key, $default);
+        $key = func_get_arg(0);
+        $args = func_get_args();
+        array_shift($args);
+
+        $lang = Arr::get($this->items, $key);
         if(is_string($lang)){
-            return $lang;
+            return $args ? $this->replacements($lang, $args) : $lang;
         }
-        return $default ?: $key;
+        return $key;
 	}
 
     /**
-     * Set a given Languageuration value.
+     * Set a given language value.
      *
      * @param  array|string  $key
      * @param  mixed   $value
@@ -113,7 +81,7 @@ class Translator
     }
 
     /**
-     * Get all of the Languageuration items for the application.
+     * Get all of the language items for the application.
      *
      * @return array
      */
@@ -122,4 +90,70 @@ class Translator
         return $this->items;
     }
 
+    /**
+     * get current language
+     *
+     * @return mixed
+     */
+    public function getLang()
+    {
+        return $this->language;
+    }
+
+    /**
+     * set current language
+     *
+     * @param $language string
+     */
+    public function setLang($language)
+    {
+        $this->language = $language;
+        $this->parseLanguage($language);
+    }
+
+    /**
+     * Make the place-holder replacements on a line.
+     *
+     * @param  string  $line
+     * @param  array   $replace
+     * @return string
+     */
+    private function replacements($lang, array $replace)
+    {
+        if(substr_count($lang,'%s') > sizeof($replace)){
+            throw new SystemException($lang.' The language arguments count ['.implode(',', $replace).'] not match.');
+        }
+        return vsprintf($lang, $replace);
+    }
+
+    /**
+     * @param $language
+     * @throws SystemException
+     */
+    private function parseLanguage($language = null)
+    {
+
+        $language = $language ? $this->language = $language : $this->language;
+
+        $PaoLanguage = PAO.DIRECTORY_SEPARATOR.'Language'.DIRECTORY_SEPARATOR.$language.'.ini';
+        $AppLanguage = PAO.DIRECTORY_SEPARATOR.APP.DIRECTORY_SEPARATOR.'Language'.DIRECTORY_SEPARATOR.$language.'.ini';
+        $readable = false;
+
+        if(is_readable($PaoLanguage))
+        {
+            $this->items = (array) parse_ini_file($PaoLanguage, true);
+
+            $readable = true;
+        }
+
+        if(is_readable($AppLanguage))
+        {
+            $this->items = array_replace_recursive($this->items, (array) parse_ini_file($AppLanguage, true));
+
+            $readable = true;
+        }
+
+        if(!$readable) throw new SystemException('The ['.$language.'] language was not readable!');
+
+    }
 }
