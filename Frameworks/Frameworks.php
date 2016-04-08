@@ -114,31 +114,19 @@ class Frameworks extends Container
             'response'=>'PAO\Http\Response',
             'cookie'=>'PAO\Http\Cookie',
             'session'=>'PAO\Http\Session',
-            'crypt'=>'PAO\Crypt\Crypt',
             'encrypter'=>'PAO\Crypt\Crypt',
+            'crypt'=>'encrypter',
             'captcha'=>'PAO\Captcha\Captcha',
             'validator'=>'PAO\Validator',
             'exception'=>'PAO\Exception\PAOException',
             'translator'=>'PAO\Translator',
-            'lang'=>'PAO\Translator',
+            'lang'=>'translator',
             'db'=>'PAO\Database',
             'view'=>'PAO\View',
             'cache'=>'PAO\Cache\Cache',
             'log'=>'PAO\Logger',
             'Illuminate\Contracts\Routing\ResponseFactory' => 'PAO\Http\Response'
         ];
-
-        //注册自定义服务别名
-        if($aliases = (array) $this->config('service'))
-        {
-            if($alias = array_intersect_key($this->aliases, $aliases))
-            {
-                $duplicates = implode(',', array_keys($aliases));
-                throw new SystemException("The Service Alias [$duplicates] Was Duplicate!");
-            }else{
-                $this->aliases = array_merge($this->aliases, $aliases);
-            }
-        }
 
     }
 
@@ -164,6 +152,7 @@ class Frameworks extends Container
             'Cookie' => 'Illuminate\Support\Facades\Cookie',
             'Session' => 'Illuminate\Support\Facades\Session',
             'Cache' => 'Illuminate\Support\Facades\Cache',
+            'Schema' => 'Illuminate\Support\Facades\Schema',
         ];
         foreach($facadesAlias as $alias => $facade)
         {
