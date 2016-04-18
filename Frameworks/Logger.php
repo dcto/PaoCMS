@@ -19,7 +19,7 @@ class Logger extends \Monolog\Logger  {
 
     public function __construct()
     {
-        $this->name = APP;
+        $this->name = basename(APP);
 
         $this->handlers = [];
 
@@ -29,7 +29,7 @@ class Logger extends \Monolog\Logger  {
 
         $this->logger = $this->container->config('config.dir.log').DIRECTORY_SEPARATOR;
 
-        $logger = $this->logger.APP.DIRECTORY_SEPARATOR.'P_'.date('Ymd').'.log';
+        $logger = $this->logger.basename(APP).DIRECTORY_SEPARATOR.$this->container->config('config.token').'_'.date('Ymd').'.log';
 
         $this->formatter = "[%datetime%] [%channel%] [%level_name%]: %message% %context% %extra%".PHP_EOL.PHP_EOL;
 
@@ -46,7 +46,7 @@ class Logger extends \Monolog\Logger  {
         {
             $this->pushHandler($stream);
         }else{
-            //ÓÃBufferHandlerÉèÖÃÍ¬Ò»ÇëÇóÏÂÈÕÖ¾Êý´ïµ½10ÌõÔÙÐ´Ò»´ÎÎÄ¼þ
+            //ï¿½ï¿½BufferHandlerï¿½ï¿½ï¿½ï¿½Í¬Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½ïµ½10ï¿½ï¿½ï¿½ï¿½Ð´Ò»ï¿½ï¿½ï¿½Ä¼ï¿½
             $this->pushHandler(new \Monolog\Handler\BufferHandler($stream, 100, \Monolog\Logger::DEBUG, true, true));
         }
 
