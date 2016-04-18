@@ -193,9 +193,9 @@ class Route
         $this->action = $action;
         $appController = $this->container->config('config.dir.controller');
         if(is_string($appController)) {
-            $controller = APP.'\\'.$appController.'\\'.$controller;
+            $controller = basename(APP).'\\'.$appController.'\\'.$controller;
         }else {
-            $controller = APP.'\\Controller\\'.$controller;
+            $controller = basename(APP).'\\Controller\\'.$controller;
         }
 
         //判断方法是否存在并将其实例化

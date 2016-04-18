@@ -136,7 +136,7 @@ class Translator
         $language = $language ? $this->language = $language : $this->language;
 
         $PaoLanguage = PAO.DIRECTORY_SEPARATOR.'Language'.DIRECTORY_SEPARATOR.$language.'.ini';
-        $AppLanguage = PAO.DIRECTORY_SEPARATOR.APP.DIRECTORY_SEPARATOR.'Language'.DIRECTORY_SEPARATOR.$language.'.ini';
+        $AppLanguage = APP.DIRECTORY_SEPARATOR.'Language'.DIRECTORY_SEPARATOR.$language.'.ini';
         $readable = false;
 
         if(is_readable($PaoLanguage))

@@ -173,7 +173,7 @@ class Repository implements ArrayAccess, ConfigContract
         $key = trim($key,'.');
         $name = trim(strstr($key,'.') ? strstr($key, '.', true) : $key);
         $PaoConfig = PAO.DIRECTORY_SEPARATOR.'Config'.DIRECTORY_SEPARATOR.strtolower($name).'.php';
-        $AppConfig = PAO.DIRECTORY_SEPARATOR.APP.DIRECTORY_SEPARATOR.'Config'.DIRECTORY_SEPARATOR.strtolower($name).'.php';
+        $AppConfig = APP.DIRECTORY_SEPARATOR.'Config'.DIRECTORY_SEPARATOR.strtolower($name).'.php';
 
         $Config = array();
 

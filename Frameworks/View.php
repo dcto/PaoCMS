@@ -32,7 +32,7 @@ class View
     public function __construct()
     {
         $this->container = Container::getInstance();
-        $this->templates = $this->container->config('template.dir')?:PAO.DIRECTORY_SEPARATOR.APP.DIRECTORY_SEPARATOR.'View';
+        $this->templates = $this->container->config('template.dir')?:APP.DIRECTORY_SEPARATOR.'View';
     }
 
 
@@ -102,7 +102,7 @@ class View
          * 注册全局变量
          */
         $twig->addGlobal('PAO', PAO);
-        $twig->addGlobal('APP', APP);
+        $twig->addGlobal('APP', basename(APP));
         $twig->addGlobal('config', $this->container->config('config'));
         $twig->addGlobal('request', $this->container->make('request'));
         $twig->addGlobal('timezone', date_default_timezone_get());
@@ -133,7 +133,7 @@ class View
            if(Str::startsWith($path, '/')){
                return $url.str_replace('//','/', trim($path, '/'));
            }else{
-               return $url.str_replace('//', '/', trim(strtolower(APP).'/'.$path, '/'));
+               return $url.str_replace('//', '/', trim(strtolower(basename(APP)).'/'.$path, '/'));
            }
         });
         $twig->addFunction($asset);
