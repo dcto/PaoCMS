@@ -19,7 +19,20 @@ function app($make = null, $parameters = [])
 }
 
 
+/**
+ * get the language
+ * @return mixed
+ */
 function lang()
 {
    return call_user_func_array(array(app('lang'), 'get'), func_get_args());
+}
+
+/**
+ * get config
+ * @return mixed
+ */
+function config()
+{
+    return call_user_func_array(array(app('config'), 'get'), func_get_args());
 }
