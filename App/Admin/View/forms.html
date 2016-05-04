@@ -1,0 +1,86 @@
+{#搜索框#}
+{% macro search() %}
+<form id="search" class="form-inline" action="{{ url() }}?">
+    <div class="form-group">
+        <div class="input-group">
+            {#<div class="input-group-addon">{{ e('username') }}</div>#}
+            <input type="text" class="form-control" id="w" name="w" placeholder="关键字">
+                <span class="input-group-btn">
+                    <button type="submit" class="btn btn-default">{{lang.search}}</button>
+                </span>
+        </div>
+    </div>
+</form>
+{% endmacro %}
+
+{#输入框#}
+{% macro input(name, type='text', size=2, value='',  message='') %}
+<div class="form-group">
+    <label for="{{ name }}" class="col-md-2 control-label">{{lang(name)}}：</label>
+    <div class="col-sm-{{ size }}">
+        <input id="{{ name }}" name="{{ name }}" type="{{ type }}" class="form-control" placeholder="{{lang.form.input}}{{lang(name)}}" value="{{value}}" />
+        <span class="help-block">{{ message }}</span>
+    </div>
+</div>
+{% endmacro %}
+
+{#选择列表#}
+{% macro select(name, options, title, size=2) %}
+<div class="form-group">
+    <label class="col-sm-2 control-label">{{ title }}：</label>
+    <div class="col-sm-{{ size }}">
+        <select name="gid" class="form-control">
+            <option value="0">{{lang.select}}{{ title }}</option>
+            {%for option in options%}
+                <option value="{{option.id}}">{{option.name}}</option>
+            {%endfor%}
+        </select>
+    </div>
+</div>
+{% endmacro %}
+
+{#选择表单#}
+{% macro checkbox(name, checked, label) %}
+    {% set id = name|default(random()) %}
+    <div class="checkbox checkbox-circle checkbox-success checkbox-inline">
+        <input id="{{ id }}" type="checkbox" name="{{ name }}"{{ checked ? ' checked=checked' }} /><label for="{{ id }}">{{ label }}</label>
+    </div>
+{% endmacro %}
+
+{#radio表单#}
+{% macro radio(name, checked) %}
+    {% set id = name|default(random()) %}
+<div class="form-group">
+    <label class="col-sm-2 control-label">{{lang.config}}{{lang(name)}}：</label>
+    <div class="col-sm-6">
+        <div class="radio radio-circle radio-inline">
+            <input id="{{ id~checked }}" type="radio" name="{{ name }}" value="0"{{ checked==0 ? ' checked=checked' }} /><label for="{{ id~checked }}">{{ lang('disable') }}</label>
+        </div>
+        <div class="radio radio-circle radio-success radio-inline">
+            <input id="{{ id~checked }}-2" type="radio" name="{{ name }}" value="1"{{ checked==1 ? ' checked=checked' }} /><label for="{{ id~checked }}">{{ lang('enable') }}</label>
+        </div>
+    </div>
+</div>
+{% endmacro %}
+
+{#提交按扭#}
+{% macro submit() %}
+<div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+        <input type="text" name="id" class="hide" />
+        <button type="submit" class="btn btn-primary">{{lang.submit}}</button>
+    </div>
+</div>
+{% endmacro %}
+
+{#状态展示#}
+{% macro status(value, id) %}
+    <a href="{{ url(request.path~'/update?id='~id) }}" data-status="{{ value?0:1 }}" class="btn-status label label-{{ value?'success':'default' }}">{{ lang(value?'enable':'disable') }}</a>
+{% endmacro %}
+
+{#修改删除按扭#}
+{% macro operate(id, name='', extend='') %}
+    <a href="{{ url(request.path~'/update?id='~id) }}" class="btn-update btn btn-xs btn-primary">{{ lang('update') }}</a>
+    &nbsp;
+    <a href="{{ url(request.path~'/delete?id='~id) }}" class="btn-delete btn btn-xs btn-danger" data-confirm="{{ lang('alert.delete_confirm')|format(name) }}">{{ lang('delete') }}</a>
+{% endmacro %}

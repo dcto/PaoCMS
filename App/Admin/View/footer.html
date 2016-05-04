@@ -1,0 +1,12 @@
+<div class="foot ">
+    <nav class="pull-left hidden-xs">
+        <button id="btn-batch-select" type="button" class="btn btn-sm btn-default">{{lang.select_all}}</button>
+        <button id="btn-batch-choice" type="button" class="btn btn-sm btn-default">{{lang.select_del}}</button>
+        <button id="btn-batch-enable" type="button" class="btn btn-sm btn-default btn-batch" value="{{url(request.path~'/update?status=1') }}">{{lang.enable}}</button>
+        <button id="btn-batch-disable" type="button" class="btn btn-sm btn-default btn-batch" value="{{url(request.path~'/update?status=0') }}">{{lang.disable}}</button>
+        <button id="btn-batch-delete" type="button" class="btn btn-sm btn-default btn-batch" value="{{url(request.path~'/delete')}}">{{lang.delete}}</button>
+    </nav>
+    <nav class="pull-right">
+        {%autoescape false%}{{list.render}}{%endautoescape%}
+    </nav>
+</div>

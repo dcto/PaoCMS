@@ -1,0 +1,81 @@
+{% extends 'layout.html' %}
+
+{% block content%}
+    <!--TAB Panel start -->
+    {% include 'header.html' with {'search':{'w':''}} %}
+    <!--TAB Panel end -->
+<div class="row">
+    <!--TAB create-->
+    <div id="create">
+        <div class="col-md-6">
+            <form class="form-horizontal" action="{{url('@user-create')}}">
+                <fieldset>
+                    <legend></legend>
+                    {{ forms.input('username', 'text', '', 3) }}
+                    {{ forms.input('password1', 'password') }}
+                    {{ forms.input('password2', 'password') }}
+                    {{ forms.select('gid', group, lang.menu.admin_group) }}
+                    {{ forms.input('phone') }}
+                    {{ forms.input('email') }}
+                    {{ forms.radio('status') }}
+                    {{ forms.submit() }}
+                </fieldset>
+            </form>
+        </div>
+    </div>
+    <!--TAB create-->
+
+    <!--TAB update-->
+    <div id="update">
+        <div class="col-md-6">
+            <form action="{{url('@user-update')}}" class="form-horizontal"></form>
+        </div>
+    </div>
+    <!--TAB update end-->
+
+    <!--TAB index-->
+    <div id="index">
+        <div id="table">
+        <table class="table table-striped table-bordered table-hover table-list" cellspacing="0"
+               width="100%">
+            <thead>
+            <tr>
+                <th><input type="checkbox" /></th>
+                <th>{{lang.id}}</th>
+                <th>{{lang.username}}</th>
+                <th>{{lang.menu.admin_group}}</th>
+                <th>{{lang.email}}</th>
+                <th>{{lang.times}}</th>
+                <th>{{lang.created_at}}</th>
+                <th>{{lang.updated_at}}</th>
+                <th>{{lang.status}}</th>
+                <th class="text-center">{{lang.operate}}</th>
+            </tr>
+            </thead>
+            <tbody>
+            <form method="POST">
+
+            {% for v in list %}
+                <tr>
+                    <td><input name="id[]" type="checkbox" value="{{v.id}}"/></td>
+                    <td>{{v.id}}</td>
+                    <td>{{v.username}}</td>
+                    <td>{{v.group.name|default }}</td>
+                    <td>{{v.email}}</td>
+                    <td>{{v.times}}</td>
+                    <td>{{v.created_at}}</td>
+                    <td>{{v.updated_at}}</td>
+                    <td>{{forms.status(v.status)}}</td>
+                    <td class="text-center">{{forms.operate(v.id, v.username)}}</td>
+                </tr>
+            {%endfor%}
+            </form>
+            </tbody>
+        </table>
+        </div>
+        {% include "footer.html" %}
+    </div>
+    <!--TAB index end-->
+
+</div><!--ROW end-->
+{% endblock %}

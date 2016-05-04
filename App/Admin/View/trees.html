@@ -1,0 +1,141 @@
+{% extends 'layout.html' %}
+
+{% block head %}
+<link href="{{asset('/plugins/bootstrap-gtreetable/bootstrap-gtreetable.css')}}" rel="stylesheet">
+<script type="text/javascript" src="{{ asset('/plugins/bootstrap-gtreetable/bootstrap-gtreetable.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('/plugins/bootstrap-gtreetable/languages/bootstrap-gtreetable.zh-CN.js') }}"></script>
+<script type="text/javascript" src="{{ asset('/plugins/js/jquery-ui.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('/plugins/js/jquery.browser.min.js') }}"></script>
+{% endblock %}
+
+{% block script %}
+<script type="text/javascript">
+    jQuery('#gtreetable').gtreetable({
+        'language':"{{ config.language }}",
+        'manyroots':true,
+        'draggable':true,
+        'inputWidth':"300px",
+
+        'source': function (pid) {
+            return {
+                type: 'POST',
+                url: '{{ url('@trees') }}',
+                data: { 'pid': pid },
+                dataType: 'json',
+                error: function(XMLHttpRequest) {
+                    $.pao.alert(XMLHttpRequest.responseText, {icon: 2});
+                }
+            }
+        },
+        "onSave":function (oNode) {
+            return {
+                type: 'POST',
+                url: !oNode.isSaved() ? '{{ url('@trees-create') }}' : URI('{{ url('@trees-update') }}').addSearch({'id':oNode.getId()}).toString(),
+                data: {
+                    pid: oNode.getParent(),
+                    name: oNode.getName(),
+                    status: 1
+                },
+                dataType: 'json',
+                error: function(XMLHttpRequest) {
+                    $.pao.alert(XMLHttpRequest.responseText, {icon: 2});
+                }
+            };
+        },
+        "onDelete":function(oNode) {
+            return {
+                type: 'POST',
+                url: URI('{{ url('@trees-delete') }}').addSearch({'id':oNode.getId()}).toString(),
+                dataType: 'json',
+                error: function(XMLHttpRequest) {
+                    $.pao.alert(XMLHttpRequest.responseText, {icon: 1});
+                }
+            };
+        },
+        "onMove":function(oSource, oDestination, position) {
+            return {
+                type: 'POST',
+                url: URI('{{ url('@trees-update') }}').addSearch({'id':oSource.getId()}).toString(),
+                data: {
+                    pid: oDestination.getId()
+                },
+                dataType: 'json',
+                error: function(XMLHttpRequest) {
+                    $.pao.alert(XMLHttpRequest.responseText, {icon: 2});
+                }
+            };
+        }
+
+    });
+</script>
+{% endblock %}
+
+{% block content %}
+    <!--TAB Panel start -->
+    {% include 'header.html' %}
+    <!--TAB Panel end -->
+
+<div class="row tab-content">
+
+    <!--TAB update-->
+    <div id="create" class="col-md-8 col-md-offset-2 tab-pane">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="btn-group-xs pull-right panel">
+                    <!--
+                    <a href="#" class="btn btn-success btn-create" data-do="create">{{ lang.create }}</a>
+                    <a href="#" class="btn btn-primary btn-update" data-do="update">{{ lang.update }}</a>
+                    <a href="#" class="btn btn-danger btn-delete" data-do="delete">{{ lang.delete }}</a>
+                    -->
+                </div>
+                <div class="panel-title">{{ lang.menu.trees }}</div>
+            </div>
+            <div class="panel-body">
+                <div id="trees">
+                    <table class="table gtreetable" id="gtreetable"><thead><tr><th>根目录</th></tr></thead></table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--TAB update end-->
+
+    <!--TAB index-->
+    <div id="index" class="tab-pane col-md-10 col-md-offset-1 active">
+        <div id="table">
+            <table class="table table-striped table-bordered table-hover table-list" cellspacing="0"
+                   width="100%">
+                <thead>
+                <tr>
+                    <th>{{lang.id}}</th>
+                    <th>{{lang.type}}</th>
+                    <th>{{lang.name}}</th>
+                    <th>{{lang.status}}</th>
+                    <th class="text-center">{{lang.operate}}</th>
+                </tr>
+                </thead>
+                <tbody>
+                <form method="POST">
+                    {% for v in trees %}
+                        <tr>
+                            <td>{{v.id}}</td>
+                            <td>{{v.type}}</td>
+                            <td>{{v.name}}</td>
+                            <td>{{forms.status(v.status, v.id)}}</td>
+                            <td class="text-center">{{forms.operate(v.id, v.name)}}</td>
+                        </tr>
+                    {%endfor%}
+                </form>
+
+                <form action="{{ url('@trees-create') }}" method="POST" class="form-inline">
+                    <tr>
+                        <td colspan="5">
+                            {{ forms.input(lang.type) }}
+                        </td>
+                    </tr>
+                </form>
+
+                </tbody>
+            </table>
+        </div>
+</div>
+{% endblock %}

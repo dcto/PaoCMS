@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+<meta name="keywords" content="{{keywords|default()}}" />
+<meta name="description" content="{{description|default()}}" />
+<meta name="author" content="paocms" />
+<link rel="icon" href="favicon.ico" />
+
+<title>{%block title%}{%if title is defined%}{{title}}-{%endif%}{{config.name}}{%endblock%}</title>
+
+<!-- Custom styles for this template -->
+<link href="{{asset('css/pao.min.css')}}" rel="stylesheet">
+<script src="{{asset('js/pao.min.js')}}" merge="true"></script>
+<!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+<!--[if lt IE 9]><script src=".{{asset('js/ie8-responsive-file-warning.js')}}"></script><![endif]-->
+
+<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+<!--[if IE 7]>
+<link rel="stylesheet" href="{{ asset('css/font-awesome-ie7.min.css') }}">
+<![endif]-->
+<!--[if lt IE 9]>
+<script src="{{asset('js/html5shiv.min.js')}}"></script>
+<script src="{{asset('js/respond.min.js')}}"></script>
+<![endif]-->
+<script type="text/javascript">var Purl="{{asset('/')}}"; PLang="{{config('config.language')}}"</script>
+{%block head%}{%endblock%}
+</head>
+{% import 'forms.html' as forms %}
+<body>
+    <nav class="navbar navbar-fixed-top top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <div class="logo-header"><a class="logo navbar-brand" href="#"></a></div>
+        </div>
+        <div id="nav_menu_item" class="navbar-collapse collapse">
+          <ul class="nav_menu_item">
+          <li><a class="selected" href="default.html"><img src="{{asset('images')}}/icon01.png" title="工作台" /><h4>工作台</h4></a></li>
+          <li><a href="imgtable.html"><img src="{{asset('images')}}/icon02.png" title="模型管理" /><h4>模型管理</h4></a></li>
+          <li><a href="imglist.html"><img src="{{asset('images')}}/icon03.png" title="模块设计" /><h4>模块设计</h4></a></li>
+          <li><a href="tools.html"><img src="{{asset('images')}}/icon04.png" title="常用工具" /><h4>常用工具</h4></a></li>
+          <li><a href="computer.html"><img src="{{asset('images')}}/icon05.png" title="文件管理" /><h4>文件管理</h4></a></li>
+          <li><a href="tab.html"><img src="{{asset('images')}}/icon06.png" title="系统设置" /><h4>系统设置</h4></a></li>
+          </ul>
+
+          <div class="nav navbar-nav navbar-right topright">
+            <ul>
+              <li><a class="lang" data-lang="en-us" href="#">English</a></li>
+              <li><a class="lang" data-lang="zh-cn" href="#">中文(简体)</a></li>
+              <li><a href="{{url('@logout')}}" target="_parent">退出</a></li>
+            </ul>
+            <div class="nav_user"><span>admin</span><i>消息</i><b>5</b></div>
+          </div>
+
+        </div><!--/.nav-collapse -->
+      </div><!--/.container-fluid -->
+    </nav>
+
+  <div class="container-fluid">
+    <div class="row">
+    <!--menu-->
+      <div class="col-sm-3 col-md-2 sidebar">
+        <div class="sidebar-title"><i></i>{{ lang.menu.navigation }}</div>
+        <div class="menu">
+          {% for mod, items in modules %}
+            {% if items.route is defined %}
+          <div class="menu-title"><i class="icon icon-{{ items.icon|default() }}"></i>{{ lang(items.name) }}</div>
+            <ul class="menu-item">
+                {% for path, item in items.route if item.menu is defined %}
+                <li class="{{ request.is(path) ? 'active' }}"><a href="{{url(item.menu.link?:path)}}">{{ lang(item.name) }}</a><i></i></li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+          {% endfor %}
+        </div>
+
+      </div>
+    <!--/menu-->
+
+    <!--content-->
+      <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+        <div class="main-header">
+          <div class="pull-left"><b>位置：</b>{{title|default(config.name)}}</div>
+          <div class="pull-right"></div>
+        </div>
+        <div class="container-fluid content">{%block content%}{%endblock%}</div>
+      </div>
+    <!--/content-->
+
+    </div>
+  </div>
+
+  <footer class="navbar navbar-fixed-bottom footer">
+    <div class="row-fluid">
+      <div class="col-sm-6 col-md-6">Web Design / Logo &copy; {{"now"|date('Y')}} PaoCMS Inc. All rights reserved </div>
+      <div class="col-sm-6 col-md-6 text-right">GMT{{"now"|date('O')}} Processed in  {{size(memory_get_usage(true))}}, {{microtime(true) - request.server('REQUEST_TIME_FLOAT')}} second(s).</div>
+    </div>
+  </footer>
+
+{%block script%}{%endblock%}
+</body>
+</html>

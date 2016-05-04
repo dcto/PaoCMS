@@ -1,0 +1,81 @@
+<div class="row sub-header">
+    <div class="labels col-md-4">
+        <!--
+        <div id="Tabs" class="nav nav-tabs tabs">
+            <ul>
+                <li id="tab-index"><a href="#index">{{title|default()}}{{lang.index}}</a></li>
+                <li id="tab-create"><a href="#create">{{lang.create}}{{title|default()}}</a></li>
+                <li id="tab-update" class="hide"><a href="#update">{{lang.update}}{{title|default()}}</a></li>
+            </ul>
+        </div>
+        -->
+        {% block tabs %}
+        <ul id="tabs" class="nav nav-tabs" role="tablist" data-tabs="tabs">
+            <li id="tab-index" class="active"><a href="#index" aria-controls="index" data-toggle="tab">{{title|default()}}{{lang.index}}</a></li>
+            <li id="tab-create"><a href="#create" aria-controls="create" data-toggle="tab">{{lang.create}}{{title|default()}}</a></li>
+            <li id="tab-update" class="hide"><a href="#update" aria-controls="update" data-toggle="tab">{{lang.update}}{{title|default()}}</a></li>
+        </ul>
+        {% endblock %}
+    </div>
+    <script type="text/javascript">
+        jQuery(document).ready(function ($) {
+            $('#mytab').tab();
+        });
+    </script>
+    <div class="search col-md-8 hidden-xs">
+        {% if search is defined %}
+        <form id="search" class="form-inline" action="{{ search.action|default(url()) }}?">
+            <div class="col-md-1">
+                {% if search.stat is defined  %}
+                <select class="form-control" name="status">
+                    <option value="">{{ lang.status }}</option>
+                    <option value="1">{{ lang.enable }}</option>
+                    <option value="0">{{ lang.disable }}</option>
+                </select>
+                {% endif %}
+            </div>
+            <div class="col-md-2">
+                {% if search.select is defined %}
+                <select class="form-control" name="">
+                    <option>选择</option>
+                </select>
+                {% endif %}
+            </div>
+            <div class="col-md-3">
+                {% if search.date is defined %}
+                <div class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon">开始</span>
+                        <input type="text" name="created_at" class="form-control" >
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            <div class="col-md-3">
+                {% if search.date is defined %}
+                <div class="form-group">
+                    <div class="input-group">
+                        <input type="text" name="updated_at" class="form-control" >
+                        <span class="input-group-addon">结束</span>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            <div class="col-md-3">
+            <div class="form-group">
+                <div class="input-group">
+                    {#<div class="input-group-addon">{{ e('username') }}</div>#}
+                    <input type="text" class="form-control" id="w" name="w" placeholder="{{ lang.form.input }}{{ lang.form.keyword }}">
+                    <span class="input-group-btn">
+                        <button type="submit" class="btn btn-default">
+                            <i class="icon-search"></i>
+
+                        </button>
+                    </span>
+                </div>
+            </div>
+            </div>
+        </form>
+        {% endif %}
+    </div>
+</div>
