@@ -3,11 +3,11 @@ defined('PAO') || die('The PaoCMS Load Error');
 
 
 return array(
-    'dir' => PAO.DIRECTORY_SEPARATOR.APP.DIRECTORY_SEPARATOR.'View', //Ä£°åÂ·¾¶
-    'cache' => false,//PAO.DIRECTORY_SEPARATOR.'RunTime'.DIRECTORY_SEPARATOR.'Cache', //Ä£°å»º´æ
-    'suffix' => '.html', //Ä£°åºó×º
+    'dir' => APP.DIRECTORY_SEPARATOR.'View', //è§†å›¾è·¯å¾„
+    'cache' => false,//PAO.DIRECTORY_SEPARATOR.'RunTime'.DIRECTORY_SEPARATOR.'Cache', //æ¢°æ¿ç¼“å­˜
+    'suffix' => '.html', //è§†å›¾æ–‡ä»¶åŽç¼€
 
-    //Ä£°æ±äÁ¿×Ô¶¨Òå
+    //æ¨¡æ¿å…¨å±€å˜é‡è®¾å®š
     'variable' => array(
             'time'=>time(),
     )

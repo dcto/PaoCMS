@@ -12,9 +12,8 @@
 
   "autoload": {
     "psr-4": {
-      "PAO\\": "Frameworks/",
-      "Portal\\": "Portal/",
-      "Manage\\": "Manage/"
+      "App\\": "App/",
+      "PAO\\": "Frameworks/"
     }
   }
 }
