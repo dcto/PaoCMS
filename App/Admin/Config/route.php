@@ -39,7 +39,7 @@ return array(
         'route'=>array(
             '/trees'=>['ANY', 'as'=>'trees', 'to'=>'trees@index','name'=>'menu.trees', 'menu'=>true],
             '/trees/create'=>['POST', 'as'=>'trees-create', 'to'=>'trees@create','name'=>'menu.trees_create'],
-            '/trees/update'=>[['GET','POST'], 'as'=>'trees-update', 'to'=>'trees@update','name'=>'menu.trees_update'],
+            '/trees/update'=>['ANY', 'as'=>'trees-update', 'to'=>'trees@update','name'=>'menu.trees_update'],
             '/trees/delete'=>['POST', 'as'=>'trees-delete', 'to'=>'trees@delete','name'=>'menu.trees_delete'],
         )
     ),
