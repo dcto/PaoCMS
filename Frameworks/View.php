@@ -175,8 +175,10 @@ class View
          * 注册语言包调用方法
          * @var [type]
          */
-        $language = new \Twig_SimpleFunction('lang', array($this->container->make('translator'), 'get'));
-        $twig->addFunction($language);
+        $lang = new \Twig_SimpleFunction('lang', function($cast = null){
+           return $this->container->make('lang')->get($cast);
+        });
+        $twig->addFunction($lang);
 
 
         /**
