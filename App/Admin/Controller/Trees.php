@@ -25,23 +25,24 @@ class Trees extends Controller
 
     public function index()
     {
-    /*
-        \App\Model\Trees::down();
-        \App\Model\Trees::up();
-    */
+
+
         if(Request::isMethod('POST')){
-            $Trees = \App\Model\Trees::get(array('id','type','name','level'));
-            $Trees = $Trees ? $Trees->toArray() : array();
-            return Response::Json(['nodes'=>$Trees]);
+            //$Trees = \App\Model\Trees::get(array('id','type','name','level'));
+            //$Trees = $Trees ? $Trees->toArray() : array();
+           return Response::Json(['nodes'=>[]]);
         }
 
-        $Trees = \App\Model\Trees::whereRoot(1)->get();
+        $Trees = \App\Model\Trees::where('pid','0')->get();
         return Response::view('trees', ['trees'=>$Trees]);
     }
 
 
     public function create()
     {
+        if(\App\Model\Trees::where('tag',Request::get('tag'))->exists()){
+            return $this->alert(0, lang('alert.exist', lang('menu.trees')));
+        }
         $create = \App\Model\Trees::create(Request::all());
         if(!$create) return Response::make(lang('alert.create_failure', lang('module.trees')), 500);
         return Response::Json($create);
@@ -50,6 +51,11 @@ class Trees extends Controller
 
     public function update()
     {
+        if(!Request::isMethod('POST')){
+            $trees = \App\Model\Trees::whereId(Request::get('id'))->get();
+            return Response::Json($trees ? $trees->toArray() : []);
+        }
+        die('sdd');
         $update = \App\Model\Trees::whereId(Request::get('id'))->update(Request::all());
         if(!$update) return Response::make(lang('alert.update_failure', lang('module.trees')), 500);
         return Response::Json(Request::all());
