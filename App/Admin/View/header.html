@@ -11,9 +11,9 @@
         -->
         {% block tabs %}
         <ul id="tabs" class="nav nav-tabs" role="tablist" data-tabs="tabs">
-            <li id="tab-index" class="active"><a href="#index" aria-controls="index" data-toggle="tab">{{title|default()}}{{lang.index}}</a></li>
-            <li id="tab-create"><a href="#create" aria-controls="create" data-toggle="tab">{{lang.create}}{{title|default()}}</a></li>
-            <li id="tab-update" class="hide"><a href="#update" aria-controls="update" data-toggle="tab">{{lang.update}}{{title|default()}}</a></li>
+            <li id="tab-index" class="active {{ index }}"><a href="#index" aria-controls="index" data-toggle="tab">{{title|default()}}{{lang.index}}</a></li>
+            <li id="tab-create" class="{{ create }}"><a href="#create" aria-controls="create" data-toggle="tab">{{lang.create}}{{title|default()}}</a></li>
+            <li id="tab-update" class="hide {{ update }}"><a href="#update" aria-controls="update" data-toggle="tab">{{lang.update}}{{title|default()}}</a></li>
         </ul>
         {% endblock %}
     </div>

@@ -14,7 +14,7 @@
 {% endmacro %}
 
 {#输入框#}
-{% macro input(name, type='text', size=2, value='',  message='') %}
+{% macro input(name, type='text', size=3, value='',  message='') %}
 <div class="form-group">
     <label for="{{ name }}" class="col-md-2 control-label">{{lang(name)}}：</label>
     <div class="col-sm-{{ size }}">
@@ -43,7 +43,7 @@
 {% macro checkbox(name, checked, label) %}
     {% set id = name|default(random()) %}
     <div class="checkbox checkbox-circle checkbox-success checkbox-inline">
-        <input id="{{ id }}" type="checkbox" name="{{ name }}"{{ checked ? ' checked=checked' }} /><label for="{{ id }}">{{ label }}</label>
+        <input id="{{ id }}" type="checkbox" name="{{ name }}"{{ checked ? ' checked=checked' }} /><label for="{{ id }}">{{ label?: lang.status }}</label>
     </div>
 {% endmacro %}
 
@@ -64,11 +64,11 @@
 {% endmacro %}
 
 {#提交按扭#}
-{% macro submit() %}
+{% macro submit(value, size) %}
 <div class="form-group">
     <div class="col-sm-offset-2 col-sm-10">
         <input type="text" name="id" class="hide" />
-        <button type="submit" class="btn btn-primary">{{lang.submit}}</button>
+        <button type="submit" class="btn btn-primary {{ size }}">{{value|default(lang.submit)}}</button>
     </div>
 </div>
 {% endmacro %}
@@ -80,7 +80,12 @@
 
 {#修改删除按扭#}
 {% macro operate(id, name='', extend='') %}
-    <a href="{{ url(request.path~'/update?id='~id) }}" class="btn-update btn btn-xs btn-primary">{{ lang('update') }}</a>
+    <a href="{{ url(request.path~'/update?id='~id) }}" class="btn-update btn btn-xs btn-info">{{ lang('update') }}</a>
     &nbsp;
     <a href="{{ url(request.path~'/delete?id='~id) }}" class="btn-delete btn btn-xs btn-danger" data-confirm="{{ lang('alert.delete_confirm')|format(name) }}">{{ lang('delete') }}</a>
+{% endmacro %}
+
+{% macro edit(name, type='text', title) %}
+
+    <a href="#" class="editable editable-click editable-empty" id="{{ name }}" data-type="{{ type }}" data-name="{{ name }}" data-original-title="{{ title|default(lang('form.input', lang(name))) }}">{{ lang('form.input', lang(name)) }}</a>
 {% endmacro %}

@@ -34,7 +34,8 @@
                 data: {
                     pid: oNode.getParent(),
                     name: oNode.getName(),
-                    status: 1
+                    position: oNode.getInsertPosition(),
+                    related: oNode.getRelatedNodeId()
                 },
                 dataType: 'json',
                 error: function(XMLHttpRequest) {
@@ -52,6 +53,7 @@
                 }
             };
         },
+        "draggable" : true,
         "onMove":function(oSource, oDestination, position) {
             return {
                 type: 'POST',
@@ -67,18 +69,36 @@
         }
 
     });
+
+    $(document).ready(function() {
+        $('.editable').editable();
+    });
 </script>
 {% endblock %}
 
 {% block content %}
     <!--TAB Panel start -->
-    {% include 'header.html' %}
+    {% include 'header.html'%}
     <!--TAB Panel end -->
 
 <div class="row tab-content">
 
-    <!--TAB update-->
+    <!--TAB create-->
     <div id="create" class="col-md-8 col-md-offset-2 tab-pane">
+    <form action="{{ url('@trees-create') }}" method="POST" class="form-horizontal">
+        <fieldset>
+            <legend>{{ lang('create')~title }}</legend>
+            {{ forms.input('tag') }}
+            {{ forms.input('name') }}
+            {{ forms.radio('status') }}
+            {{ forms.submit() }}
+        </fieldset>
+    </form>
+    </div>
+    <!--TAB create end-->
+
+    <!--TAB update-->
+    <div id="update" class="col-md-8 col-md-offset-2 tab-pane">
         <div class="panel panel-default">
             <div class="panel-heading">
                 <div class="btn-group-xs pull-right panel">
@@ -100,14 +120,14 @@
     <!--TAB update end-->
 
     <!--TAB index-->
-    <div id="index" class="tab-pane col-md-10 col-md-offset-1 active">
+    <div id="index" class="tab-pane col-md-6 col-md-offset-3 active">
         <div id="table">
             <table class="table table-striped table-bordered table-hover table-list" cellspacing="0"
                    width="100%">
                 <thead>
                 <tr>
                     <th>{{lang.id}}</th>
-                    <th>{{lang.type}}</th>
+                    <th>{{lang.tag}}</th>
                     <th>{{lang.name}}</th>
                     <th>{{lang.status}}</th>
                     <th class="text-center">{{lang.operate}}</th>
@@ -118,22 +138,29 @@
                     {% for v in trees %}
                         <tr>
                             <td>{{v.id}}</td>
-                            <td>{{v.type}}</td>
+                            <td>{{v.tag}}</td>
                             <td>{{v.name}}</td>
                             <td>{{forms.status(v.status, v.id)}}</td>
                             <td class="text-center">{{forms.operate(v.id, v.name)}}</td>
                         </tr>
                     {%endfor%}
                 </form>
+                </tbody>
+            </table>
 
-                <form action="{{ url('@trees-create') }}" method="POST" class="form-inline">
-                    <tr>
-                        <td colspan="5">
-                            {{ forms.input(lang.type) }}
-                        </td>
-                    </tr>
-                </form>
+            <hr />
 
+            <table class="table table-bordered " cellspacing="0"
+                   width="100%">
+                <tbody>
+                        <tr>
+
+                            <td>{{lang.id}}</td>
+                            <td>{{ forms.edit('tag') }}</td>
+                            <td>{{ forms.edit('name') }}</td>
+                            <td>{{lang.status }}</td>
+                            <td class="text-center">{{ forms.submit(lang.create, 'btn-xs') }}</td>
+                        </tr>
                 </tbody>
             </table>
         </div>
