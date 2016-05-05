@@ -34,7 +34,7 @@ cite{font-style:normal;}
   border: 0;
 }
 
-.top {
+.navbar-top {
   height: 88px;
   background:url(../images/topbg.gif) repeat-x;
 }
@@ -299,6 +299,7 @@ a:focus,input[type=checkbox]:focus,input[type=radio]:focus,button:focus,select{o
 .table-list th:first-child, .table-list td:first-child{text-align: center}
 .table-list tbody tr.odd{background:#f5f8fa;}
 .table-list tbody tr:hover{background:#e5ebee;}
+.table-center tbody td{text-align: center}
 
 /*page*/
 .pagin{position:relative;margin-top:10px;padding:0 12px;}
