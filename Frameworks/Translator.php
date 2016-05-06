@@ -51,10 +51,8 @@ class Translator
      */
 	public function get()
 	{
-        $key = func_get_arg(0);
         $args = func_get_args();
-        array_shift($args);
-
+        $key = array_shift($args);
         $lang = Arr::get($this->items, $key);
         if(is_string($lang)){
             return $args ? $this->replacements($lang, $args) : $lang;

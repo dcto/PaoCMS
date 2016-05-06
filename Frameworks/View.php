@@ -107,6 +107,24 @@ class View
         $twig->addGlobal('request', $this->container->make('request'));
         $twig->addGlobal('timezone', date_default_timezone_get());
         $twig->addGlobal('lang', $this->container->make('lang')->all());
+
+
+        /**
+         * 注册全局可用php函数
+         * @example {{php_function()}}
+         */
+        $twig->addFunction(new \Twig_SimpleFunction('php_*',
+            function() {
+                $args = func_get_args();
+
+                $function = array_shift($args);
+
+                return call_user_func_array($function, $args);
+            },
+            array('pre_escape' => 'html', 'is_safe' => array('html'))
+            )
+        );
+
         /**
          * 注册全局make方法
          * @example   [make('class').function]
@@ -175,10 +193,7 @@ class View
          * 注册语言包调用方法
          * @var [type]
          */
-        $lang = new \Twig_SimpleFunction('lang', function($cast = null){
-           return $this->container->make('lang')->get($cast);
-        });
-        $twig->addFunction($lang);
+        $twig->addFunction('lang', new \Twig_SimpleFunction('lang', array($this->container->make('lang'), 'get')));
 
 
         /**
@@ -188,8 +203,7 @@ class View
         $dump = function($variable){
                echo "<pre>".var_dump($variable)."</pre>";
         };
-
-        $twig->addFunction(new \Twig_SimpleFunction('dump', $dump));
+        $twig->addFunction(new \Twig_SimpleFunction('dump', $dump,  array('pre_escape' => 'html', 'is_safe' => array('html'))));
 
         /**
          * [$debug 注册debug函数]
@@ -199,7 +213,7 @@ class View
             echo "<pre>".print_r($variable)."</pre>";
         };
 
-        $twig->addFunction(new \Twig_SimpleFunction('debug', $debug));
+        $twig->addFunction(new \Twig_SimpleFunction('debug', $debug, array('pre_escape' => 'html', 'is_safe' => array('html'))));
 
         $twig->addFunction(new \Twig_SimpleFunction('microtime', function($parameters){
             return microtime($parameters);}
