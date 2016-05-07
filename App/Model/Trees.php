@@ -13,15 +13,21 @@ class Trees extends Model
     protected $hidden = ['status','created_at', 'updated_at'];
 
 
-    protected $appends = ['level'];
+    protected $appends = ['level','type'];
 
     public function getLevelAttribute()
     {
-        return $this->attributes['pid'];
+        if(isset($this->attributes['pid'])){
+            return $this->attributes['pid'];
+        }
+        return 0;
     }
 
     public function getTypeAttribute()
     {
+        if(isset($this->attributes['tag'])){
+            return $this->attributes['tag'];
+        }
         return 'default';
     }
 
