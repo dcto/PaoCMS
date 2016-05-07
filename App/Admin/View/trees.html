@@ -84,13 +84,13 @@
 <div class="row tab-content">
 
     <!--TAB create-->
-    <div id="create" class="col-md-8 col-md-offset-2 tab-pane">
+    <div id="create" class="col-md-10 col-md-offset-1 tab-pane">
     <form action="{{ url('@trees-create') }}" method="POST" class="form-horizontal">
         <fieldset>
             <legend>{{ lang('create')~title }}</legend>
-            {{ forms.input('tag') }}
-            {{ forms.input('name') }}
-            {{ forms.radio('status') }}
+            {{ forms.text('tag') }}
+            {{ forms.text('name') }}
+            {{ forms.radio('status',4) }}
             {{ forms.submit() }}
         </fieldset>
     </form>
@@ -112,7 +112,7 @@
             </div>
             <div class="panel-body">
                 <div id="trees">
-                    <table class="table gtreetable" id="gtreetable"><thead><tr><th>根目录</th></tr></thead></table>
+                    <table class="table gtreetable" id="gtreetable"><thead><tr><th>ROOT</th></tr></thead></table>
                 </div>
             </div>
         </div>
@@ -148,21 +148,6 @@
                 </tbody>
             </table>
 
-            <hr />
-
-            <table class="table table-bordered " cellspacing="0"
-                   width="100%">
-                <tbody>
-                        <tr>
-
-                            <td>{{lang.id}}</td>
-                            <td>{{ forms.edit('tag') }}</td>
-                            <td>{{ forms.edit('name') }}</td>
-                            <td>{{lang.status }}</td>
-                            <td class="text-center">{{ forms.submit(lang.create, 'btn-xs') }}</td>
-                        </tr>
-                </tbody>
-            </table>
         </div>
 </div>
 {% endblock %}

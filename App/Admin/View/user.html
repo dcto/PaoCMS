@@ -6,15 +6,14 @@
 <div class="row tab-content">
     <!--TAB create-->
     <div id="create" class="tab-pane">
-            <form class="form-horizontal col-md-10 col-md-offset-1" action="{{url('@user-create')}}">
+            <form class="form-horizontal col-md-10 col-md-offset-1 form-group-sm" action="{{url('@user-create')}}">
                 <fieldset>
                     <legend>创建会员</legend>
-                    {{ forms.input('username') }}
-                    {{ forms.input('password1', 'password') }}
-                    {{ forms.input('password2', 'password') }}
-                    {{ forms.select('gid', group, lang.menu.group) }}
-                    {{ forms.input('phone') }}
-                    {{ forms.input('email', 'text', 3) }}
+                    {{ forms.text('username',2) }}
+                    {{ forms.text('password') }}
+                    {{ forms.select('gid', group, lang.menu.group, 2) }}
+                    {{ forms.text('phone') }}
+                    {{ forms.text('email', 3) }}
                     {{ forms.radio('status') }}
                     {{ forms.submit() }}
                 </fieldset>
