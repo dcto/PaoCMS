@@ -45,12 +45,16 @@ class Controller extends \PAO\Controller
      */
     protected function checkForm($array = array(), $except = array())
     {
-        if(!in_array('username',$except) && isset($array['username'])) Validator::make($array['username'])->username(Lang::get('alert.username'));
-        if(!in_array('password',$except) && isset($array['password1'])) Validator::make($array['password1'])->password(Lang::get('alert.password'))->eq(Request::get('password2'), Lang::get('alert.password_distinct'));
-        if(!in_array('name', $except) && isset($array['name'])) Validator::make($array['name'])->null(Lang::get('name').Lang::get('alert.empty'));
-        if(!in_array('gid',$except) && isset($array['gid'])) Validator::make($array['gid'])->gt(1,sprintf(Lang::get('alert.select'), Lang::get('group')));
-        if(!in_array('phone',$except) && isset($array['phone'])) Validator::make($array['phone'])->phone(sprintf(Lang::get('alert.phone')));
-        if(!in_array('email',$except) && isset($array['email']))  Validator::make($array['email'])->email(sprintf(Lang::get('alert.email')));
+        $forms = array_diff_key($array, array_fill_keys($except,''));
+
+        if(isset($forms['username'])) Validator::make($array['username'])->username(lang('alert.username'));
+        if(isset($forms['password'])) Validator::make($array['password1'])->password(lang('alert.password'))->eq(Request::get('password2'), lang('alert.password_distinct'));
+        if(isset($forms['name'])) Validator::make($array['name'])->null(lang('alert.empty', lang('tag')));
+        if(isset($forms['gid'])) Validator::make($array['gid'])->gt(1,lang('alert.select', lang('group')));
+        if(isset($forms['phone'])) Validator::make($array['phone'])->phone(lang('alert.phone'));
+        if(isset($forms['email']))  Validator::make($array['email'])->email(lang('alert.email'));
+
+        if(isset($forms['tag'])) Validator::make($array['tag'])->null(lang('alert.empty', lang('tag')));
 
         if(Validator::is(true)){
             return true;
