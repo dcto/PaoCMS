@@ -286,7 +286,7 @@ cite{font-style:normal;}
 .toolbar1 li{background:url(../images/toolbg.gif) repeat-x; line-height:33px; height:33px; border:solid 1px #d3dbde; float:left; padding-right:10px; margin-left:5px;border-radius: 3px; behavior:url(../js/PIE.htc);}
 .toolbar1 li span{float:left; margin-left:10px; margin-right:5px; margin-top:5px;}
 a:focus,input[type=checkbox]:focus,input[type=radio]:focus,button:focus,select{outline:none;}
-
+.form-horizontal .checkbox, .form-horizontal .checkbox-inline, .form-horizontal .radio, .form-horizontal .radio-inline{padding-top: 4px;}
 /*----------------------------------*
  *  组件公用图标库                 *
  *----------------------------------*/
@@ -295,6 +295,7 @@ a:focus,input[type=checkbox]:focus,input[type=radio]:focus,button:focus,select{o
 .uew-icon-triangle-1-s{background-position:-80px 0;}
 
 .table{margin-bottom: 0;}
+.table tbody>tr>td{vertical-align: middle;}
 .table-list {}
 .table-list th:first-child, .table-list td:first-child{text-align: center}
 .table-list tbody tr.odd{background:#f5f8fa;}
