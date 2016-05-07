@@ -14,21 +14,20 @@
 {% endmacro %}
 
 {#输入框#}
-{% macro input(name, type='text', size=3, value='',  message='') %}
+{% macro text(name, size=3, value='',  message='') %}
 <div class="form-group">
-    <label for="{{ name }}" class="col-md-2 control-label">{{lang(name)}}：</label>
-    <div class="col-sm-{{ size }}">
-        <input id="{{ name }}" name="{{ name }}" type="{{ type }}" class="form-control" placeholder="{{lang.form.input}}{{lang(name)}}" value="{{value}}" />
-        <span class="help-block">{{ message }}</span>
+    <div class="col-md-{{ size }}">
+        <label for="{{ name }}" class="control-label text-right">{{lang(name)}}：</label>
+        <input id="{{ name }}" name="{{ name }}" type="text" class="form-control" placeholder="{{ lang('form.input', lang(name))}}" value="{{value}}" />
     </div>
 </div>
 {% endmacro %}
 
 {#选择列表#}
-{% macro select(name, options, title, size=2) %}
+{% macro select(name, options, title, size=3) %}
 <div class="form-group">
-    <label class="col-sm-2 control-label">{{ title }}：</label>
-    <div class="col-sm-{{ size }}">
+    <div class="col-md-{{ size }}">
+        <label class="control-label text-right">{{ title }}：</label>
         <select name="gid" class="form-control">
             <option value="0">{{lang.select}}{{ title }}</option>
             {%for option in options%}
@@ -48,16 +47,16 @@
 {% endmacro %}
 
 {#radio表单#}
-{% macro radio(name, checked) %}
+{% macro radio(name, checked, size=3) %}
     {% set id = name|default(random()) %}
 <div class="form-group">
-    <label class="col-sm-2 control-label">{{lang.config}}{{lang(name)}}：</label>
-    <div class="col-sm-6">
+    <div class="col-md-{{ size }}">
+        <label class="control-label">{{lang.config}}{{lang(name)}}：</label>
         <div class="radio radio-circle radio-inline">
-            <input id="{{ id~checked }}" type="radio" name="{{ name }}" value="0"{{ checked==0 ? ' checked=checked' }} /><label for="{{ id~checked }}">{{ lang('disable') }}</label>
+            <input id="{{ id }}-1" type="radio" name="{{ name }}" value="0"{{ checked==0 ? ' checked=checked' }} /><label for="{{ id }}-1">{{ lang('disable') }}</label>
         </div>
-        <div class="radio radio-circle radio-success radio-inline">
-            <input id="{{ id~checked }}-2" type="radio" name="{{ name }}" value="1"{{ checked==1 ? ' checked=checked' }} /><label for="{{ id~checked }}">{{ lang('enable') }}</label>
+        <div class="radio radio-circle radio-inline radio-success">
+            <input id="{{ id }}-2" type="radio" name="{{ name }}" value="1"{{ checked==1 ? ' checked=checked' }} /><label for="{{ id }}-2">{{ lang('enable') }}</label>
         </div>
     </div>
 </div>
@@ -66,10 +65,8 @@
 {#提交按扭#}
 {% macro submit(value, size) %}
 <div class="form-group">
-    <div class="col-sm-offset-2 col-sm-10">
         <input type="text" name="id" class="hide" />
         <button type="submit" class="btn btn-primary {{ size }}">{{value|default(lang.submit)}}</button>
-    </div>
 </div>
 {% endmacro %}
 
@@ -85,7 +82,8 @@
     <a href="{{ url(request.path~'/delete?id='~id) }}" class="btn-delete btn btn-xs btn-danger" data-confirm="{{ lang('alert.delete_confirm')|format(name) }}">{{ lang('delete') }}</a>
 {% endmacro %}
 
-{% macro edit(name, type='text', title) %}
 
-    <a href="#" class="editable editable-click editable-empty" id="{{ name }}" data-type="{{ type }}" data-name="{{ name }}" data-original-title="{{ title|default(lang('form.input', lang(name))) }}">{{ lang('form.input', lang(name)) }}</a>
+{#表格编辑器#}
+{% macro edit(name, type='text', title, value) %}
+    <a href="#" class="editable editable-click editable-empty" id="{{ name }}" data-type="{{ type }}" data-name="{{ name }}" data-title="{{ title|default(lang('form.input', lang(name))) }}" data-original-title="{{ title|default(lang('form.input', lang(name))) }}"></a>
 {% endmacro %}
