@@ -20,6 +20,8 @@ cite{font-style:normal;}
 /*
  * Global add-ons
  */
+.pao {
+    padding-top:88px;}
 
 .sub-header {
   margin-bottom: 5px;
@@ -35,13 +37,15 @@ cite{font-style:normal;}
 }
 
 .navbar-top {
-  height: 88px;
-  background:url(../images/topbg.gif) repeat-x;
+    height: 88px;
+    margin-bottom: 0;
+    border-bottom: none;
+    background:url(../images/topbg.gif) repeat-x;
 }
 
 
 .logo{
-  width: 320px;
+  width: 280px;
   height: 88px;
   background:url(../images/logo.png) left center no-repeat;
 }
@@ -52,7 +56,12 @@ cite{font-style:normal;}
 .search{
   height:37px; position:relative;
 }
-
+.col-center {
+    float: none;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
 /*tab*/
 .tabs{height:37px;position:relative; border-left:solid 1px #d3dbde; margin-bottom: 5px;}
 .tabs ul li{float:left;height:37px; line-height:37px; background:url(../images/itabbg.png) repeat-x; border-right:solid 1px #d3dbde;}
@@ -64,6 +73,12 @@ cite{font-style:normal;}
   -moz-border-radius: 0;
   border-radius: 0;
 }
+.navbar-nav>li>a{padding-top: 0}
+.navbar-default .navbar-toggle .icon-bar {
+  background-color: black;
+}
+.navbar-default .navbar-nav>li>a, .navbar-default .navbar-text {
+    color: #fff;}
 
 .labels{height:37px;position:relative; border-left:solid 1px #d3dbde;}
 .labels ul li{height:37px; line-height: 37px; background:url(../images/itabbg.png) repeat-x;border-right:solid 1px #d3dbde;}
@@ -88,13 +103,12 @@ cite{font-style:normal;}
 
 
 
-.topright{height:88px;background:url(../images/topright.jpg) no-repeat right;float:right;}
-.topright ul{padding-top:15px; float:right; padding-right:12px;}
-.topright ul li{float:left; padding-left:9px; padding-right:9px; background:url(../images/line.gif) no-repeat right;}
-.topright ul li:last-child{background:none;}
-.topright ul li a{font-size:13px; color:#e9f2f7;}
-.topright ul li a:hover{color:#fff;}
-.topright ul li span{margin-top:2px;float:left;padding-right:3px;}
+.nav-custom{/*background:url(../images/topright.jpg) no-repeat right;*/float:right;}
+.nav-custom li{background:url(../images/line.gif) no-repeat right;}
+.nav-custom li:last-child{background:none;}
+.nav-custom li a{font-size:13px; padding-top: 10px}
+.nav-custom li a:hover{color:#fff;}
+.nav-custom li span{margin-top:2px;float:left;padding-right:3px;}
 
 .nav_user{height:30px;background:url(../images/ub1.png) repeat-x;clear:both;margin-top:10px;float:right; margin-right:12px;border-radius:30px; behavior:url(../js/PIE.htc); white-space:nowrap;position:relative;}
 .nav_user span{display:inline-block;padding-right:10px; background:url(../images/user.png) no-repeat 15px 10px; line-height:30px; font-size:14px;color:#b8ceda; padding-left:35px;}
@@ -109,21 +123,30 @@ cite{font-style:normal;}
 .sidebar {
   display: none;
 }
+
+@media (max-width: 1023px) {
+    .nav_menu_item{
+        display: none;
+    }
+
+}
+
+
 @media (min-width: 768px) {
   .sidebar {
-    position: fixed;
+    /*position: fixed;*/
+      /*
     top: 88px;
     bottom: 0;
-    left: 0;
-    z-index: 1000;
+    left: 0;*/
+    /*z-index: 1000;*/
     display: block;
     /*padding: 20px;*/
     padding : 0;
-    overflow-x: hidden;
-    overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
-    background-color: #f0f9fd;
+    /*overflow-y: auto; !* Scrollable contents if viewport is shorter than content. *!*/
     border-right: 1px solid #eee;
   }
+    .sidebar li {background-color: #f0f9fd;}
 }
 
 .sidebar-title{background:url(../images/lefttop.gif) repeat-x;height:40px;color:#fff;font-size:14px;line-height:40px;}
@@ -180,9 +203,9 @@ cite{font-style:normal;}
  */
 
 .main {
-  margin-top: 88px;
   padding: 0;
 }
+
 @media (min-width: 768px) {
   .main {
 /*    padding-right: 40px;

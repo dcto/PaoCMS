@@ -14,6 +14,9 @@
             <li id="tab-index" class="active {{ index }}"><a href="#index" aria-controls="index" data-toggle="tab">{{title|default()}}{{lang.index}}</a></li>
             <li id="tab-create" class="{{ create }}"><a href="#create" aria-controls="create" data-toggle="tab">{{lang.create}}{{title|default()}}</a></li>
             <li id="tab-update" class="hide {{ update }}"><a href="#update" aria-controls="update" data-toggle="tab">{{lang.update}}{{title|default()}}</a></li>
+            {% if tab is defined  %}
+                <li id="tab-{{ tab.id }}" class="{{ tab.id }} {{ tab.hide }}"><a href="#{{ tab.id }}" aria-controls="{{ tab.name }}" data-toggle="tab">{{tab.title|default(lang(tab.name))}}</a></li>
+            {% endif %}
         </ul>
         {% endblock %}
     </div>

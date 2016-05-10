@@ -113,10 +113,10 @@ $(function() {
             $.get(href, function(json){
                 if(json.status){
                     $.pao.close(confirm);
+                    location.reload();
                 }else{
                     $.pao.alert(json.message,{icon:2,shade:[0.8 , '#fff' , true]});
                 }
-                location.reload();
             });
         });
         return false;

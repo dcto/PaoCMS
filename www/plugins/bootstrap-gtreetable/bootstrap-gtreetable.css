@@ -91,7 +91,7 @@
   cursor: url(data:image/x-icon;base64,AAACAAEAICACAAcABQAwAQAAFgAAACgAAAAgAAAAQAAAAAEAAQAAAAAAAAEAAAAAAAAAAAAAAgAAAAAAAAAAAAAA////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD8AAAA/AAAAfwAAAP+AAAH/gAAB/8AAAH/AAAB/wAAA/0AAANsAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//////////////////////////////////////////////////////////////////////////////////////gH///4B///8Af//+AD///AA///wAH//+AB///wAf//4AH//+AD///yT/////////////////////////////8=), pointer;
 }
 .gtreetable .node-draggable-pointer {
-  /*position: absolute;*/
+  position: absolute;
   visibility: hidden;
   display: inline-block;
   width: 0;
@@ -109,3 +109,4 @@
 .node-draggable-container .node-draggable-pointer {
   visibility: visible;
 }
+.gtreetable tr td{position:relative}
