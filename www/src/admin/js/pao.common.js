@@ -22,6 +22,10 @@ $(function() {
         $('#index tbody input:checkbox').prop('checked','');
     });
 
+    //显示tab
+    $.pao.tab = function(tab){
+        $('#tabs a[href="#' + tab + '"]').tab('show');
+    };
 
     //公用
     //定位标签
