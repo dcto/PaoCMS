@@ -13,15 +13,8 @@ class Trees extends Model
     protected $hidden = ['status','created_at', 'updated_at'];
 
 
-    protected $appends = ['level','type'];
+    protected $appends = ['type'];
 
-    public function getLevelAttribute()
-    {
-        if(isset($this->attributes['pid'])){
-            return $this->attributes['pid'];
-        }
-        return 0;
-    }
 
     public function getTypeAttribute()
     {
@@ -33,8 +26,14 @@ class Trees extends Model
 
 
 
-    public function getTreeById($id, $with = [])
+    static public function getTreeById($id)
     {
+        return self::where('pid', $id)->orderBy('order', 'ASC')->get()->toArray();
+    }
+
+    static public function getNodeById($id)
+    {
+        return self::where('id', $id)->orderBy('order', 'ASC')->first()->toArray();
     }
 
     static public function up()
@@ -51,6 +50,8 @@ class Trees extends Model
             $table->integer('pid')->unsigned()->default(0)->comment('父级');
             $table->string('tag',64)->nullable()->unique()->comment('类型');
             $table->string('name',96)->nullable()->comment('名称');
+            $table->integer('level')->unsigned()->default(0)->comment('层级');
+            $table->integer('order')->unsigned()->default(0)->comment('排序');
             $table->timestamp('created_at')->default(\DB::raw('CURRENT_TIMESTAMP'))->comment('创建时间');
             $table->timestamp('updated_at')->default(\DB::raw('CURRENT_TIMESTAMP'))->comment('更新时间');
             $table->boolean('status')->default(0)->comment('0=停用,1=正常');
