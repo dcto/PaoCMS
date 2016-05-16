@@ -48,7 +48,6 @@ class Frameworks extends Container
     private $is_providers = [];
 
 
-
     /**
      * [Issue 核心应用构造方法]
      */
@@ -108,23 +107,23 @@ class Frameworks extends Container
     private function registerContainerAliases()
     {
         $this->aliases = [
-            'route'=>'PAO\Route',
-            'config'=>'PAO\Configure\Repository',
-            'request'=>'PAO\Http\Request',
-            'response'=>'PAO\Http\Response',
-            'cookie'=>'PAO\Http\Cookie',
-            'session'=>'PAO\Http\Session',
-            'encrypter'=>'PAO\Crypt\Crypt',
-            'crypt'=>'encrypter',
-            'captcha'=>'PAO\Captcha\Captcha',
-            'validator'=>'PAO\Validator',
-            'exception'=>'PAO\Exception\PAOException',
-            'translator'=>'PAO\Translator',
-            'lang'=>'translator',
-            'db'=>'PAO\Database',
-            'view'=>'PAO\View',
-            'cache'=>'PAO\Cache\Cache',
-            'log'=>'PAO\Logger',
+            'route' => 'PAO\Route',
+            'config' => 'PAO\Configure\Repository',
+            'request' => 'PAO\Http\Request',
+            'response' => 'PAO\Http\Response',
+            'cookie' => 'PAO\Http\Cookie',
+            'session' => 'PAO\Http\Session',
+            'encrypter' => 'PAO\Crypt\Crypt',
+            'crypt' => 'encrypter',
+            'captcha' => 'PAO\Captcha\Captcha',
+            'validator' => 'PAO\Validator',
+            'exception' => 'PAO\Exception\PAOException',
+            'translator' => 'PAO\Translator',
+            'lang' => 'translator',
+            'db' => 'PAO\Database',
+            'view' => 'PAO\View',
+            'cache' => 'PAO\Cache\Cache',
+            'log' => 'PAO\Logger',
             'Illuminate\Contracts\Routing\ResponseFactory' => 'PAO\Http\Response'
         ];
 
@@ -154,8 +153,7 @@ class Frameworks extends Container
             'Cache' => 'Illuminate\Support\Facades\Cache',
             'Schema' => 'Illuminate\Support\Facades\Schema',
         ];
-        foreach($facadesAlias as $alias => $facade)
-        {
+        foreach ($facadesAlias as $alias => $facade) {
             class_alias($facade, $alias);
         }
     }
@@ -163,14 +161,13 @@ class Frameworks extends Container
     /**
      * [make 全局注入方法]
      *
-     * @param string $abstract      [方法名称]
-     * @param array  $parameters    [方法参数]
+     * @param string $abstract [方法名称]
+     * @param array $parameters [方法参数]
      * @return mixed
      */
     public function make($abstract, array $parameters = [])
     {
-        if(!isset($this->is_bindings[$abstract]) && $this->isAlias($abstract) )
-        {
+        if (!isset($this->is_bindings[$abstract]) && $this->isAlias($abstract)) {
             $this->singleton($abstract, $this->getAlias($abstract));
             $this->is_bindings[$abstract] = true;
         }
@@ -192,6 +189,19 @@ class Frameworks extends Container
         return $this->make($abstract, $parameters);
     }
 
+    /**
+     * [service 应用服务注册器]
+     *
+     * @param $abstract
+     * @param array $parameters
+     * @return mixed
+     */
+    public function service($abstract, array $parameters = [])
+    {
+        $abstract = 'App\\Service\\'.$abstract;
+
+        return $this->make($abstract, $parameters);
+    }
 
     /**
      * [config 容器配置读取方法]
