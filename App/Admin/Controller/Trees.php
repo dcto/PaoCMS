@@ -84,6 +84,11 @@ class Trees extends Controller
     }
 
 
+    public function change()
+    {
+
+    }
+
     private function setNode($node)
     {
         $node['level'] = $node['order'] = 0;
@@ -93,11 +98,9 @@ class Trees extends Controller
             $targetNode = \App\Model\Trees::getNodeById($targetId);
 
             //更新原排序列表
-            if(isset($node['id'])){
-                $sourceNode = \App\Model\Trees::getNodeById($node['id']);
-                if($sourceNode['pid'] != $node['pid']){
+            if(isset($node['id']) && $node['position']=='lastChild'){
+                    $sourceNode = \App\Model\Trees::getNodeById($node['id']);
                     \App\Model\Trees::where('pid', $sourceNode['pid'])->where('order','>', $sourceNode['order'])->decrement('order', 1);
-                }
             }
 
             //更新层级

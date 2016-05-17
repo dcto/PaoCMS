@@ -6,14 +6,14 @@
 <!--TAB Panel end -->
 <div class="row tab-content">
     <!--TAB create-->
-    <div id="create" class="tab-pane">
-        <form class="form-horizontal" action="{{url('@group-create')}}">
-            <fieldset>
-                {{ forms.input('name') }}
-                {{ forms.input('title') }}
-                {{ forms.radio('status', 1) }}
+    <div id="create" class="tab-pane col-md-12 col-center">
+                        <form class="form-horizontal" action="{{url('@group-create')}}">
+                            <fieldset>
+                                {{ forms.text('name') }}
+                                {{ forms.text('title') }}
+                                {{ forms.radio('status', 1) }}
                 <div class="row">
-                    <div class="col-md-10 col-md-offset-1">
+                    <div class="col-md-10">
                     <table class="table table-striped table-bordered table-hover table-list" cellspacing="0"
                            width="100%">
                         <caption>{{ lang.permission }}{{ lang.config }}</caption>
