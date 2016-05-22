@@ -40,6 +40,10 @@ class Controller
 
         $this->action = $this->container->make('route')->getAction();
 
+        $this->assign['CONTROLLER'] = $this->controller;
+
+        $this->assign['ACTION'] = $this->action;
+
         $this->assign($this->assign);
     }
 
