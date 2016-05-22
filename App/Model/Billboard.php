@@ -23,8 +23,9 @@ class Admin extends  Model
             $table->string('tag',32)->default()->comment('标签');
             $table->string('name',96)->default()->comment('名称');
             $table->string('link')->default()->comment('链接');
+            $table->string('title')->default()->comment('标题');
             $table->string('image')->default()->comment('图片');
-            $table->string('content',15)->default()->comment('备注');
+            $table->string('content')->default()->comment('内容');
             $table->integer('times')->unsigned()->default(0)->comment('点击次数');
             $table->timestamp('created_at')->default(\DB::raw('CURRENT_TIMESTAMP'))->comment('创建时间');
             $table->timestamp('updated_at')->default(\DB::raw('CURRENT_TIMESTAMP'))->comment('更新时间');
