@@ -22,12 +22,12 @@ return array(
             '/user/create' => ['ANY', 'as'=>'user-create', 'to'=>'user@create', 'name'=>'menu.user_create',],
             '/user/update' => ['ANY', 'as'=>'user-update', 'to'=>'user@update', 'name'=>'menu.user_update'],
             '/user/delete' => ['ANY', 'as'=>'user-delete', 'to'=>'user@delete', 'name'=>'menu.user_delete'],
-
+/*
                 '/group' => ['GET', 'as'=>'group', 'to'=>'Group@index','name'=>'menu.group', 'menu'=>true],
                 '/group/create' => ['ANY', 'as'=>'group-create', 'to'=>'Group@create','name'=>'menu.group_create',],
                 '/group/update' => ['ANY', 'as'=>'group-update', 'to'=>'Group@update','name'=>'menu.group_update'],
                 '/group/delete' => ['ANY', 'as'=>'group-delete', 'to'=>'Group@delete','name'=>'menu.group_delete'],
-
+*/
         )
     ),
 
@@ -80,6 +80,9 @@ return array(
 
         'route'=>array(
             '/article'=>['GET', 'as'=>'article', 'to'=>'Article@index', 'name'=>'menu.article', 'menu'=>true],
+            '/article/create'=>['ANY', 'as'=>'article_create', 'to'=>'Article@create', 'name'=>'menu.article_create'],
+            '/article/update'=>['ANY', 'as'=>'article_update', 'to'=>'Article@update', 'name'=>'menu.article_update'],
+            '/article/delete'=>['ANY', 'as'=>'article_delete', 'to'=>'Article@delete', 'name'=>'menu.article_delete'],
 
         )
     ),

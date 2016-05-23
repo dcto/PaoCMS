@@ -15,7 +15,7 @@ class Group extends Controller
 
     public function index()
     {
-        $this->assign('title', Lang::get('menu.group'));
+        $this->assign('title', lang('menu.group'));
         $var['group'] = \App\Model\Group::all();
         return Response::view('group', $var);
     }
@@ -26,18 +26,19 @@ class Group extends Controller
         if(!Request::isMethod('post')) return $this->index();
 
         $group['name'] = Request::get('name');
+        $group['nickname'] = Request::get('nickname');
         $group['status'] = Request::get('status');
 
         if(!$this->checkForm($group)) return $this->alert();
 
-        $group['permission'] = Request::not(array('id','name','status'));
+        $group['permission'] = Request::not(array('id','name','nickname','status'));
 
         if(\App\Model\Group::create($group)) {
             $this->status = true;
-            $this->message = sprintf(Lang::get('alert.create_success'), Lang::get('menu.admin_group'));
+            $this->message = sprintf(lang('alert.create_success'), lang('menu.group'));
         }else{
             $this->status = false;
-            $this->message = sprintf(Lang::get('alert.create_failure'), Lang::get('menu.admin_group'));
+            $this->message = sprintf(lang('alert.create_failure'), lang('menu.group'));
         }
         return $this->alert();
     }
@@ -47,19 +48,20 @@ class Group extends Controller
     {
         if(Request::isMethod('post')){
             $ids =  Request::get('id');
-            if(!$ids) return $this->alert(false, Lang::get('alert.id-empty'));
+            if(!$ids) return $this->alert(false, lang('alert.id-empty'));
 
             $group['name'] = Request::get('name');
+            $group['nickname'] = Request::get('nickname');
             $group['status'] = Request::get('status');
             if(!$this->checkForm($group)){ return $this->alert();}
-            $group['permission'] = Request::not(array('id','name','status'));
+            $group['permission'] = Request::not(array('id','name','nickname','status'));
 
             if(\App\Model\Group::find($ids)->update($group)){
                 $this->status = true;
-                $this->message = sprintf(Lang::get('alert.update_success'), Lang::get('menu.admin_group'));
+                $this->message = sprintf(lang('alert.update_success'), lang('menu.group'));
             }else{
                 $this->status = false;
-                $this->message = sprintf(Lang::get('alert.update_failure'), Lang::get('menu.admin_group'));
+                $this->message = sprintf(lang('alert.update_failure'), lang('menu.group'));
             }
             return $this->alert();
         }
@@ -82,10 +84,10 @@ class Group extends Controller
         $delete = \App\Model\Group::whereIn('id', $ids)->delete();
         if($delete){
             $this->status = true;
-            $this->message = sprintf(Lang::get('alert.delete_success'), implode(',', $ids));
+            $this->message = lang('alert.delete_success', implode(',', $ids));
         }else{
             $this->status = false;
-            $this->message = sprintf(Lang::get('alert.delete_failure'), implode(',', $ids));
+            $this->message = lang('alert.delete_failure', implode(',', $ids));
         }
         return $this->alert();
     }

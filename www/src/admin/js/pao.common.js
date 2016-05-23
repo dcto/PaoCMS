@@ -71,9 +71,19 @@ $(function() {
 
     //修改按扭
     $("#index .btn-update").on('click', function(){
-        var load = $.pao.load(0, {shade:[0.8 , '#fff' , true]});
+        var load = $.pao.load(0, {shade:[0.8 , '#fff' , true]})
+
         $.get($(this).attr('href'), function(json){
-            $("#update form").html( $("#create fieldset").clone());
+            //$("#update form").html( $("#create fieldset").clone());
+            $("#update form").html(
+                $("#create fieldset").clone().find("input[id]").each(function(i, e){
+                    $(e).attr("id", $(this).attr("id")+"_cloned");
+                }).end().find("label").each(function(i, e){
+                    $(e).attr("for", $(this).attr("for")+"_cloned");
+                }).end()
+            );
+
+
             $("#update form").find(":input").each(function() {
                 switch(this.type){
                     case 'text':

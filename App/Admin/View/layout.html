@@ -66,39 +66,36 @@
       </div>
     </nav>
 -->
-<nav class="navbar navbar-default navbar-fixed-top navbar-top">
-  <div class="container-fluid">
-    <!-- Brand and toggle get grouped for better mobile display -->
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand logo" href="#"></a>
-    </div>
+  <nav class="navbar navbar-default navbar-fixed-top navbar-top">
+    <div class="container-fluid">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand logo" href="#"></a>
+      </div>
 
-    <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav nav_menu_item">
-        <li><a class="selected" href="default.html"><img src="{{asset('images')}}/icon01.png" title="工作台" /><h4>工作台</h4></a></li>
-        <li><a href="imgtable.html"><img src="{{asset('images')}}/icon02.png" title="模型管理" /><h4>模型管理</h4></a></li>
-        <li><a href="imglist.html"><img src="{{asset('images')}}/icon03.png" title="模块设计" /><h4>模块设计</h4></a></li>
-        <li><a href="tools.html"><img src="{{asset('images')}}/icon04.png" title="常用工具" /><h4>常用工具</h4></a></li>
-        <li><a href="computer.html"><img src="{{asset('images')}}/icon05.png" title="文件管理" /><h4>文件管理</h4></a></li>
-        <li><a href="tab.html"><img src="{{asset('images')}}/icon06.png" title="系统设置" /><h4>系统设置</h4></a></li>
-      </ul>
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav nav_menu_item">
+          <li><a class="selected" href="/"><i class="icon icon-home icon-4x"></i><h4>工作台</h4></a></li>
+          <li><a href="{{ url('@user') }}"><i class="icon icon-group icon-4x"></i><h4>{{ lang.menu.user }}</h4></a></li>
+          <li><a href="{{ url('@article') }}"><i class="icon icon-file icon-4x"></i><h4>{{ lang.menu.article }}</h4></a></li>
+        </ul>
 
-      <ul class="nav navbar-nav navbar-right nav-custom">
-          <li><a class="lang" data-lang="en-us" href="#">English</a></li>
-          <li><a class="lang" data-lang="zh-cn" href="#">中文(简体)</a></li>
-          <li><a href="{{url('@logout')}}" target="_parent">退出</a></li>
-          <div class="nav_user"><span>admin</span><i>消息</i><b>5</b></div>
-      </ul>
-    </div><!-- /.navbar-collapse -->
-  </div><!-- /.container-fluid -->
-</nav>
+        <ul class="nav navbar-nav navbar-right nav-custom">
+            <li><a class="lang" data-lang="en-us" href="#">English</a></li>
+            <li><a class="lang" data-lang="zh-cn" href="#">中文(简体)</a></li>
+            <li><a href="{{url('@logout')}}" target="_parent">退出</a></li>
+            <div class="nav_user"><span>admin</span><i>消息</i><b>5</b></div>
+        </ul>
+      </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+  </nav>
 
   <div class="container-fluid pao">
     <div class="row">

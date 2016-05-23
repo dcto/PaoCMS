@@ -28,7 +28,6 @@ class Controller extends \PAO\Controller
         return new Response('未登陆');
     }
 
-
     /**
      * 根据路由获取模块
      * @return array

@@ -10,7 +10,7 @@ class Trees extends Model
 {
     protected $table = 'trees';
 
-    protected $hidden = ['status','created_at', 'updated_at'];
+    protected $hidden = ['created_at', 'updated_at'];
 
 
     protected $appends = ['type'];

@@ -14,11 +14,16 @@
 
     $(function() {
         $('.btn-trees').on('click', function(){
+
             var pid = $(this).data('id');
-            $('#gtreetable').gtreetable({
+            var tabTmp = '<table class="table gtreetable" id="gtt_'+ pid +'"><thead><tr><th>ROOT</th></tr></thead></table>';
+            $('#trees').html(tabTmp);
+
+            $('#gtt_' + pid).gtreetable({
                 "language":"{{ config.language }}",
                 "nodeIndent": 16,
                 "inputWidth":"60%",
+                "cache": 0,
 
                 "source": function(id){
                     return {
@@ -26,6 +31,9 @@
                         url: URI('{{ url('@trees') }}'),
                         data: { 'pid':pid,'id': id },
                         dataType: 'json',
+                        success: function(json){
+                            alert(json);
+                        },
                         error: function(XMLHttpRequest) {
                             alert(XMLHttpRequest.status+': '+XMLHttpRequest.responseText);
                         }
@@ -77,9 +85,13 @@
                 }
 
             });
+
             $.pao.tab('trees');
+
+            //alert();
             return false;
         });
+
 
         $('#tabs').on('show.bs.tab', function (e) {
             if(e.target.hash=="#trees"){
@@ -109,7 +121,7 @@
     <div id="create" class="col-md-10 tab-pane col-center">
     <form action="{{ url('@trees-create') }}" method="POST" class="form-horizontal">
         <fieldset>
-            <legend>{{ lang('create')~title }}</legend>
+            <legend>{{ lang(ACTION)~title }}</legend>
             {{ forms.text('tag') }}
             {{ forms.text('name') }}
             {{ forms.radio('status',4) }}
@@ -141,7 +153,7 @@
             </div>
             <div class="panel-body">
                 <div id="gtree">
-                    <table class="table gtreetable" id="gtreetable"><thead><tr><th>ROOT</th></tr></thead></table>
+                    {#<table class="table gtreetable" id="gtreetable"><thead><tr><th>ROOT</th></tr></thead></table>#}
                 </div>
             </div>
         </div>
