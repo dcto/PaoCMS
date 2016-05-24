@@ -16,10 +16,10 @@
         $('.btn-trees').on('click', function(){
 
             var pid = $(this).data('id');
-            var tabTmp = '<table class="table gtreetable" id="gtt_'+ pid +'"><thead><tr><th>ROOT</th></tr></thead></table>';
-            $('#trees').html(tabTmp);
+            var gTreeTable = '<table class="table gtreetable" id="gtreetable'+ pid +'"><thead><tr><th>ROOT</th></tr></thead></table>';
+            $('#gtree').html(gTreeTable);
 
-            $('#gtt_' + pid).gtreetable({
+            $('#gtreetable'+pid).gtreetable({
                 "language":"{{ config.language }}",
                 "nodeIndent": 16,
                 "inputWidth":"60%",
@@ -32,7 +32,6 @@
                         data: { 'pid':pid,'id': id },
                         dataType: 'json',
                         success: function(json){
-                            alert(json);
                         },
                         error: function(XMLHttpRequest) {
                             alert(XMLHttpRequest.status+': '+XMLHttpRequest.responseText);
@@ -153,7 +152,7 @@
             </div>
             <div class="panel-body">
                 <div id="gtree">
-                    {#<table class="table gtreetable" id="gtreetable"><thead><tr><th>ROOT</th></tr></thead></table>#}
+                    <table class="table gtreetable" id="gtreetable"><thead><tr><th>ROOT</th></tr></thead></table>
                 </div>
             </div>
         </div>
