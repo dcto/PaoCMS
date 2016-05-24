@@ -13,71 +13,85 @@
 
 
     $(function() {
-        $('.btn-trees').on('click', function(){
 
-            var pid = $(this).data('id');
-            var gTreeTable = '<table class="table gtreetable" id="gtreetable'+ pid +'"><thead><tr><th>ROOT</th></tr></thead></table>';
-            $('#gtree').html(gTreeTable);
-
-            $('#gtreetable'+pid).gtreetable({
-                "language":"{{ config.language }}",
+        if(URI().hash()=='#trees'){
+            var pid = '{{ request.get('pid') }}';
+            $('#gtreetable').gtreetable({
+                "language": "{{ config.language }}",
                 "nodeIndent": 16,
-                "inputWidth":"60%",
+                "inputWidth": "60%",
                 "cache": 0,
+                "actions": [
+                    {
+                        name: '{{ lang.enable }}',
+                        event: function (oNode) {
+                            $.post('{{ url("@trees-update") }}', {id: oNode.getId(), status: 1}, function (json) {
+                            });
+                        }
+                    },
+                    {
+                        name: '{{ lang.disable }}',
+                        event: function (oNode) {
+                            $.post('{{ url("@trees-update") }}', {id: oNode.getId(), status: 0}, function (json) {
+                            });
+                        }
+                    },
 
-                "source": function(id){
-                    return {
+                ],
+                "source": function (id) {
+                    var data = {
                         type: 'POST',
                         url: URI('{{ url('@trees') }}'),
-                        data: { 'pid':pid,'id': id },
+                        data: {'pid': pid, 'id': id},
                         dataType: 'json',
-                        success: function(json){
+                        success: function (json) {
                         },
-                        error: function(XMLHttpRequest) {
-                            alert(XMLHttpRequest.status+': '+XMLHttpRequest.responseText);
+                        error: function (XMLHttpRequest) {
+                            alert(XMLHttpRequest.status + ': ' + XMLHttpRequest.responseText);
                         }
-                    }
+                    };
+                    return data;
                 },
 
-                "onSave":function (oNode) {
+                "onSave": function (oNode) {
                     return {
                         type: 'POST',
                         url: !oNode.isSaved() ? '{{ url('@trees-create') }}' : URI('{{ url('@trees-update') }}'),
                         data: {
-                            id:oNode.getId(),
+                            id: oNode.getId(),
                             pid: oNode.getParent(),
                             name: oNode.getName(),
                             position: oNode.getInsertPosition(),
                             related: oNode.getRelatedNodeId()
                         },
                         dataType: 'json',
-                        error: function(XMLHttpRequest) {
+                        error: function (XMLHttpRequest) {
                             $.pao.alert(XMLHttpRequest.responseText, {icon: 2});
                         }
                     };
                 },
-                "onDelete":function(oNode) {
+                "onDelete": function (oNode) {
                     return {
                         type: 'POST',
-                        url: URI('{{ url('@trees-delete') }}').addSearch({'id':oNode.getId()}).toString(),
+                        url: URI('{{ url('@trees-delete') }}').addSearch({'id': oNode.getId()}).toString(),
                         dataType: 'json',
-                        error: function(XMLHttpRequest) {
+                        error: function (XMLHttpRequest) {
                             $.pao.alert(XMLHttpRequest.responseText, {icon: 1});
                         }
                     };
                 },
-                "draggable":true,
-                "onMove":function(oSource, oDestination, position) {
+                "draggable": true,
+                "onMove": function (oSource, oDestination, position) {
                     return {
                         type: 'POST',
-                        url: URI('{{ url('@trees-update') }}').addSearch({'id':oSource.getId()}).toString(),
+                        url: URI('{{ url('@trees-update') }}').addSearch({'id': oSource.getId()}).toString(),
                         data: {
-                            pid : oDestination.getParent(),
+                            pid: oDestination.getParent(),
                             related: oDestination.getId(),
                             position: position
                         },
                         dataType: 'json',
-                        error: function(XMLHttpRequest) {
+                        error: function (XMLHttpRequest) {
                             $.pao.alert(XMLHttpRequest.responseText, {icon: 2});
                         }
                     };
@@ -85,11 +99,10 @@
 
             });
 
-            $.pao.tab('trees');
-
+            //$.pao.tab('trees');
             //alert();
-            return false;
-        });
+            //return false;
+        };
 
 
         $('#tabs').on('show.bs.tab', function (e) {
@@ -180,7 +193,7 @@
                             <td>{{v.tag}}</td>
                             <td>{{v.name}}</td>
                             <td>{{forms.status(v.status, v.id)}}</td>
-                            <td class="text-center">{{forms.operate(v.id, v.name, {name:'trees', title:lang('menu.trees_list'),url:url('@trees')~'?pid='~v.id})}}</td>
+                            <td class="text-center">{{forms.operate(v.id, v.name, {name:'trees', title:lang('menu.trees_list'),url:url('@trees')~'?pid='~v.id~'#trees'})}}</td>
                         </tr>
                     {%endfor%}
                 </form>
