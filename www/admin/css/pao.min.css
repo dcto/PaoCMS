@@ -1134,6 +1134,12 @@ cite{font-style:normal;}
     background:url(../images/topbg.gif) repeat-x;
 }
 
+.navbar-default .navbar-toggle .icon-bar{
+    background-color: #fff !important;
+}
+navbar-collapse{
+    background-color: #000;
+}
 
 .logo{
   width: 280px;

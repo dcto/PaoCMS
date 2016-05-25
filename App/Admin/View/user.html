@@ -8,7 +8,7 @@
     <div id="create" class="tab-pane">
             <form class="form-horizontal col-md-10 col-md-offset-1 form-group-sm" action="{{url('@user-create')}}">
                 <fieldset>
-                    <legend>创建会员</legend>
+                    <legend>{{ lang.menu.user_create }}</legend>
                     {{ forms.text('username',2) }}
                     {{ forms.text('password') }}
                     {{ forms.select('gid', group, lang.menu.group, 2) }}

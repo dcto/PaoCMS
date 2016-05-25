@@ -66,7 +66,7 @@
 {% macro submit(value, size) %}
 <div class="form-group">
         <input type="text" name="id" class="hide" />
-        <button type="submit" class="btn btn-primary {{ size }}">{{value|default(lang.submit)}}</button>
+        <button type="submit" data-loading="loading..." class="btn btn-primary {{ size }}">{{value|default(lang.submit)}}</button>
 </div>
 {% endmacro %}
 
