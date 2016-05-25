@@ -31,7 +31,8 @@ class PAOException
         if($this->container->config('config.log')){
             $this->container->make('log')->error($e);
         }
-        http_response_code(intval($e->getCode()));
+        $httpCode = $e->getCode()>200 ? $e->getCode() : 500;
+        http_response_code($httpCode);
         if($this->container->config('config.debug')) {
             die($this->HandleError($e));
         }
