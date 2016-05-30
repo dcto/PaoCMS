@@ -28,13 +28,13 @@ class Article extends Model
             $table->integer('pid')->unsigned()->default(0)->comment('父文pid');
             $table->integer('uid')->unsigned()->default(0)->comment('用户id');
             $table->integer('tag')->unsigned()->default(0)->comment('标签');
-            $table->string('from',48)->nullable()->comment('来源');
-            $table->string('link')->nullable()->comment('链接');
-            $table->string('price')->unsigned()->default(0)->comment('价格');
-            $table->string('cover',96)->nullable()->comment('封面');
             $table->string('title',96)->nullable()->comment('标题');
             $table->string('subtitle',96)->nullable()->comment('副标题');
+            $table->string('from',48)->nullable()->comment('来源');
+            $table->string('link')->nullable()->comment('链接');
             $table->string('author',64)->nullable()->comment('作者');
+            $table->string('price')->unsigned()->default(0)->comment('价格');
+            $table->string('cover',96)->nullable()->comment('封面');
             $table->string('summary')->nullable()->comment('摘要');
             $table->text('content')->nullable()->comment('内容');
             $table->string('password')->nullable()->comment('阅读权限,非空表示须要密码');

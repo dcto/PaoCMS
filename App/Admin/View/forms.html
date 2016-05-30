@@ -62,6 +62,129 @@
 </div>
 {% endmacro %}
 
+{% macro file(name) %}
+    <div class="form-group">
+        <label class="control-label">{{ lang(name) }}</label>
+        <input id="{{ name }}" type="file" class="file">
+    </div>
+{% endmacro %}
+
+{% macro textarea(name, row=3) %}
+<div class="form-group">
+    <label class="control-label">{{ lang(name) }}</label>
+    <textarea id="{{ name }}" name="{{ name }}" class="form-control" rows="{{ row }}"></textarea>
+</div>
+{% endmacro %}
+
+{% macro upload(name) %}
+    <div class="form-group">
+        <label class="control-label">{{ lang(name) }}</label>
+        <!-- image-preview-filename input [CUT FROM HERE]-->
+        <div class="col-md-4 input-group image-preview">
+            <input type="text" class="form-control image-preview-filename" disabled="disabled"> <!-- don't give a name === doesn't send on POST/GET -->
+                <span class="input-group-btn">
+                    <!-- image-preview-clear button -->
+                    <button type="button" class="btn btn-sm btn-default image-preview-clear" style="display:none;">
+                        <span class="glyphicon glyphicon-remove"></span> Clear
+                    </button>
+                    <!-- image-preview-input -->
+                    <div class="btn btn-sm btn-default image-preview-input">
+                        <span class="glyphicon glyphicon-folder-open"></span>
+                        <span class="image-preview-input-title">Browse</span>
+                        <input type="file" accept="image/png, image/jpeg, image/gif" name="input-file-preview"/> <!-- rename it -->
+                    </div>
+                </span>
+        </div><!-- /input-group image-preview [TO HERE]-->
+    </div>
+    <script type="text/javascript">
+        $(document).on('click', '#close-preview', function(){
+            $('.image-preview').popover('hide');
+            // Hover befor close the preview
+            $('.image-preview').hover(
+                    function () {
+                        $('.image-preview').popover('show');
+                    },
+                    function () {
+                        $('.image-preview').popover('hide');
+                    }
+            );
+        });
+
+        $(function() {
+            // Create the close button
+            var closebtn = $('<button/>', {
+                type:"button",
+                text: 'x',
+                id: 'close-preview',
+                style: 'font-size: initial;',
+            });
+            closebtn.attr("class","close pull-right");
+            // Set the popover default content
+            $('.image-preview').popover({
+                trigger:'manual',
+                html:true,
+                title: "<strong>Preview</strong>"+$(closebtn)[0].outerHTML,
+                content: "There's no image",
+                placement:'bottom'
+            });
+            // Clear event
+            $('.image-preview-clear').click(function(){
+                $('.image-preview').attr("data-content","").popover('hide');
+                $('.image-preview-filename').val("");
+                $('.image-preview-clear').hide();
+                $('.image-preview-input input:file').val("");
+                $(".image-preview-input-title").text("Browse");
+            });
+            // Create the preview image
+            $(".image-preview-input input:file").change(function (){
+                var img = $('<img/>', {
+                    id: 'dynamic',
+                    width:250,
+                    height:200
+                });
+                var file = this.files[0];
+                var reader = new FileReader();
+                // Set preview image into the popover data-content
+                reader.onload = function (e) {
+                    $(".image-preview-input-title").text("Change");
+                    $(".image-preview-clear").show();
+                    $(".image-preview-filename").val(file.name);
+                    img.attr('src', e.target.result);
+                    $(".image-preview").attr("data-content",$(img)[0].outerHTML).popover("show");
+                }
+                reader.readAsDataURL(file);
+            });
+        });
+        var uploader = WebUploader.create({
+            swf: '{{ asset('/plugins/webuploader/Upload.swf') }}', // swf文件路径
+            server: 'http://webuploader.duapp.com/server/fileupload.php',// 文件接收服务端。
+
+            // 选择文件的按钮。可选。
+            // 内部根据当前运行是创建，可能是input元素，也可能是flash.
+            pick: '#picker',
+
+            // 不压缩image, 默认如果是jpeg，文件上传前会压缩一把再上传！
+            resize: false
+        });
+
+    </script>
+{% endmacro %}
+
+{% macro ueditor(name) %}
+<div class="form-group">
+    <label class="control-label">{{ lang(name) }}</label>
+    <script id="{{ name }}" name="{{ name }}" type="text/plain"></script>
+    <script type="text/javascript">
+        var ue = UE.getEditor('content', {
+            serverUrl: '',
+            lang:'zh-cn',
+            initialFrameWidth:"100%",
+            autoHeightEnabled: true
+        });
+    </script>
+</div>
+{% endmacro %}
+
 {#提交按扭#}
 {% macro submit(value, size) %}
 <div class="form-group">

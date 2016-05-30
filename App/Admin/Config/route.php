@@ -80,9 +80,9 @@ return array(
 
         'route'=>array(
             '/article'=>['GET', 'as'=>'article', 'to'=>'Article@index', 'name'=>'menu.article', 'menu'=>true],
-            '/article/create'=>['ANY', 'as'=>'article_create', 'to'=>'Article@create', 'name'=>'menu.article_create'],
-            '/article/update'=>['ANY', 'as'=>'article_update', 'to'=>'Article@update', 'name'=>'menu.article_update'],
-            '/article/delete'=>['ANY', 'as'=>'article_delete', 'to'=>'Article@delete', 'name'=>'menu.article_delete'],
+            '/article/create'=>['ANY', 'as'=>'article-create', 'to'=>'Article@create', 'name'=>'menu.article_create'],
+            '/article/update'=>['ANY', 'as'=>'article-update', 'to'=>'Article@update', 'name'=>'menu.article_update'],
+            '/article/delete'=>['ANY', 'as'=>'article-delete', 'to'=>'Article@delete', 'name'=>'menu.article_delete'],
 
         )
     ),
