@@ -7,12 +7,23 @@ use Illuminate\Support\Str;
 use Illuminate\Container\Container;
 use Symfony\Component\HttpFoundation;
 use Symfony\Component\HttpFoundation\ParameterBag;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class Request extends HttpFoundation\Request
 {
 
+    /**
+     * 容器
+     * @var static
+     */
     private $container;
+
+
+    /**
+     * 临时存储文件
+     * @var
+     */
+    private $gainFiles;
+
 
     /**
      * 重构Request方法
@@ -36,6 +47,9 @@ class Request extends HttpFoundation\Request
             }
         }
 
+        /**
+         * 初始化请求对象
+         */
         parent::__construct(
             array_merge($_GET, $query),
             array_merge($_POST, $request),
@@ -45,6 +59,9 @@ class Request extends HttpFoundation\Request
             array_merge($_SERVER, $server)
         );
 
+        /**
+         * 后置处理
+         */
         if (0 === strpos($this->headers->get('CONTENT_TYPE'), 'application/x-www-form-urlencoded') && in_array(strtoupper($this->server->get('REQUEST_METHOD', 'GET')), array('PUT', 'DELETE', 'PATCH'))) {
             parse_str($this->getContent(), $data);
             $this->request = new ParameterBag($data);
@@ -247,15 +264,17 @@ class Request extends HttpFoundation\Request
     public function files()
     {
         $files = $this->files->all();
-
-        return $this->convertedFiles
-            ? $this->convertedFiles
-            : $this->convertedFiles = $this->convertUploadedFiles($files);
+        return $this->gainFiles
+            ? $this->gainFiles
+            : $this->gainFiles = $this->gainFiles($files);
     }
 
 
-
-    protected function convertUploadedFiles(array $files)
+    /**
+     * @param array $files
+     * @return array
+     */
+    private function gainFiles(array $files)
     {
         return array_map(function ($file) {
             if (is_null($file) || (is_array($file) && empty(array_filter($file)))) {
@@ -263,8 +282,8 @@ class Request extends HttpFoundation\Request
             }
 
             return is_array($file)
-                ? $this->convertUploadedFiles($file)
-                : UploadedFile::createFromBase($file);
+                ? $this->gainFiles($file)
+                : Upload::initialize($file);
         }, $files);
     }
 
