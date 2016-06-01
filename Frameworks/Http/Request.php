@@ -2,26 +2,42 @@
 
 namespace PAO\Http;
 
-
-
-use Illuminate\Container\Container;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use Illuminate\Container\Container;
+use Symfony\Component\HttpFoundation;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
-class Request extends \Symfony\Component\HttpFoundation\Request
+class Request extends HttpFoundation\Request
 {
 
+    /**
+     * 容器
+     * @var static
+     */
     private $container;
+
+
+    /**
+     * 临时存储文件
+     * @var
+     */
+    private $gainFiles;
+
 
     /**
      * 重构Request方法
      */
     public function __construct(array $query = array(), array $request = array(), array $attributes = array(), array $cookies = array(), array $files = array(), array $server = array(), $content = null)
     {
-
+        /**
+         * 获取容器
+         */
         $this->container = Container::getInstance();
 
+        /**
+         * 命令行模式获取参数
+         */
         if ('cli-server' === php_sapi_name()) {
             if (array_key_exists('HTTP_CONTENT_LENGTH', $_SERVER)) {
                 $_SERVER['CONTENT_LENGTH'] = $_SERVER['HTTP_CONTENT_LENGTH'];
@@ -30,11 +46,23 @@ class Request extends \Symfony\Component\HttpFoundation\Request
                 $_SERVER['CONTENT_TYPE'] = $_SERVER['HTTP_CONTENT_TYPE'];
             }
         }
-        parent::__construct($_GET, $_POST, array(), $_COOKIE, $_FILES, $_SERVER);
 
-        if (0 === strpos($this->headers->get('CONTENT_TYPE'), 'application/x-www-form-urlencoded')
-            && in_array(strtoupper($this->server->get('REQUEST_METHOD', 'GET')), array('PUT', 'DELETE', 'PATCH'))
-        ) {
+        /**
+         * 初始化请求对象
+         */
+        parent::__construct(
+            array_merge($_GET, $query),
+            array_merge($_POST, $request),
+            array_merge(array('system'=>'PaoCMS'), $attributes),
+            array_merge($_COOKIE, $cookies),
+            array_merge($_FILES, $files),
+            array_merge($_SERVER, $server)
+        );
+
+        /**
+         * 后置处理
+         */
+        if (0 === strpos($this->headers->get('CONTENT_TYPE'), 'application/x-www-form-urlencoded') && in_array(strtoupper($this->server->get('REQUEST_METHOD', 'GET')), array('PUT', 'DELETE', 'PATCH'))) {
             parse_str($this->getContent(), $data);
             $this->request = new ParameterBag($data);
         }
@@ -225,7 +253,38 @@ class Request extends \Symfony\Component\HttpFoundation\Request
      */
     public function file($key = null, $default = null)
     {
-        return Arr::get($this->files->all(), $key, $default);
+        return Arr::get($this->files(), $key, $default);
+    }
+
+
+    /**
+     * [files 获取多文件]
+     * @return mixed
+     */
+    public function files()
+    {
+        $files = $this->files->all();
+        return $this->gainFiles
+            ? $this->gainFiles
+            : $this->gainFiles = $this->gainFiles($files);
+    }
+
+
+    /**
+     * @param array $files
+     * @return array
+     */
+    private function gainFiles(array $files)
+    {
+        return array_map(function ($file) {
+            if (is_null($file) || (is_array($file) && empty(array_filter($file)))) {
+                return $file;
+            }
+
+            return is_array($file)
+                ? $this->gainFiles($file)
+                : Upload::initialize($file);
+        }, $files);
     }
 
     /**
