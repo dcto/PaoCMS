@@ -122,6 +122,7 @@ class Frameworks extends Container
             'lang' => 'translator',
             'db' => 'PAO\Database',
             'view' => 'PAO\View',
+            'files' => 'PAO\FileSystem\Files',
             'cache' => 'PAO\Cache\Cache',
             'log' => 'PAO\Logger',
             'Illuminate\Contracts\Routing\ResponseFactory' => 'PAO\Http\Response'
@@ -146,6 +147,7 @@ class Frameworks extends Container
             'DB' => 'Illuminate\Support\Facades\DB',
             'Log' => 'Illuminate\Support\Facades\Log',
             'Lang' => 'Illuminate\Support\Facades\Lang',
+            'File' => 'Illuminate\Support\Facades\File',
             'Validator' => 'Illuminate\Support\Facades\Validator',
             'Crypt' => 'Illuminate\Support\Facades\Crypt',
             'Cookie' => 'Illuminate\Support\Facades\Cookie',
