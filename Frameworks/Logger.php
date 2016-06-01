@@ -31,7 +31,7 @@ class Logger extends \Monolog\Logger  {
 
         $logger = $this->logger.basename(APP).DIRECTORY_SEPARATOR.$this->container->config('config.token').'_'.date('Ymd').'.log';
 
-        $this->formatter = "[%datetime%] [%channel%] [%level_name%]: %message% %context% %extra%".PHP_EOL.PHP_EOL;
+        $this->formatter = "[%datetime%] [%channel%] [%level_name%]: %message% %context% %extra%".PHP_EOL;
 
         $this->Stream($logger);
     }
@@ -58,7 +58,7 @@ class Logger extends \Monolog\Logger  {
         $this->name = $app ?: $this->name;
 
         $logger = $this->logger.trim($logger, '.log').'.log';
-        $this->formatter = "[%datetime%] [%channel%] [%level_name%]: %message%".PHP_EOL.PHP_EOL;
+        $this->formatter = "[%datetime%] [%channel%] [%level_name%]: %message%".PHP_EOL;
         $this->Stream($logger);
         return $this;
     }
