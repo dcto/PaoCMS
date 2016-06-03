@@ -140,7 +140,7 @@ class Frameworks extends Container
         $facadesAlias = [
             'PAO' => 'Illuminate\Support\Facades\App',
             'Config' => 'Illuminate\Support\Facades\Config',
-            'Input' => 'Illuminate\Support\Facades\Request',
+            'Input' => 'Illuminate\Support\Facades\Input',
             'Request' => 'Illuminate\Support\Facades\Request',
             'Response' => 'Illuminate\Support\Facades\Response',
             'Event' => 'Illuminate\Support\Facades\Event',
