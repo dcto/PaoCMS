@@ -271,6 +271,36 @@ class Request extends HttpFoundation\Request
 
 
     /**
+     * 判断文件是否上传
+     *
+     * @param  string  $key
+     * @return bool
+     */
+    public function hasFile($key)
+    {
+        if (! is_array($files = $this->file($key))) {
+            $files = [$files];
+        }
+
+        foreach ($files as $file) {
+            if ($file instanceof \SplFileInfo && $file->getPath() != '') {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * 上传文件getPathname
+     * @param array $config
+     */
+    public function upload($config = array())
+    {
+        return Upload::save($config);
+    }
+
+    /**
      * @param array $files
      * @return array
      */
