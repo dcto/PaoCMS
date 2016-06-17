@@ -2,6 +2,9 @@
 
 namespace PAO\Http;
 
+use Illuminate\Container\Container;
+use Illuminate\Contracts\Support\Arrayable;
+use Symfony\Component\HttpFoundation;
 
 
 class Response //implements  \Illuminate\Contracts\Routing\ResponseFactory
@@ -14,26 +17,6 @@ class Response //implements  \Illuminate\Contracts\Routing\ResponseFactory
      */
     private $response;
 
-
-    /**
-     * [__call]
-     *
-     * @param $method
-     * @param $parameters
-     * @author 11.
-     */
-    public function __call($method, $parameters)
-    {
-        if(!$this->response instanceof \Symfony\Component\HttpFoundation\Response)
-        {
-            $this->response = new \Symfony\Component\HttpFoundation\Response;
-        }
-
-        return call_user_func_array(array($this->response, $method), $parameters);
-    }
-
-
-
     /**
      * [make Response]
      *
@@ -44,7 +27,7 @@ class Response //implements  \Illuminate\Contracts\Routing\ResponseFactory
      */
     public function make($content = '', $status = 200 , array $headers = [])
     {
-        $this->response = new \Symfony\Component\HttpFoundation\Response($content, $status, $headers);
+        $this->response = new HttpFoundation\Response($content, $status, $headers);
         return $this;
     }
 
@@ -73,7 +56,7 @@ class Response //implements  \Illuminate\Contracts\Routing\ResponseFactory
      */
     public function view($view, array $data = [], $status = 200, array $headers = [])
     {
-       return $this->make(\Illuminate\Container\Container::getInstance()->make('view')->render($view, $data), $status, $headers);
+       return $this->make(Container::getInstance()->make('view')->render($view, $data), $status, $headers);
     }
 
     /**
@@ -83,15 +66,15 @@ class Response //implements  \Illuminate\Contracts\Routing\ResponseFactory
      * @param int   $status [状态值]
      * @param array $headers [header]
      * @param int   $options [其他设置]
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     * @return HttpFoundation\JsonResponse
      * @author 11.
      */
     public function json($data = [], $status = 200, array $headers = [])
     {
-        if ($data instanceof \Illuminate\Contracts\Support\Arrayable && ! $data instanceof \JsonSerializable) {
+        if ($data instanceof Arrayable && ! $data instanceof \JsonSerializable) {
             $data = $data->toArray();
         }
-        $this->response = new \Symfony\Component\HttpFoundation\JsonResponse($data, $status, $headers);
+        $this->response = new HttpFoundation\JsonResponse($data, $status, $headers);
 
         return $this;
     }
@@ -104,7 +87,7 @@ class Response //implements  \Illuminate\Contracts\Routing\ResponseFactory
      * @param int   $status [状态值]
      * @param array $headers [header]
      * @param int   $options [其他设置]
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     * @return HttpFoundation\JsonResponse
      * @author 11.
      */
     public function jsonp($callback, $data = [], $status = 200, array $headers = [])
@@ -119,12 +102,12 @@ class Response //implements  \Illuminate\Contracts\Routing\ResponseFactory
      * @param \Closure $callback [回调]
      * @param int      $status [状态值]
      * @param array    $headers [header]
-     * @return \Symfony\Component\HttpFoundation\StreamedResponse
+     * @return HttpFoundation\StreamedResponse
      * @author 11.
      */
     public function stream($callback, $status = 200, array $headers = [])
     {
-        $this->response = new \Symfony\Component\HttpFoundation\StreamedResponse($callback, $status, $headers);
+        $this->response = new HttpFoundation\StreamedResponse($callback, $status, $headers);
 
         return $this;
     }
@@ -137,12 +120,12 @@ class Response //implements  \Illuminate\Contracts\Routing\ResponseFactory
      * @param null                $name [文件名]
      * @param array               $headers header
      * @param string              $disposition
-     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     * @return HttpFoundation\BinaryFileResponse
      * @author 11.
      */
     public function download($file, $name = null, array $headers = [], $disposition = 'attachment')
     {
-        $this->response = new \Symfony\Component\HttpFoundation\BinaryFileResponse($file, 200, $headers, true, $disposition);
+        $this->response = new HttpFoundation\BinaryFileResponse($file, 200, $headers, true, $disposition);
         if (! is_null($name)) {
              $this->response->setContentDisposition($disposition, $name, str_replace('%', '', \Illuminate\Support\Str::ascii($name)));
         }
@@ -156,14 +139,54 @@ class Response //implements  \Illuminate\Contracts\Routing\ResponseFactory
      * @param       $url [地址]
      * @param int   $status [状态值]
      * @param array $headers [header]
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @return HttpFoundation\RedirectResponse
      * @author 11.
      */
     public function redirect($url, $status = 302, $headers = [])
     {
-        $this->response = new \Symfony\Component\HttpFoundation\RedirectResponse($url, $status, $headers);
+        $this->response = new HttpFoundation\RedirectResponse($url, $status, $headers);
 
         return $this;
+    }
+
+
+    /**
+     * [__call]
+     *
+     * @param $method
+     * @param $parameters
+     * @author 11.
+     */
+    public function __call($method, $parameters)
+    {
+        if(!$this->response instanceof HttpFoundation\Response)
+        {
+            $this->response = new HttpFoundation\Response;
+        }
+
+        return call_user_func_array(array($this->response, $method), $parameters);
+    }
+
+    /**
+     * 操作父类属性
+     *
+     * @param $name
+     * @param $value
+     */
+    public function __set($name, $value)
+    {
+        $this->response->$name = $value;
+    }
+
+    /**
+     * 获取父类属性
+     *
+     * @param $name
+     * @return mixed
+     */
+    public function __get($name)
+    {
+        return $this->response->$name;
     }
 
 }
