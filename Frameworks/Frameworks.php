@@ -125,7 +125,7 @@ class Frameworks extends Container
             'files' => 'PAO\FileSystem\Files',
             'cache' => 'PAO\Cache\Cache',
             'log' => 'PAO\Logger',
-            'Illuminate\Contracts\Routing\ResponseFactory' => 'PAO\Http\Response'
+            'Illuminate\Contracts\Routing\ResponseFactory' => 'response'
         ];
 
     }

@@ -47,7 +47,7 @@ class Files extends Filesystem
      * @param $content
      * @return int
      */
-    public function push($path, $content)
+    public function put($path, $content)
     {
         return $this->append($path, $content);
     }
