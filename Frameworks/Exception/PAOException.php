@@ -18,9 +18,9 @@ class PAOException
     }
 
     /**
-     * [Exception �쳣���]
+     * [Exception]
      *
-     * @param Exception $e [�쳣����]
+     * @param Exception $e
      *
      * @author  11
      * @version v1
@@ -100,7 +100,6 @@ class PAOException
         ksort($debugBacktrace);
         foreach ($debugBacktrace as $k => $error) {
             if (!isset($error['file'])) {
-                // ���÷���API����ȡ����/�������ڵ��ļ�������
                 try {
                     if (isset($error['class'])) {
                         $reflection = new ReflectionMethod($error['class'], $error['function']);
@@ -132,11 +131,9 @@ class PAOException
 
 
     /**
-     * ��ʾ����
-     *
      * @static
      * @access public
-     * @param string $type �������� db,system
+     * @param string $type db,system
      * @param string $errorMsg
      * @param string $phpMsg
      */
