@@ -27,7 +27,5 @@ class SystemServiceProvider extends ServiceProvider
          * 加载系统function
          */
         require (dirname(__DIR__).'/Function.php');
-
-        lang('title');
     }
 }

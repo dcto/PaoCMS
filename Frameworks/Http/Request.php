@@ -53,7 +53,7 @@ class Request extends HttpFoundation\Request
         parent::__construct(
             array_merge($_GET, $query),
             array_merge($_POST, $request),
-            array_merge(array('system'=>'PaoCMS'), $attributes),
+            array_merge(array(), $attributes),
             array_merge($_COOKIE, $cookies),
             array_merge($_FILES, $files),
             array_merge($_SERVER, $server)
@@ -295,9 +295,9 @@ class Request extends HttpFoundation\Request
      * 上传文件getPathname
      * @param array $config
      */
-    public function upload($config = array())
+    public function upload($file = array())
     {
-        return Upload::save($config);
+            return Upload::save($file);
     }
 
     /**

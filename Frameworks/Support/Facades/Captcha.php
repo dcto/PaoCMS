@@ -5,7 +5,7 @@ namespace PAO\Support\Facades;
 /**
  * @see \Illuminate\Encryption\Encrypter
  */
-class Crypt extends Facade
+class Captcha extends Facade
 {
     /**
      * Get the registered name of the component.
@@ -14,6 +14,6 @@ class Crypt extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'crypt';
+        return 'captcha';
     }
 }
