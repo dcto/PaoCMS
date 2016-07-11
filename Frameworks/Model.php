@@ -4,7 +4,7 @@ namespace PAO;
 
 use Illuminate\Container\Container;
 
-class Model extends \Illuminate\Database\Eloquent\Model
+abstract class Model extends \Illuminate\Database\Eloquent\Model
 {
 
     /**

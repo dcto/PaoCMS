@@ -5,7 +5,7 @@ namespace PAO;
 use Illuminate\Container\Container;
 
 
-class Controller
+abstract class Controller
 {
     /**
      * 全局容器
