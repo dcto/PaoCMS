@@ -35,6 +35,8 @@ version_compare(PHP_VERSION,'5.5.0','ge') || die('The php version least must 5.5
 class Frameworks extends Container
 {
 
+    const VERSION = 'v1.2';
+
     /**
      * 已注入的模块
      * @var array
@@ -75,6 +77,12 @@ class Frameworks extends Container
         $this->registerExceptionHandling();
 
         /**
+         * 初始化外观模式
+         */
+        Facade::setFacadeApplication($this);
+
+
+        /**
          * 配置系统环境
          */
         $this->registerSystemEnvironment();
@@ -83,12 +91,6 @@ class Frameworks extends Container
          * 基本服务注册
          */
         $this->registerBaseServiceProviders();
-
-
-        /**
-         * 初始化外观模式
-         */
-        Facade::setFacadeApplication($this);
 
 
         /**
@@ -147,7 +149,8 @@ class Frameworks extends Container
      */
     private function Navigate()
     {
-        $response = $this->make('route')->Dispatch();
+        $response = $this->make('router')->dispatch();
+        //$response = $this->make('route')->Dispatch();
 
         //重置Response
         if(!$response instanceof Response)
@@ -194,7 +197,7 @@ class Frameworks extends Container
     {
         $this->aliases = [
             'route' => 'PAO\Route',
-            //'router' => 'PAO\Routing\Router',
+            'router' => 'PAO\Routing\Router',
             'config' => 'PAO\Configure\Repository',
             'request' => 'PAO\Http\Request',
             'response' => 'PAO\Http\Response',
@@ -260,6 +263,11 @@ class Frameworks extends Container
      */
     private function registerBaseServiceProviders()
     {
+        /**
+         * 系统服务
+         */
+        $this->register(new SystemServiceProvider($this));
+
         /**
          * 系统服务
          */

@@ -3,8 +3,9 @@
 namespace PAO\Services;
 
 use Illuminate\Support\ServiceProvider;
+use PAO\Http\Request;
 
-class SystemServiceProvider extends ServiceProvider
+class FoundationServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap the application services.
@@ -23,14 +24,6 @@ class SystemServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        /**
-         * 注册路由
-         */
-        require (APP.'/Route.php');
 
-        /**
-         * 加载系统function
-         */
-        require (dirname(__DIR__).'/Function.php');
     }
 }
