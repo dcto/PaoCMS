@@ -198,6 +198,7 @@ class Route
             $controller = basename(APP).'\\Controller\\'.$controller;
         }
 
+
         //判断方法是否存在并将其实例化
         if (!method_exists($instance = $this->container->make($controller), $action)) {
            throw new NotFoundHttpException  ('The target [' . $controller . '::' . $action . '] does not exist!');
