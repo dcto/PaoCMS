@@ -8,13 +8,11 @@
 
 namespace PAO\Routing;
 
-use Illuminate\Support\Arr;
-use Illuminate\Container\Container;
-use PAO\Exception\LogicException;
+use PAO\Support\Arr;
+use PAO\Http\Response;
 use PAO\Exception\SystemException;
 use PAO\Exception\NotFoundHttpException;
-use PAO\Http\Response;
-
+use Illuminate\Container\Container;
 
 
 /**
@@ -27,26 +25,35 @@ class Router
      *
      * @var \Illuminate\Container\Container
      */
-    protected $container;
+    private $container;
+
+
+    /*
+     * @var $group
+     */
+    private $group = array();
 
     /**
      * Matched Route, the current found Route, if any.
      *
-     * @var Route|null $matchedRoute
+     * @var $route object $matched Route
      */
-    protected $route;
+    private $route;
 
     /**
      * Array of routes
      *
-     * @var Route[] $routes
+     * @var $routes Route[] $routes
      */
-    protected $routes = array();
+    private $routes = array();
 
     /**
-     * @var array All available Filters
+     * An array of HTTP request Methods.
+     *
+     * @var array $methods
      */
-    private $filters = array();
+    private static $methods = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'];
+
 
     /**
      * @var array
@@ -70,20 +77,6 @@ class Router
      */
     private $groupStack = array();
 
-
-    /**
-     * route namespace
-     * @var null
-     */
-    private $namespace = null;
-
-    /**
-     * An array of HTTP request Methods.
-     *
-     * @var array $methods
-     */
-    public static $methods = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'];
-
     /**
      * Router constructor.
      *
@@ -95,118 +88,6 @@ class Router
     }
 
 
-    /**
-     * Register many request URIs to a single Callback.
-     *
-     * <code>
-     *      // Register a group of URIs for a Callback
-     *      Router::share(array(array('GET', '/'), array('POST', '/home')), 'App\Controllers\Home@index');
-     * </code>
-     *
-     * @param  array  $routes
-     * @param  mixed  $callback
-     * @return void
-     */
-    public function share($routes, $callback)
-    {
-        foreach ($routes as $route) {
-            $method = array_shift($route);
-            $path  = array_shift($route);
-            $this->register($method, $path, $callback);
-        }
-    }
-
-    /**
-     * Dispatch route
-     * @return bool
-     */
-    public function dispatch()
-    {
-        $request = $this->container->make('request');
-
-        // Get the Method and Path.
-        $method = $request->method();
-
-        $path = trim(urldecode($request->path()),'/');
-
-        // Execute the Routes matching loop.
-        foreach ($this->routes as $route) {
-            //if ($route->match($path, $method, true, $this->regex)) {
-            if ($this->matching($path, $method, $route)) {
-                // Found a valid Route; process it.
-                $this->route = $route;
-
-                // Apply the (specified) Filters on matched Route.
-                /*
-                $result = $this->applyFiltersToRoute($route);
-
-                if($result instanceof \Response) {
-                    return $result;
-                }*/
-                return $this->ThroughRoute($route->callable, $route->parameters);
-            }
-        }
-        // No valid Route found; send an Error 404 NotFoundHttpException Response.
-        throw new NotFoundHttpException('Can\'t found route of the url: '. $request->baseUrl().'/'.htmlspecialchars($path, ENT_COMPAT, 'ISO-8859-1', true));
-    }
-
-
-    /**
-     * 匹配路由
-     * @param $path
-     * @param $method
-     * @param $route
-     * @return bool
-     */
-    private function matching($path, $method, $route)
-    {
-            if (!in_array($method, $route->methods)) return false;
-
-            $route->method = $method;
-
-            $route->path = $path;
-
-            $pattern = $route->pattern;
-
-            if($pattern == $path) return true;
-
-            if (strpos($pattern, ':')) {
-                $pattern = str_replace(array_keys($this->regex), array_values($this->regex), $pattern);
-            }
-
-            $regex = str_replace(array('(/', ')'), array('(?:/', ')?'), $pattern);
-            $route->regex = $regex;
-            //if (preg_match($reg = '#^(?:([a-z]{2})?/?)?'.$pattern.'(?:\?.*)?$#', $path, $matches)) {
-            if (preg_match('#^'.$regex.'$#', $route->path, $matches)) {
-                array_shift($matches);
-                $route->parameters = $matches;
-                return true;
-            }
-
-        return false;
-    }
-
-
-    private function compilerRoute($route)
-    {
-        $path = explode('/', $route->getPattern());
-
-        $params = array();
-
-        $path = array_map(function($p) use ($route){
-                if(strpos($p, ':')){
-                    //parse_str(strtr($p, ':|', '=&'), $params);
-                    //$route->setParameters($params);
-                    list($key, $val) = explode(':', $p);
-
-                    if(isset($this->regex[$key])){
-                        return  $this->regex[$key];
-                    }
-                }
-
-            return $p;
-        },$path);
-    }
 
     /**
      * Defines a route with or without Callback and Method.
@@ -235,13 +116,133 @@ class Router
         return $this->register($method, $route, $action);
     }
 
+    /**
+     * Dispatch route
+     * @return bool
+     */
+    public function dispatch()
+    {
+        $request = $this->container->make('request');
+
+        // Get the Method and Path.
+        $method = $request->method();
+
+        $path = trim(urldecode($request->path()),'/');
+        // Execute the Routes matching loop.
+        foreach ($this->routes as $route) {
+            if ($this->matching($path, $method, $route)) {
+                // Found a valid Route; process it.
+                $this->route = $route;
+                if($callback = Arr::get($route->group,'call')){
+                    if(is_array($callback)) {
+                        $this->ThroughRoute(array_shift($callback), array_shift($callback));
+                    }else{
+                        $this->ThroughRoute($callback);
+                    }
+                }
+                return $this->ThroughRoute($route->getCallable(), $route->parameters);
+            }
+        }
+        // No valid Route found; send an Error 404 NotFoundHttpException Response.
+        throw new NotFoundHttpException("Can not match route of path '$path' from current url: ". $request->url());
+    }
+
+
+    /*
+    private function compilerRoute($route)
+    {
+        $path = explode('/', $route->getPattern());
+
+        $params = array();
+
+        $path = array_map(function($p) use ($route){
+                if(strpos($p, ':')){
+                    //parse_str(strtr($p, ':|', '=&'), $params);
+                    //$route->setParameters($params);
+                    list($key, $val) = explode(':', $p);
+
+                    if(isset($this->regex[$key])){
+                        return  $this->regex[$key];
+                    }
+                }
+
+            return $p;
+        },$path);
+    }
+    */
+
+
+    /**
+     * Register many request URIs to a single Callback.
+     *
+     * <code>
+     *      // Register a group of URIs for a Callback
+     *      Router::share(array(array('GET', '/'), array('POST', '/home')), 'App\Controllers\Home@index');
+     * </code>
+     *
+     * @param  array  $routes
+     * @param  mixed  $callback
+     * @return void
+     */
+    public function share($routes, $callback)
+    {
+        foreach($routes as $route) {
+            $method = array_shift($route);
+            $path  = array_shift($route);
+            $this->register($method, $path, $callback);
+        }
+    }
+
+
+
+    /* The Resourceful Routes in the Laravel Style.
+
+    Method     |  Path                 |  Action   |
+    ------------------------------------------------
+    GET        |  /test               |  index    |
+    GET        |  /test/(:id)         |  select   |
+    GET        |  /test/create        |  create   |
+    POST       |  /test               |  insert   |
+    GET        |  /test/(:id)/modify  |  modify   |
+    PUT/PATCH  |  /test/(:id)         |  update   |
+    DELETE     |  /test/(:id)         |  delete   |
+
+    */
+
+    /**
+     * Defines a Resourceful Routes Group to a target Controller.c
+     *
+     * @param string $basePath The base path of the resourceful routes group
+     * @param string $controller The target Resourceful Controller's name.
+     */
+    public function resource($basePath, $controller)
+    {
+        $this->register('get',                 $basePath,                 $controller .'@index');
+        $this->register('get',                 $basePath .'/(:any)',      $controller .'@select');
+        $this->register('get',                 $basePath .'/create',      $controller .'@create');
+        $this->register('post',                $basePath,                 $controller .'@insert');
+        $this->register('get',                 $basePath .'/(:any)/modify', $controller .'@modify');
+        $this->register(array('put', 'patch'), $basePath .'/(:any)',      $controller .'@update');
+        $this->register('delete',              $basePath .'/(:any)',      $controller .'@delete');
+
+    }
+
+    /**
+     * resource alias name
+     * @param $bassPath
+     * @param $controller
+     */
+    public function restful($bassPath, $controller)
+    {
+        $this->resource($bassPath, $controller);
+    }
 
     /**
      * global pattern
      * @param $key
      * @param $regex
      */
-    public function regex($key, $regex)
+    public function regex($key = null, $regex = null)
     {
         $this->regex[$key] = $regex;
     }
@@ -250,7 +251,7 @@ class Router
     /**
      * Return current route
      *
-     * @return array
+     * @return object
      */
     public function route()
     {
@@ -263,91 +264,93 @@ class Router
      *
      * @return array
      */
-    public function routes()
+    public function routes($group = null)
     {
+        if($group){
+            $routes = array();
+            foreach ($this->routes as $route) {
+                if($route->group == $group){
+                    $route->tag ? $routes[$route->tag] = $route : $routes[] = $route;
+                }
+            }
+            return $routes;
+        }
         return $this->routes;
     }
 
-
     /**
-     * Defines a Route Group.
+     * Create a route group with shared attributes.
      *
-     * @param string $group The scope of the current Routes Group
-     * @param callback $callback Callback object called to define the Routes.
+     * @param  array  $attributes
+     * @param  \Closure  $callback
+     * @return void
      */
-    public function group($attributes, $callback)
+    public function group(array $attributes, \Closure $callback)
     {
-        if ($this->groupStack) {
-            $attributes = $this->mergeGroup($attributes, end($this->groupStack));
-        }
-        $this->groupStack[] = array_map('trim',$attributes);
+        //array_push($this->groupStack, $attributes);
+        $this->updateGroupStack($attributes);
+        //$this->groupStack[] = $attributes;//array_merge_recursive($this->groupStack, $attributes);
+        // Once we have updated the group stack, we will execute the user Closure and
+        // merge in the groups attributes when the route is created. After we have
+        // run the callback, we will pop the attributes off of this group stack.
+        call_user_func($callback, $this);
 
-        // Call the Callback, to define the Routes on the current Group.
-        call_user_func($callback);
-
-        // Removes the last Route Group from the array.
         array_pop($this->groupStack);
     }
 
-
-
-    /* The Resourceful Routes in the Laravel Style.
-
-    Method     |  Path                 |  Action   |
-    ------------------------------------------------
-    GET        |  /photo               |  index    |
-    GET        |  /photo/create        |  create   |
-    POST       |  /photo               |  store    |
-    GET        |  /photo/{photo}       |  show     |
-    GET        |  /photo/{photo}/edit  |  edit     |
-    PUT/PATCH  |  /photo/{photo}       |  update   |
-    DELETE     |  /photo/{photo}       |  destroy  |
-
-    */
-
     /**
-     * Defines a Resourceful Routes Group to a target Controller.
-     *
-     * @param string $basePath The base path of the resourceful routes group
-     * @param string $controller The target Resourceful Controller's name.
+     * format the route item list
+     * @param null $key
+     * @return array
      */
-    public function resource($basePath, $controller)
+    public function groups($tag = null)
     {
-        $this->register('get',                 $basePath,                 $controller .'@index');
-        $this->register('get',                 $basePath .'/create',      $controller .'@create');
-        $this->register('post',                $basePath,                 $controller .'@insert');
-        $this->register('get',                 $basePath .'/(:any)',      $controller .'@show');
-        $this->register('get',                 $basePath .'/(:any)/modify', $controller .'@modify');
-        $this->register(array('put', 'patch'), $basePath .'/(:any)',      $controller .'@update');
-        $this->register('delete',              $basePath .'/(:any)',      $controller .'@delete');
-
+        $routes = array();
+        foreach ($this->routes as $route){
+            if($tag && Arr::get($route->group, 'tag') == $tag){
+                $routes[$tag][] = $route;
+            }else{
+                $routes[Arr::get($route->group, 'tag')][] = $route;
+            }
+        }
+        return $this->group;
     }
 
-    /**
-     * resource alias name
-     * @param $bassPath
-     * @param $controller
-     */
-    public function auto($bassPath, $controller)
-    {
-         $this->resource($bassPath, $controller);
-    }
+
 
     /**
-     * Define a Route Filter.
-     *
-     * @param string $name
-     * @param callback $callback
+     * 匹配路由
+     * @param $path
+     * @param $method
+     * @param $route
+     * @return bool
      */
-    public function filter($name, $callback)
+    private function matching($path, $method, $route)
     {
-        if (array_key_exists($name, $this->filters)) {
-            throw new \Exception('Filter already exists: ' .$name);
+        if (!in_array($method, $route->methods)) return false;
+
+        $route->method = $method;
+
+        $route->path = $path;
+
+        $pattern = $route->pattern;
+
+        if($pattern == $path) return true;
+
+        if (strpos($pattern, ':')) {
+            $pattern = str_replace(array_keys($this->regex), array_values($this->regex), $pattern);
         }
 
-        $this->filters[$name] = $callback;
+        $regex = str_replace(array('(/', ')'), array('(?:/', ')?'), $pattern);
+        $route->regex = $regex;
+        //if (preg_match($reg = '#^(?:([a-z]{2})?/?)?'.$pattern.'(?:\?.*)?$#', $path, $matches)) {
+        if (preg_match('#^'.$regex.'$#', $route->path, $matches)) {
+            array_shift($matches);
+            $route->parameters = $this->parameters($matches);
+            return true;
+        }
+        return false;
     }
-
 
     /**
      * ThroughRoute
@@ -399,30 +402,7 @@ class Router
         $property = $this->parseAction($property);
 
         if ($this->groupStack) {
-            $prefix = array();
-            $namespace = $language = null;
-            foreach ($this->groupStack as $group) {
-                // Add the current prefix to the prefix list.
-                array_push($prefix, trim($group['prefix'], '/'));
-                $namespace = Arr::get($group, 'namespace');
-                $language = Arr::get($group, 'lang');
-            }
-
-            $prefix && $property['prefix'] = implode('/', $prefix);
-
-
-            if(!isset($property['lang']) && $language) {
-                $property['lang'] = $language;
-            }
-
-            // Adjust the Route callback, if it is needed.
-            if($namespace && is_string($property['to'])) {
-                if(strpos($property['to'],'@')){
-                    $property['to'] = rtrim($namespace,'\\') .'\\' .ltrim($property['to'], '\\');
-                }
-            }
-
-            $property['group'] = end($this->groupStack);
+            $property['group'] = end($this->group);
         }
 
        return $this->addPushToRoutes(new Route($methods, $path, $property));
@@ -435,48 +415,14 @@ class Router
      */
     protected function addPushToRoutes(Route $route)
     {
-        $hash = $route->hash = $route->alias;
-        if($hash && isset($this->routes[$hash])){
-            throw new SystemException("The route name [$hash] was exist");
+        $tag = $route->tag;
+        if($tag && isset($this->routes[$tag])){
+            throw new SystemException("The route name [$tag] was exist");
         }
-        if($hash){
-           return $this->routes[$hash] = $route;
+        if($tag){
+           return $this->routes[$tag] = $route;
         }
         return $this->routes[] = $route;
-    }
-
-
-    /**
-     * applyFiltersToRoute
-     * @param \PAO\Routing\Route $route
-     * @return mixed|null
-     * @throws \Exception
-     */
-    protected function applyFiltersToRoute(Route $route)
-    {
-        $result = null;
-
-        foreach ($route->getFilters() as $filter => $params) {
-            if(empty($filter)) {
-                continue;
-            } else if (! array_key_exists($filter, $this->filters)) {
-                throw new LogicException('Invalid Filter specified: ' .$filter);
-            }
-
-            // Get the current Filter Callback.
-            $callback = $this->filters[$filter];
-
-            // If the Callback returns a Response instance, the Filtering will be stopped.
-            if (is_callable($callback)) {
-                $result = call_user_func($callback, $route, $params);
-            }
-
-            if ($result instanceof Response) {
-                break;
-            }
-        }
-
-        return $result;
     }
 
 
@@ -499,17 +445,37 @@ class Router
     }
 
     /**
-     * Find the Closure in an property array.
+     * Find the Closure in an action array.
      *
-     * @param  array  $property
+     * @param  array  $action
      * @return \Closure
      */
-    protected function findClosure(array $property)
+    protected function findClosure(array $action)
     {
-        return array_first($property, function($key, $value)
+        return array_first($action, function($key, $value)
         {
             return is_callable($value);
         });
+    }
+    /**
+     * Update the group stack with the given attributes.
+     *
+     * @param  array  $attributes
+     * @return void
+     */
+    protected function updateGroupStack(array $attributes)
+    {
+        if (! empty($this->groupStack)) {
+            $attributes = $this->mergeGroup($attributes, end($this->groupStack));
+            array_pop($this->group);
+        }
+        $tag = $attributes['tag'] = Arr::get($attributes,'tag', crc32(serialize($attributes)));
+
+        if(isset($this->group[$tag])){
+            throw new SystemException('The Route Group exist');
+        }
+
+        $this->group[$tag] = $this->groupStack[] = $attributes;
     }
 
     /**
@@ -519,7 +485,7 @@ class Router
      * @param  array  $old
      * @return array
      */
-    protected static function mergeGroup($new, $old)
+    private function mergeGroup($new, $old)
     {
         $new['namespace'] = static::formatUsesPrefix($new, $old);
 
@@ -528,30 +494,17 @@ class Router
         if (isset($new['domain'])) {
             unset($old['domain']);
         }
-
+        /*
         $new['where'] = array_merge(
             isset($old['where']) ? $old['where'] : [],
             isset($new['where']) ? $new['where'] : []
         );
-
+        */
         if (isset($old['as'])) {
             $new['as'] = $old['as'].(isset($new['as']) ? $new['as'] : '');
         }
 
-        return array_merge_recursive(Arr::except($old, ['namespace', 'prefix', 'append', 'where', 'as']), $new);
-    }
-
-    /**
-     * Prepend the last group uses onto the use clause.
-     *
-     * @param  string  $uses
-     * @return string
-     */
-    protected function prependGroupUses($uses)
-    {
-        $group = end($this->groupStack);
-
-        return isset($group['namespace']) && strpos($uses, '\\') !== 0 ? $group['namespace'].'\\'.$uses : $uses;
+        return array_merge_recursive(Arr::except($old, ['namespace', 'prefix', 'where', 'as']), $new);
     }
 
     /**
@@ -572,7 +525,6 @@ class Router
         return isset($old['namespace']) ? $old['namespace'] : null;
     }
 
-
     /**
      * Format the prefix for the new group attributes.
      *
@@ -592,34 +544,30 @@ class Router
     }
 
     /**
-     * Get the key / value list of parameters without null values.
+     * Get the prefix from the last group on the stack.
      *
-     * @return array
+     * @return string
      */
-    public function parametersWithoutNulls()
+    private function getLastGroupPrefix()
     {
-        return array_filter($this->parameters(), function ($p) {
-            return ! is_null($p);
-        });
+        if (! empty($this->groupStack)) {
+            $last = end($this->groupStack);
+
+            return isset($last['prefix']) ? $last['prefix'] : '';
+        }
+
+        return '';
     }
 
 
-    /**
-     * Get the key / value list of parameters for the route.
-     *
-     * @return array
-     *
-     * @throws \LogicException
-     */
-    public function parameters()
+    private function parameters($parameters)
     {
-        if (isset($this->parameters)) {
+        if ($parameters) {
             return array_map(function ($value) {
                 return is_string($value) ? rawurldecode($value) : $value;
-            }, $this->parameters);
+            }, $parameters);
         }
-
-        throw new LogicException('Route is not bound.');
+        return array();
     }
 
 }

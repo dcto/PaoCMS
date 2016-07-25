@@ -10,12 +10,15 @@ use PAO\Support\Arr;
 class Route
 {
 
-    public $name;
+    /**
+     * @var string tag
+     */
+    public $tag;
 
     /**
-     * @var string The current route hash
+     * @var string
      */
-    public $hash;
+    public $name;
 
     /**
      * @var string The current matched PathInfo
@@ -28,14 +31,9 @@ class Route
     public $lang;
 
     /**
-     * @var menu flag
+     * @var string route icon for menu
      */
-    public $menu;
-
-    /**
-     * @var string name
-     */
-    public $alias;
+    public $icon;
 
     /**
      * @var string Matching regular expression
@@ -46,6 +44,11 @@ class Route
      * @var string group name
      */
     public $group;
+
+    /**
+     * @var $hidden string
+     */
+    public $hidden;
 
     /**
      * @var string The matched HTTP method
@@ -68,15 +71,14 @@ class Route
     public $callable;
 
     /**
-     * @var route priority
+     * @var string callable namespace
      */
-    public $priority = 0;
+    public $namespace;
 
     /**
      * @var array http request parameters
      */
     public $parameters = array();
-
 
 
     /**
@@ -88,35 +90,34 @@ class Route
      */
     public function __construct($method, $pattern, $property = array())
     {
-        $this->name = Arr::get($property,'name', $this->hash);
+        $this->tag = Arr::get($property, 'as');
 
-        $this->alias = Arr::get($property, 'as');
+        $this->name = Arr::get($property, 'name', $this->tag);
 
-        $this->lang = Arr::get($property,'lang');
+        $this->lang = Arr::get($property, 'lang')?:Arr::get($property['group'],'lang');
 
-        $this->group = $property['group'];
+        $this->group = $property['group']['tag'];
 
         $this->methods = array_map('strtoupper', is_array($method) ? $method : array($method));
 
-        $this->pattern = $pattern ?: '/';
+        $this->pattern = $this->parsePattern($pattern, $property);
 
-        $this->callable = Arr::get($property,'to');
+        $this->callable = Arr::get($property, 'to');
 
-        if (isset($property['prefix'])) {
-            $this->prefix($property['prefix']);
-        }
-        if (in_array('GET', $this->methods) && ! in_array('HEAD', $this->methods)) {
+        $this->namespace = Arr::get($property, 'namespace')?:Arr::get($property['group'],'namespace');
+
+        if (in_array('GET', $this->methods) && !in_array('HEAD', $this->methods)) {
             $this->methods[] = 'HEAD';
         }
     }
 
     public function __call($property, $arguments)
     {
-        if(!property_exists($this, $property)){
-            throw new  NotFoundHttpException('The route property no available of to the '.$property. ' action');
+        if (!property_exists($this, $property)) {
+            throw new  NotFoundHttpException('The route property no available of to the ' . $property . ' action');
         }
 
-        if($arguments[0]){
+        if ($arguments[0]) {
             $this->$property = $arguments[0];
             return $this;
         }
@@ -125,15 +126,26 @@ class Route
 
 
     /**
-     * Add a prefix to the route URI.
-     *
-     * @param  string  $prefix
-     * @return \PAO\Routing\Route
+     * parse pattern of the route path
+     * @param $pattern
+     * @param $property
+     * @return string
      */
-    private function prefix($prefix)
+    private function parsePattern($pattern, $property)
     {
-        $this->pattern = trim($prefix, '/') .'/' .trim($this->pattern, '/');
+        $pattern = $pattern ?: '/';
+        $prefix = Arr::get($property,'prefix') ?: Arr::get($property['group'],'prefix');
+        $pattern = trim($prefix, '/') . '/' . trim($pattern, '/');
+        return $pattern;
+    }
 
-        return $this;
+    /**
+     * get route callable
+     *
+     * @return string
+     */
+    public function getCallable()
+    {
+        return rtrim($this->namespace,'\\') .'\\' .ltrim($this->callable, '\\');
     }
 }
