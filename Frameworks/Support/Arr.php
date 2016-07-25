@@ -4,6 +4,7 @@ namespace PAO\Support;
 
 use ArrayAccess;
 use Illuminate\Support\Traits\Macroable;
+use Illuminate\Support\Collection;
 
 class Arr
 {

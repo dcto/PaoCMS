@@ -34,14 +34,13 @@ class PAOException
         $httpCode = $e->getCode()>200 ? $e->getCode() : 500;
         http_response_code($httpCode);
         if($this->container->config('config.debug')) {
-            die($this->HandleError($e));
+            die($this->HandleError($httpCode, $e));
         }
         die($e->getMessage());
     }
 
-    public function HandleError($e)
+    public function HandleError($code, $e)
     {
-        $type = 'system';
         $message = $e->getMessage();
         $trace = $e->getTrace();
         krsort($trace);
@@ -81,7 +80,7 @@ class PAOException
             }
             $errorExplain[] = array('file' => str_replace(array(PAO, ''), array('', '/'), $error['file']), 'line' => $error['line'], 'function' => $error['function']);
         }
-        return $this->display($type, $message, $errorExplain);
+        return $this->display($code, $message, $errorExplain);
 
     }
 
@@ -137,15 +136,14 @@ class PAOException
      * @param string $errorMsg
      * @param string $phpMsg
      */
-    public function display($type, $message, $errorExplain = '')
+    public function display($code, $message, $errorExplain = '')
     {
         //ob_end_clean();
-        $title = $type == 'db' ? 'Database' : 'System';
         $content = <<<EOT
 <!DOCTYPE html">
 <html>
 <head>
- <title>{$_SERVER['REQUEST_URI']} - {$title} Error</title>
+ <title>Pao Frameworks Error</title>
  <meta http-equiv="Content-Type" content="text/html; charset="utf-8" />
  <meta name="robots" content="NOINDEX,NOFOLLOW,NOARCHIVE" />
  <style type="text/css">
@@ -195,7 +193,7 @@ class PAOException
 </head>
 <body>
 <div id="container">
-<h1>{$title} Error</h1>
+<h1>PAO Frameworks System Error {Response Status Code: $code}</h1>
 <div class='info'>{$message}</div>
 EOT;
             if (!empty($errorExplain)) {
