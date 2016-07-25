@@ -3,6 +3,7 @@
 namespace App\Model;
 
 
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 class Article extends Model
@@ -12,22 +13,17 @@ class Article extends Model
 
     public function user()
     {
-        return $this->hasOne(__NAMESPACE__.'\\User','id', 'uid');
-    }
-
-    public function comment()
-    {
-        return $this->hasMany(__NAMESPACE__.'\\Comment','aid', 'id');
+        return $this->hasOne(__NAMESPACE__.'\\User');
     }
 
     static public function up()
     {
-        Schema::create('article', function($table) {
-            /** @var \Illuminate\Database\Schema\Blueprint $table */
+        Schema::create('article', function(Blueprint $table) {
+
             $table->increments('id')->unsigned();
             $table->integer('pid')->unsigned()->default(0)->comment('父文pid');
-            $table->integer('uid')->unsigned()->default(0)->comment('用户id');
-            $table->integer('tag')->unsigned()->default(0)->comment('标签');
+            $table->integer('user_id')->unsigned()->default(0)->comment('用户id');
+            $table->integer('tags')->unsigned()->default(0)->comment('标签');
             $table->string('title',96)->nullable()->comment('标题');
             $table->string('subtitle',96)->nullable()->comment('副标题');
             $table->string('from',48)->nullable()->comment('来源');
@@ -44,7 +40,7 @@ class Article extends Model
             $table->timestamp('updated_at')->default(\DB::raw('CURRENT_TIMESTAMP'))->comment('更新时间');
             $table->boolean('status')->default(0)->comment('0=无效,1=正常');
 
-            $table->index('uid');
+            $table->index('user_id');
             $table->index('status');
             $table->engine = 'InnoDB';
         });

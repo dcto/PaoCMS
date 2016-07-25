@@ -12,4 +12,6 @@ class Model extends \PAO\Model
     public $perPage = 10;
 
     public $timestamps = true;
+
+    public $softDelete = true;
 }

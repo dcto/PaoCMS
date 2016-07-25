@@ -3,12 +3,12 @@
 namespace App\Model;
 
 
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Schema;
 
 class User extends Model
 {
-
 
     protected $table = 'user';
 
@@ -16,16 +16,15 @@ class User extends Model
 
     public function group()
     {
-        return $this->hasOne(__NAMESPACE__.'\\Group','id','gid');
+        return $this->hasOne(__NAMESPACE__.'\\Group');
     }
 
     static public function up()
     {
-        Schema::create('user', function($table){
-            /** @var \Illuminate\Database\Schema\Blueprint $table */
-            $table->increments('id')->unsigned();
+        Schema::create('user', function(Blueprint $table){
+            $table->increments('id');
             $table->integer('pid')->unsigned()->default(0)->comment('父id');
-            $table->integer('gid')->unsigned()->default(0)->comment('组id');
+            $table->integer('group_id')->unsigned()->default(0)->comment('组id');
             $table->string('username',32)->comment('帐号');
             $table->string('password',32)->comment('密码');
             $table->string('nickname',32)->nullable()->comment('昵称');
@@ -44,16 +43,17 @@ class User extends Model
             $table->string('ip',24)->nullable()->comment('ip地址');
             $table->integer('times')->unsigned()->default(0)->comment('登录次数');
             $table->string('token',12)->nullable()->comment('用户标识码');
-            $table->timestamp('created_at')->default(\DB::raw('CURRENT_TIMESTAMP'))->comment('创建时间');
-            $table->timestamp('updated_at')->default(\DB::raw('CURRENT_TIMESTAMP'))->comment('更新时间');
             $table->boolean('status')->default(0)->comment('0=停用,1=正常');
+
+            $table->timestamps();
+            $table->softDeletes();
 
             $table->unique(array('id','pid'));
             $table->unique('username');
             $table->unique('email');
             $table->unique('phone');
             $table->index('pid');
-            $table->index('gid');
+            $table->index('group_id');
             $table->index('admin');
             $table->index('status');
             $table->engine = 'InnoDB';
