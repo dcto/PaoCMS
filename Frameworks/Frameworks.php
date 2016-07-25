@@ -2,11 +2,12 @@
 
 namespace PAO;
 
+use PAO\Exception\PAOException;
 use PAO\Http\Response;
+use PAO\Support\Facades\Facade;
 use PAO\Exception\SystemException;
 use PAO\Services\SystemServiceProvider;
 use Illuminate\Container\Container;
-use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Events\EventServiceProvider;
 use Illuminate\Pagination\PaginationServiceProvider;
@@ -33,6 +34,8 @@ version_compare(PHP_VERSION,'5.5.0','ge') || die('The php version least must 5.5
  */
 class Frameworks extends Container
 {
+
+    const VERSION = 'v1.2';
 
     /**
      * 已注入的模块
@@ -62,35 +65,33 @@ class Frameworks extends Container
 
         $this->instance('Illuminate\Container\Container', $this);
 
+
+        /**
+         * 注册核心容器
+         */
+        $this->registerContainerAliases();
+
         /**
          * 异常模块注入
          */
         $this->registerExceptionHandling();
 
         /**
-         * 注册核心容器别名
+         * 初始化外观模式
          */
-        $this->registerContainerAliases();
+        Facade::setFacadeApplication($this);
+
+
+        /**
+         * 配置系统环境
+         */
+        $this->registerSystemEnvironment();
 
         /**
          * 基本服务注册
          */
         $this->registerBaseServiceProviders();
 
-        /**
-         * 初始化配置系统环境
-         */
-        $this->registerSystemEnvironment();
-
-        /**
-         * 初始化外观模式
-         */
-        Facade::setFacadeApplication($this);
-
-        /**
-         * 注册外观模式别名
-         */
-        $this->registerFacadeAlias();
 
         /**
          * 启航
@@ -98,65 +99,6 @@ class Frameworks extends Container
         $this->Navigate();
     }
 
-
-    /**
-     * [注册核心容器中的别名]
-     *
-     * @return void
-     */
-    private function registerContainerAliases()
-    {
-        $this->aliases = [
-            'route' => 'PAO\Route',
-            'config' => 'PAO\Configure\Repository',
-            'request' => 'PAO\Http\Request',
-            'response' => 'PAO\Http\Response',
-            'cookie' => 'PAO\Http\Cookie',
-            'session' => 'PAO\Http\Session',
-            'encrypter' => 'PAO\Crypt\Crypt',
-            'crypt' => 'encrypter',
-            'captcha' => 'PAO\Captcha\Captcha',
-            'validator' => 'PAO\Validator',
-            'exception' => 'PAO\Exception\PAOException',
-            'translator' => 'PAO\Translator',
-            'lang' => 'translator',
-            'db' => 'PAO\Database',
-            'view' => 'PAO\View',
-            'cache' => 'PAO\Cache\Cache',
-            'log' => 'PAO\Logger',
-            'Illuminate\Contracts\Routing\ResponseFactory' => 'PAO\Http\Response'
-        ];
-
-    }
-
-    /**
-     * [registerFacadeAlias 批量绑定外观模式别名]
-     *
-     * @author 11.
-     */
-    private function registerFacadeAlias()
-    {
-        $facadesAlias = [
-            'PAO' => 'Illuminate\Support\Facades\App',
-            'Config' => 'Illuminate\Support\Facades\Config',
-            'Input' => 'Illuminate\Support\Facades\Request',
-            'Request' => 'Illuminate\Support\Facades\Request',
-            'Response' => 'Illuminate\Support\Facades\Response',
-            'Event' => 'Illuminate\Support\Facades\Event',
-            'DB' => 'Illuminate\Support\Facades\DB',
-            'Log' => 'Illuminate\Support\Facades\Log',
-            'Lang' => 'Illuminate\Support\Facades\Lang',
-            'Validator' => 'Illuminate\Support\Facades\Validator',
-            'Crypt' => 'Illuminate\Support\Facades\Crypt',
-            'Cookie' => 'Illuminate\Support\Facades\Cookie',
-            'Session' => 'Illuminate\Support\Facades\Session',
-            'Cache' => 'Illuminate\Support\Facades\Cache',
-            'Schema' => 'Illuminate\Support\Facades\Schema',
-        ];
-        foreach ($facadesAlias as $alias => $facade) {
-            class_alias($facade, $alias);
-        }
-    }
 
     /**
      * [make 全局注入方法]
@@ -173,20 +115,6 @@ class Frameworks extends Container
         }
 
         return parent::make($abstract, $parameters);
-    }
-
-
-    /**
-     * [get make注入方法别名]
-     *
-     * @param       $abstract
-     * @param array $parameters
-     * @return mixed
-     * @author 11.
-     */
-    public function get($abstract, array $parameters = [])
-    {
-        return $this->make($abstract, $parameters);
     }
 
     /**
@@ -221,7 +149,8 @@ class Frameworks extends Container
      */
     private function Navigate()
     {
-        $response = $this->make('route')->Dispatch();
+        $response = $this->make('router')->dispatch();
+        //$response = $this->make('route')->Dispatch();
 
         //重置Response
         if(!$response instanceof Response)
@@ -241,7 +170,7 @@ class Frameworks extends Container
      *
      * @param $provider
      */
-    private function register($provider, $options = [])
+    public function register($provider, $options = [])
     {
         if(!$provider instanceof ServiceProvider)
         {
@@ -257,12 +186,50 @@ class Frameworks extends Container
         $provider->boot();
     }
 
+
+
+    /**
+     * [注册核心容器中的别名]
+     *
+     * @return void
+     */
+    private function registerContainerAliases()
+    {
+        $this->aliases = [
+            'route' => 'PAO\Route',
+            'router' => 'PAO\Routing\Router',
+            'config' => 'PAO\Configure\Repository',
+            'request' => 'PAO\Http\Request',
+            'response' => 'PAO\Http\Response',
+            'cookie' => 'PAO\Http\Cookie',
+            'session' => 'PAO\Http\Session',
+            'crypt' => 'PAO\Crypt\Crypt',
+            'captcha' => 'PAO\Captcha\Captcha',
+            'validator' => 'PAO\Validator',
+            'lang' => 'PAO\Translator',
+            'view' => 'PAO\View',
+            'file' => 'PAO\FileSystem\Files',
+            'cache' => 'PAO\Cache\Cache',
+            'log' => 'PAO\Logger',
+            'db' => 'PAO\Database'
+        ];
+
+        foreach($this->aliases as $alias=>$value)
+        {
+            $alias = ucfirst($alias);
+            class_alias(__NAMESPACE__.'\\Support\\Facades\\'.$alias, $alias);
+        }
+    }
+
+
     /**
      * [registerExceptionHandling 异常服务注册]
      *
      */
     private function registerExceptionHandling()
     {
+        $PAOException = new PAOException();
+
         //设置异常错误处理
         set_error_handler(function ($level, $message, $file = null, $line = 0) {
             if (error_reporting() & $level) {
@@ -271,12 +238,12 @@ class Frameworks extends Container
         });
 
         //设置抛出异常
-        set_exception_handler(function ($e) {
-            $this->make('exception')->Exception($e);
+        set_exception_handler(function ($e)use($PAOException) {
+            $PAOException->Exception($e);
         });
 
         //致命错误处理
-        register_shutdown_function(function(){
+        register_shutdown_function(function()use($PAOException){
 
             $e = error_get_last();
 
@@ -284,7 +251,7 @@ class Frameworks extends Container
             {
                 $e['function'] = $e['type'];
                 $error[] = $e;
-                die($this->make('exception')->display($e['type'], $e['message'], $error));
+                die($PAOException->display($e['type'], $e['message'], $error));
             }
         });
     }
@@ -296,6 +263,11 @@ class Frameworks extends Container
      */
     private function registerBaseServiceProviders()
     {
+        /**
+         * 系统服务
+         */
+        $this->register(new SystemServiceProvider($this));
+
         /**
          * 系统服务
          */

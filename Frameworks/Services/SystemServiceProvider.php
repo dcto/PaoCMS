@@ -24,10 +24,13 @@ class SystemServiceProvider extends ServiceProvider
     public function register()
     {
         /**
+         * 注册路由
+         */
+        require (APP.'/Route.php');
+
+        /**
          * 加载系统function
          */
         require (dirname(__DIR__).'/Function.php');
-
-        lang('title');
     }
 }
