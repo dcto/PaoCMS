@@ -133,9 +133,8 @@ class Route
      */
     private function parsePattern($pattern, $property)
     {
-        $pattern = $pattern ?: '/';
         $prefix = Arr::get($property,'prefix') ?: Arr::get($property['group'],'prefix');
-        $pattern = trim($prefix, '/') . '/' . trim($pattern, '/');
+        $pattern = '/'.trim(trim($prefix,'/').'/'.trim($pattern, '/'),'/');
         return $pattern;
     }
 
