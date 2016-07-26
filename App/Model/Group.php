@@ -2,9 +2,8 @@
 
 namespace App\Model;
 
-
-use Illuminate\Support\Facades\Schema;
-
+use PAO\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
 
 
 class Group extends Model
@@ -19,22 +18,24 @@ class Group extends Model
 
     public function users()
     {
-        return $this->belongsTo(__NAMESPACE__.'\\User', 'id');
+        return $this->belongsTo(__NAMESPACE__.'\\User');
     }
 
     static public function up()
     {
-        Schema::create('group', function($table) {
-            /** @var \Illuminate\Database\Schema\Blueprint $table */
-            $table->increments('id')->unsigned();
+        Schema::create('group', function(Blueprint $table) {
+            $table->increments('id');
+            $table->string('tag',32)->comment('组标签');
             $table->string('name',48)->comment('组名称');
             $table->string('nickname',96)->nullable()->comment('组头衔/别名');
-            $table->text('permission')->nullable()->comment('组权限');
+            $table->json('permission')->nullable()->comment('组权限');
             $table->boolean('status')->default(0)->comment('状态');
-            $table->timestamp('created_at')->default(\DB::raw('CURRENT_TIMESTAMP'))->comment('创建时间');
-            $table->timestamp('updated_at')->default(\DB::raw('CURRENT_TIMESTAMP'))->comment('更新时间');
+
+            $table->timestamps();
+            $table->softDeletes();
+
             $table->index('status');
-            $table->engine = 'innodb';
+            $table->engine = 'InnoDB';
         });
     }
 

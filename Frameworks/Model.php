@@ -12,7 +12,7 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model
      *
      * @var array
      */
-    protected $guarded = ['id','created_at','updated_at'];
+    protected $guarded = ['id','created_at','updated_at','deleted_at'];
 
     /**
      * 字段白名单  属性指定了哪些字段支持批量赋值 。可以设定在类的属性里或是实例化后设定。

@@ -3,23 +3,25 @@
 namespace App\Model;
 
 
-use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use PAO\Support\Facades\Schema;
 
-class Article extends Model
+class Layout extends Model
 {
     protected $table = 'layout';
 
     static public function up()
     {
-        Schema::create('layout', function($table) {
+        Schema::create('layout', function(Blueprint $table) {
             /** @var \Illuminate\Database\Schema\Blueprint $table */
             $table->string('id',48)->comment('标识');
-            $table->string('name',96)->nullable->comment('名称');
+            $table->string('name',96)->nullable()->comment('名称');
             $table->string('title',96)->nullable()->comment('标题');
             $table->mediumText('content')->nullable()->comment('内容');
-            $table->timestamp('created_at')->default(\DB::raw('CURRENT_TIMESTAMP'))->comment('创建时间');
-            $table->timestamp('updated_at')->default(\DB::raw('CURRENT_TIMESTAMP'))->comment('更新时间');
             $table->boolean('status')->default(0)->comment('0=无效,1=正常');
+
+            $table->timestamps();
+            $table->softDeletes();
 
             $table->unique('id');
             $table->index('status');

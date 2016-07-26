@@ -2,7 +2,8 @@
 
 namespace App\Model;
 
-use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use PAO\Support\Facades\Schema;
 
 class Setting extends Model
 {
@@ -13,13 +14,16 @@ class Setting extends Model
     static public function up()
     {
 
-        Schema::create('setting', function($table){
-            /** @var \Illuminate\Database\Schema\Blueprint $table */
-            $table->increments('id')->unsigned();
-            $table->string('key',24)->comment('键');
+        Schema::create('setting', function(Blueprint $table){
+            $table->increments('id');
+            $table->string('key',32)->comment('键');
             $table->string('value')->nullable()->comment('值');
 
+            $table->timestamps();
+            $table->softDeletes();
+
             $table->index('key');
+
             $table->engine = 'innodb';
         });
     }

@@ -3,6 +3,14 @@
 namespace Admin\Controller;
 
 
+use App\Model\Article;
+use App\Model\Billboard;
+use App\Model\Comment;
+use App\Model\Group;
+use App\Model\Layout;
+use App\Model\Setting;
+use App\Model\Trees;
+use App\Model\User;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Cookie;
@@ -23,19 +31,22 @@ class Index extends Controller
 
     public function index()
     {
-    /*
-        \App\Model\Admin::down();
-        \App\Model\Admin::up();
-        \App\Model\AdminGroup::down();
-        \App\Model\AdminGroup::up();
-        \App\Model\Setting::down();
-        \App\Model\Setting::up();
-        \App\Model\User::down();
-        \App\Model\User::up();
-        \App\Model\Category::down();
-        \App\Model\Category::up();
-*/
-        return Response::view('index');
+        Article::down();
+        Article::up();
+        Billboard::down();
+        Billboard::up();
+        Comment::down();
+        Comment::up();
+        Layout::down();
+        Layout::up();
+        Setting::down();
+        Setting::up();
+        Trees::down();
+        Trees::up();
+        User::down();
+        User::up();
+
+        return \Response::view('index');
     }
 
     public function test()

@@ -2,17 +2,14 @@
 
 namespace App\Model;
 
-
+use PAO\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Schema;
 
 class User extends Model
 {
 
     protected $table = 'user';
 
-    protected $casts = ['admin'=>'boolean','permission'=>'array'];
 
     public function group()
     {
@@ -54,8 +51,8 @@ class User extends Model
             $table->unique('phone');
             $table->index('pid');
             $table->index('group_id');
-            $table->index('admin');
             $table->index('status');
+
             $table->engine = 'InnoDB';
         });
     }

@@ -3,41 +3,44 @@
 namespace App\Model;
 
 
-use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use PAO\Support\Facades\Schema;
 
-class Article extends Model
+class Comment extends Model
 {
     protected $table = 'comment';
 
     public function article()
     {
-        return $this->hasOne(__NAMESPACE__.'\\Article','id','aid');
+        return $this->hasOne(__NAMESPACE__.'\\Article');
     }
 
     public function user()
     {
-        return $this->hasOne(__NAMESPACE__.'\\User','id','uid');
+        return $this->hasOne(__NAMESPACE__.'\\User');
     }
 
 
     static public function up()
     {
-        Schema::create('comment', function($table) {
-            /** @var \Illuminate\Database\Schema\Blueprint $table */
-            $table->increments('id')->unsigned();
-            $table->integer('aid')->unsigned()->default(0)->comment('文章id');
-            $table->integer('uid')->unsigned()->default(0)->comment('用户id');
-            $table->integer('pid')->unsigned()->default(0)->comment('引用用户id');
+        Schema::create('comment', function(Blueprint $table) {
+            $table->increments('id');
+            $table->unsignedInteger('pid')->default(0)->comment('引用用户id');
+            $table->unsignedInteger('user_id')->default(0)->comment('用户id');
+            $table->unsignedInteger('article_id')->default(0)->comment('文章id');
+            $table->string('email',96)->nullable()->comment('邮箱');
             $table->string('title',96)->nullable()->comment('标题');
             $table->text('content')->nullable()->comment('内容');
-            $table->timestamp('created_at')->default(\DB::raw('CURRENT_TIMESTAMP'))->comment('创建时间');
-            $table->timestamp('updated_at')->default(\DB::raw('CURRENT_TIMESTAMP'))->comment('更新时间');
             $table->boolean('status')->default(0)->comment('0=无效,1=正常');
 
+            $table->timestamps();
+            $table->softDeletes();
 
-            $table->index('aid');
-            $table->index('uid');
+            //$table->foreign('user_id')->references('id')->on('user');
+            //$table->foreign('article_id')->references('id')->on('article');
             $table->index('pid');
+            $table->index('user_id');
+            $table->index('article_id');
             $table->index('status');
             $table->engine = 'InnoDB';
         });

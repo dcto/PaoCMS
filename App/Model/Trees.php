@@ -4,7 +4,9 @@ namespace App\Model;
 
 
 
-use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use PAO\Support\Facades\Schema;
+
 
 class Trees extends Model
 {
@@ -38,9 +40,8 @@ class Trees extends Model
 
     static public function up()
     {
-        Schema::create('trees', function($table){
-            /** @var \Illuminate\Database\Schema\Blueprint $table */
-            $table->increments('id')->unsigned();
+        Schema::create('trees', function(Blueprint $table){
+            $table->increments('id');
             /*
             $table->integer('lft')->unsigned()->default(0)->comment('左');
             $table->integer('rgt')->unsigned()->default(0)->comment('右');
@@ -52,10 +53,10 @@ class Trees extends Model
             $table->string('name',96)->nullable()->comment('名称');
             $table->integer('level')->unsigned()->default(0)->comment('层级');
             $table->integer('order')->unsigned()->default(0)->comment('排序');
-            $table->timestamp('created_at')->default(\DB::raw('CURRENT_TIMESTAMP'))->comment('创建时间');
-            $table->timestamp('updated_at')->default(\DB::raw('CURRENT_TIMESTAMP'))->comment('更新时间');
             $table->boolean('status')->default(0)->comment('0=停用,1=正常');
 
+            $table->timestamps();
+            $table->softDeletes();
 
             $table->unique(array('id','pid'));
             $table->index('pid');

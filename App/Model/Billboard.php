@@ -2,21 +2,17 @@
 
 namespace App\Model;
 
-use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use PAO\Support\Facades\Schema;
 
-class Admin extends  Model
+class Billboard extends  Model
 {
 
     protected $table = 'billboard';
 
-    protected $primaryKey = 'id';
-
-    public $perPage = 10;
-
-
     static public function up()
     {
-        Schema::create(self::$table, function($table){
+        Schema::create('billboard', function(Blueprint $table){
             $table->increments('id')->unsigned();
             $table->integer('pid')->unsigned()->comment('父id');
             $table->integer('gid')->unsigned()->comment('组id');
@@ -27,9 +23,10 @@ class Admin extends  Model
             $table->string('image')->default()->comment('图片');
             $table->string('content')->default()->comment('内容');
             $table->integer('times')->unsigned()->default(0)->comment('点击次数');
-            $table->timestamp('created_at')->default(\DB::raw('CURRENT_TIMESTAMP'))->comment('创建时间');
-            $table->timestamp('updated_at')->default(\DB::raw('CURRENT_TIMESTAMP'))->comment('更新时间');
             $table->boolean('status')->default(0)->comment('0=停用,1=正常');
+
+            $table->timestamps();
+            $table->softDeletes();
 
             $table->index('pid');
             $table->index('gid');
@@ -43,7 +40,7 @@ class Admin extends  Model
 
     static public function down()
     {
-        Schema::dropIfExists(self::$table);
+        Schema::dropIfExists('billboard');
     }
 
 }
