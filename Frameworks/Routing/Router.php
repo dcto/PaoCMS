@@ -134,7 +134,7 @@ class Router
                 // Found a valid Route; process it.
                 $this->route = $route;
                 if(!$group = Arr::get($this->group,$route->group)){
-                    throw new NotFoundHttpException('The can not define '.$route->group. ' of router group');
+                    throw new NotFoundHttpException('Does not define '.$route->group. ' of router group');
                 }
                 if($callback = Arr::get($group,'call')){
                     if(is_array($callback)) {
@@ -306,17 +306,19 @@ class Router
      * @param null $key
      * @return array
      */
-    public function groups($tag = null)
+    public function groups()
     {
-        $routes = array();
-        foreach ($this->routes as $route){
-            if($tag && Arr::get($route->group, 'tag') == $tag){
-                $routes[$tag][] = $route;
-            }else{
-                $routes[Arr::get($route->group, 'tag')][] = $route;
+        $tags = func_get_args();
+        $groups = array();
+        foreach ($this->group as $tag => $group) {
+            if($tags && !in_array($tag, $tags)) continue;
+            $groups[$tag] = $group;
+            unset($groups[Arr::get($group, 'pid')]);
+            foreach ($this->routes as $route){
+                $route->group == $tag && $groups[$tag]['routes'][] = $route;
             }
         }
-        return $this->group;
+        return $groups;
     }
 
 
@@ -470,7 +472,7 @@ class Router
         if (! empty($this->groupStack)) {
             $attributes = $this->mergeGroup($attributes, end($this->groupStack));
             $attributes['pid'] = Arr::get(end($this->groupStack),'tag');
-            unset($this->group[$attributes['pid']]);
+            //unset($this->group[$attributes['pid']]);
         }
         $tag = $attributes['tag'] = Arr::get($attributes,'tag', crc32(serialize($attributes)));
         if(isset($this->group[$tag])){
