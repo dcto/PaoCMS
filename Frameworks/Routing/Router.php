@@ -127,13 +127,13 @@ class Router
         // Get the Method and Path.
         $method = $request->method();
 
-        $path = trim(urldecode($request->path()),'/');
+        $path = trim(urldecode($request->path()),'/')?:'/';
         // Execute the Routes matching loop.
         foreach ($this->routes as $route) {
             if ($this->matching($path, $method, $route)) {
                 // Found a valid Route; process it.
                 $this->route = $route;
-                if($callback = Arr::get($route->group,'call')){
+                if($callback = Arr::get($this->group[$route->group],'call')){
                     if(is_array($callback)) {
                         $this->ThroughRoute(array_shift($callback), array_shift($callback));
                     }else{
@@ -384,7 +384,6 @@ class Router
      */
     protected function register($method, $path, $property)
     {
-
         // Prepare the route Methods.
         if (is_string($method) && (strtolower($method) == 'any')) {
             $methods = static::$methods;
