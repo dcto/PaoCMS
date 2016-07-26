@@ -103,10 +103,10 @@
       <div class="col-sm-3 col-md-2 sidebar">
         <div class="sidebar-title"><i></i>{{ lang.menu.navigation }}</div>
         <div class="menu">
-          {% for mod, items in menu %}
+          {% for items in menu %}
           <div class="menu-title"><i class="icon icon-{{ items.icon }}"></i>{{ lang(items.name) }}</div>
             <ul class="menu-item">
-                {% for item in items.routes if item.hidden == false %}
+                {% for item in items.routes if item.menu == true %}
                 <li class="{{ request.is(item.pattern) ? 'active' }}"><a href="{{url(item.pattern)}}">{{ lang(item.name) }}</a><i></i></li>
                 {% endfor %}
             </ul>
