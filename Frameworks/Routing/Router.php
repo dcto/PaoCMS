@@ -490,6 +490,10 @@ class Router
 
         $new['prefix'] = static::formatGroupPrefix($new, $old);
 
+        if (isset($new['tag'])) {
+            unset($old['tag']);
+        }
+
         if (isset($new['domain'])) {
             unset($old['domain']);
         }
