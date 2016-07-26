@@ -133,7 +133,10 @@ class Router
             if ($this->matching($path, $method, $route)) {
                 // Found a valid Route; process it.
                 $this->route = $route;
-                if($callback = Arr::get($this->group[$route->group],'call')){
+                if(!$group = Arr::get($this->group,$route->group)){
+                    throw new NotFoundHttpException('The can not define '.$route->group. ' of router group');
+                }
+                if($callback = Arr::get($group,'call')){
                     if(is_array($callback)) {
                         $this->ThroughRoute(array_shift($callback), array_shift($callback));
                     }else{
