@@ -25,6 +25,12 @@ class Route
      */
     public $path;
 
+
+    /**
+     * @var $hidden boolean
+     */
+    public $menu;
+
     /**
      * @var string current route language
      */
@@ -44,11 +50,6 @@ class Route
      * @var string group name
      */
     public $group;
-
-    /**
-     * @var $hidden string
-     */
-    public $hidden;
 
     /**
      * @var string The matched HTTP method
@@ -95,6 +96,8 @@ class Route
         $this->name = Arr::get($property, 'name', $this->tag);
 
         $this->lang = Arr::get($property, 'lang')?:Arr::get($property['group'],'lang');
+
+        $this->menu = Arr::get($property, 'menu')?:Arr::get($property['group'],'menu');
 
         $this->group = $property['group']['tag'];
 
