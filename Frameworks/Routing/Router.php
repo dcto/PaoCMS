@@ -127,7 +127,7 @@ class Router
         // Get the Method and Path.
         $method = $request->method();
 
-        $path = rtrim(urldecode($request->path()),'/');
+        $path = '/'.trim(urldecode($request->path()),'/');
         // Execute the Routes matching loop.
         foreach ($this->routes as $route) {
             if ($this->matching($path, $method, $route)) {
@@ -403,7 +403,7 @@ class Router
         // Pre-process the Action information.
         $property = $this->parseAction($property);
 
-        if ($this->groupStack) {
+        if ($this->group) {
             $property['group'] = end($this->group);
         }
 
@@ -469,10 +469,10 @@ class Router
     {
         if (! empty($this->groupStack)) {
             $attributes = $this->mergeGroup($attributes, end($this->groupStack));
-            array_pop($this->group);
+            $attributes['pid'] = Arr::get(end($this->groupStack),'tag');
+            unset($this->group[$attributes['pid']]);
         }
         $tag = $attributes['tag'] = Arr::get($attributes,'tag', crc32(serialize($attributes)));
-
         if(isset($this->group[$tag])){
             throw new SystemException('The Route Group exist');
         }
@@ -493,24 +493,7 @@ class Router
 
         $new['prefix'] = static::formatGroupPrefix($new, $old);
 
-        if (isset($new['tag'])) {
-            unset($old['tag']);
-        }
-
-        if (isset($new['domain'])) {
-            unset($old['domain']);
-        }
-        /*
-        $new['where'] = array_merge(
-            isset($old['where']) ? $old['where'] : [],
-            isset($new['where']) ? $new['where'] : []
-        );
-        */
-        if (isset($old['as'])) {
-            $new['as'] = $old['as'].(isset($new['as']) ? $new['as'] : '');
-        }
-
-        return array_merge_recursive(Arr::except($old, ['namespace', 'prefix', 'where', 'as']), $new);
+        return array_replace_recursive(Arr::except($old, ['namespace', 'prefix']), $new);
     }
 
     /**
