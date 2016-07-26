@@ -127,7 +127,7 @@ class Router
         // Get the Method and Path.
         $method = $request->method();
 
-        $path = trim(urldecode($request->path()),'/')?:'/';
+        $path = trim(urldecode($request->path()),'/').'/';
         // Execute the Routes matching loop.
         foreach ($this->routes as $route) {
             if ($this->matching($path, $method, $route)) {
