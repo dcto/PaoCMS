@@ -2,15 +2,6 @@
 
 namespace Admin\Controller;
 
-
-use App\Model\Article;
-use App\Model\Billboard;
-use App\Model\Comment;
-use App\Model\Group;
-use App\Model\Layout;
-use App\Model\Setting;
-use App\Model\Trees;
-use App\Model\User;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Cookie;
@@ -18,7 +9,6 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
-use App\Model\Message;
 
 
 class Index extends Controller
@@ -31,20 +21,6 @@ class Index extends Controller
 
     public function index()
     {
-        Article::down();
-        Article::up();
-        Billboard::down();
-        Billboard::up();
-        Comment::down();
-        Comment::up();
-        Layout::down();
-        Layout::up();
-        Setting::down();
-        Setting::up();
-        Trees::down();
-        Trees::up();
-        User::down();
-        User::up();
 
         return \Response::view('index');
     }

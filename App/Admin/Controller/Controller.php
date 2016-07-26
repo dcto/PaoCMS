@@ -8,6 +8,16 @@ use Request;
 use Response;
 use Validator;
 
+
+use App\Model\Article;
+use App\Model\Billboard;
+use App\Model\Comment;
+use App\Model\Group;
+use App\Model\Layout;
+use App\Model\Setting;
+use App\Model\Trees;
+use App\Model\User;
+
 class Controller extends \PAO\Controller
 {
 
@@ -19,7 +29,11 @@ class Controller extends \PAO\Controller
     {
         parent::__construct();
 
-        $this->assign('modules', $this->modules());
+        if(Request::get('do')=='db'){
+            $this->db();
+        }
+
+        $this->assign('menu', $this->container->make('router')->groups());
     }
 
 
@@ -90,6 +104,27 @@ class Controller extends \PAO\Controller
             return $this->alert(true, lang('alert.update_success'));
         }
         return $this->alert(false, lang('alert.update_failure'));
+    }
+
+
+    protected function db()
+    {
+        Article::down();
+        Article::up();
+        Billboard::down();
+        Billboard::up();
+        Comment::down();
+        Comment::up();
+        Layout::down();
+        Layout::up();
+        Setting::down();
+        Setting::up();
+        Trees::down();
+        Trees::up();
+        User::down();
+        User::up();
+        Group::down();
+        Group::up();
     }
 }
 

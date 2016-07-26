@@ -103,15 +103,13 @@
       <div class="col-sm-3 col-md-2 sidebar">
         <div class="sidebar-title"><i></i>{{ lang.menu.navigation }}</div>
         <div class="menu">
-          {% for mod, items in modules %}
-            {% if items.route is defined %}
-          <div class="menu-title"><i class="icon icon-{{ items.icon|default() }}"></i>{{ lang(items.name) }}</div>
+          {% for mod, items in menu %}
+          <div class="menu-title"><i class="icon icon-{{ items.icon }}"></i>{{ lang(items.name) }}</div>
             <ul class="menu-item">
-                {% for path, item in items.route if item.menu is defined %}
-                <li class="{{ request.is(path) ? 'active' }}"><a href="{{url(item.menu.link?:path)}}">{{ lang(item.name) }}</a><i></i></li>
+                {% for item in items.routes if item.hidden == false %}
+                <li class="{{ request.is(item.pattern) ? 'active' }}"><a href="{{url(item.pattern)}}">{{ lang(item.name) }}</a><i></i></li>
                 {% endfor %}
             </ul>
-            {% endif %}
           {% endfor %}
         </div>
 
