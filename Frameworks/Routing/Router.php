@@ -71,6 +71,11 @@ class Router
     );
 
     /**
+     * @var array router property
+     */
+    private $property = array();
+
+    /**
      * Array of Route Groups
      *
      * @var array $groupStack
@@ -98,85 +103,20 @@ class Router
 
     public function __call($method, $params)
     {
-        $method = strtoupper($method);
-        if (($method != 'ANY') && !in_array($method, static::$methods)) {
-            throw new NotFoundHttpException('Invalid Method Of The Router');
-        }
-
-        // Get the Route.
-        $route = array_shift($params);
-
-        if (!$route || !$params) {
-            throw new NotFoundHttpException('Invalid Parameter Of The Router');
-        }
-
-        $property = array_shift($params);
-
-        // Register the Route.
-        return $this->register($method, $route, $property);
-    }
-
-    /**
-     * Dispatch route
-     * @return bool
-     */
-    public function dispatch()
-    {
-        $request = $this->container->make('request');
-
-        // Get the Method and Path.
-        $url = trim(urldecode($request->path()));
-        $method = $request->method();
-
-        // Execute the Routes matching loop.
-        foreach ($this->routes as $router) {
-            if ($this->Matching($url, $method, $router)) {
-                // Found a valid Route; process it.
-                $router->url = $url;
-                $router->method = $method;
-                $this->router = $router;
-
-                if(!$group = Arr::get($this->group, $router->group)){
-                    throw new NotFoundHttpException('Does not define '.$router->group. ' of router group');
-                }
-                if($callback = Arr::get($group,'call')){
-                    if(is_array($callback)) {
-                        $this->ThroughRoute(array_shift($callback), array_shift($callback));
-                    }else{
-                        $this->ThroughRoute($callback);
-                    }
-                }
-                return $this->ThroughRoute($router->getCallable(), $router->parameters);
+        if (($method == 'any') || in_array(strtoupper($method), static::$methods)) {
+            // Get the Route.
+            $route = array_shift($params);
+            if (!$route || !$params) {
+                throw new SystemException('Invalid Parameter Of The Router');
             }
+            $property = array_shift($params);
+
+            // Register the Route.
+           return $this->register($method, $route, $property);
+        }else{
+            throw new SystemException('Invalid Parameter Of The Method');
         }
-        // No valid Route found; send an Error 404 NotFoundHttpException Response.
-        throw new NotFoundHttpException("Can not match route of path '$url' from current url: ". $request->url());
     }
-
-
-    /*
-    private function compilerRoute($route)
-    {
-        $path = explode('/', $route->getPattern());
-
-        $params = array();
-
-        $path = array_map(function($p) use ($route){
-                if(strpos($p, ':')){
-                    //parse_str(strtr($p, ':|', '=&'), $params);
-                    //$route->setParameters($params);
-                    list($key, $val) = explode(':', $p);
-
-                    if(isset($this->regex[$key])){
-                        return  $this->regex[$key];
-                    }
-                }
-
-            return $p;
-        },$path);
-    }
-    */
-
 
     /**
      * Register many request URIs to a single Callback.
@@ -267,7 +207,15 @@ class Router
     public function router($tag = null)
     {
         if($tag){
-            return isset($this->routes[$tag]) ? $this->routes[$tag] : [];
+             if(isset($this->routes[$tag])){
+                 $this->routes[$tag];
+             }else{
+                 foreach($this->routes as $router) {
+                     if($router->tag == $tag) {
+                         return $router;
+                     }
+                 }
+             }
         }
         if(!$this->router){
             throw new NotFoundHttpException('Current route can not available.');
@@ -289,17 +237,6 @@ class Router
                 $routes[$tag] = $route;
         }
         return $routes;
-    }
-
-
-    /**
-     * set current router
-     *
-     * @param $router
-     */
-    public function setRouter($router)
-    {
-        $this->router = $router;
     }
 
     /**
@@ -340,6 +277,43 @@ class Router
             }
         }
         return $groups;
+    }
+
+    /**
+     * dispatch to the router
+     * @return bool
+     */
+    public function dispatch()
+    {
+        $request = $this->container->make('request');
+
+        // Get the Method and Path.
+        $url = trim(urldecode($request->path()));
+        $method = $request->method();
+
+        // Execute the Routes matching loop.
+        foreach ($this->routes as $router) {
+            if ($this->Matching($url, $method, $router)) {
+                // Found a valid Route; process it.
+                $router->url = $url;
+                $router->method = $method;
+                $this->router = $router;
+
+                if(!$group = Arr::get($this->group, $router->group)){
+                    throw new NotFoundHttpException('Does not define '.$router->group. ' of router group');
+                }
+                if($callback = Arr::get($group,'call')){
+                    if(is_array($callback)) {
+                        $this->ThroughRoute(array_shift($callback), array_shift($callback));
+                    }else{
+                        $this->ThroughRoute($callback);
+                    }
+                }
+                return $this->ThroughRoute($router->getCallable(), $router->parameters);
+            }
+        }
+        // No valid Route found; send an Error 404 NotFoundHttpException Response.
+        throw new NotFoundHttpException("Can not match route of path '$url' from current url: ". $request->url());
     }
 
     /**
@@ -398,7 +372,10 @@ class Router
      */
     protected function register($method, $route, $property)
     {
-        // Prepare the route Methods.
+        //Merge the property
+        //$property = array_replace_recursive($property, $this->property);
+
+        //Prepare the route Methods.
         if (is_string($method) && (strtolower($method) == 'any')) {
             $methods = static::$methods;
         } else {
@@ -422,7 +399,7 @@ class Router
 
         $property['regex'] = str_replace(array_keys($this->regex), array_values($this->regex), $route);
 
-       return $this->addPushToRoutes(new Route($methods, $route, $property));
+        return $this->addPushToRoutes($this->router = new Route($methods, $route, $property));
     }
 
 
@@ -587,4 +564,28 @@ class Router
         return array();
     }
 
+
+
+    /*
+    private function compilerRoute($route)
+    {
+        $path = explode('/', $route->getPattern());
+
+        $params = array();
+
+        $path = array_map(function($p) use ($route){
+                if(strpos($p, ':')){
+                    //parse_str(strtr($p, ':|', '=&'), $params);
+                    //$route->setParameters($params);
+                    list($key, $val) = explode(':', $p);
+
+                    if(isset($this->regex[$key])){
+                        return  $this->regex[$key];
+                    }
+                }
+
+            return $p;
+        },$path);
+    }
+    */
 }
