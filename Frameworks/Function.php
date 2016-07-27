@@ -17,6 +17,14 @@ function app($make = null, $parameters = [])
     return Container::getInstance()->make($make, $parameters);
 }
 
+/**
+ * get request url
+ * @return mixed
+ */
+function url()
+{
+    return call_user_func_array(array(app('request'), 'url'), func_get_args());
+}
 
 /**
  * get the language

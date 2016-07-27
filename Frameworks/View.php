@@ -161,22 +161,19 @@ class View
          * @example [route(alias, ['a','b'])]
          * @var [type]
          */
-        $route = new \Twig_SimpleFunction('route', array($this->container->make('route'), 'get'));
-        $twig->addFunction($route);
+        $router = new \Twig_SimpleFunction('route', array($this->container->make('router'), 'router'));
+        $twig->addFunction($router);
 
         /**
          * [获取当前 URL]
-         * @param null $do [构建 URL 参数 @=获了路由, #=根据当前控制器,控制器方法获取 url,]
+         * @param null $do [构建 URL 参数 @=获了路由, $=根据当前控制器,控制器方法获取 url,]
          * @example url('@index')
-         * @example url('#controller');
+         * @example url('$controller');
          * @example url('/index/abc');
          * @example url();
          * @return string
          */
-        $url = new \Twig_SimpleFunction('url', function($cast = null){
-            return $this->container->make('request')->url($cast);
-
-        });
+        $url = new \Twig_SimpleFunction('url',  array($this->container->make('request'), 'url'));
         $twig->addFunction('url', $url);
 
         /**
