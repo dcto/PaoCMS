@@ -5,6 +5,7 @@ namespace PAO\Http;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Container\Container;
+use PAO\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
@@ -94,20 +95,24 @@ class Request extends HttpFoundation\Request
      * @example url();
      * @return string
      */
-    public function url($cast = null)
+    public function url()
     {
-        if(is_null($cast)) return rtrim(preg_replace('/\?.*/', '', $this->getUri()), '/');
+        if(!$args = func_get_args()) return preg_replace('/\?.*/', '', $this->getUri());
 
         $baseUrl = trim($this->baseUrl(), '/').'/';
-        if($cast[0]=='@') {
-            $route = $this->container->make('route')->get(ltrim($cast, '@'));
-            return $baseUrl.trim($route, '/');
-        }else if($cast[0]=='$') {
-            $route = $this->container->make('route');
-            $url = str_replace(array('$controller', '$action'), array($route->getController(), $route->getAction()), $cast);
+        $tag = array_shift($args);
+        if($tag[0] == '@'){
+            $router = $this->container->make('router');
+            if(!$route = $router->router(ltrim($tag, '@'))) throw new NotFoundHttpException("The $tag route does not found");
+            if(!strpos($route->route,':')) return $router->route;
+            $url = preg_replace("/\([^)]+\)/", '%s', $route->route);
+            return vsprintf($url, $args);
+        }else if($tag[0]=='$'){
+            $router = $this->container->make('router')->route();
+            $url = str_replace(array('$controller','$action'), explode('@', $router->callable()), $tag);
             return $baseUrl.trim($url,'/');
         }else{
-            return $baseUrl.trim($cast, '/');
+            return $baseUrl.trim($tag, '/');
         }
     }
 

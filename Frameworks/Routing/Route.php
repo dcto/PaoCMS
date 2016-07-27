@@ -9,22 +9,20 @@ use PAO\Support\Arr;
  */
 class Route
 {
-
     /**
      * @var string tag
      */
     public $tag;
 
     /**
+     * @var string current request url
+     */
+    public $url;
+
+    /**
      * @var string
      */
     public $name;
-
-    /**
-     * @var string The current matched PathInfo
-     */
-    public $path;
-
 
     /**
      * @var $hidden boolean
@@ -40,6 +38,11 @@ class Route
      * @var string route icon for menu
      */
     public $icon;
+
+    /**
+     * @var string current route path;
+     */
+    public $route;
 
     /**
      * @var string Matching regular expression
@@ -60,11 +63,6 @@ class Route
      * @var array Supported HTTP methods
      */
     public $methods;
-
-    /**
-     * @var string URL pattern
-     */
-    public $pattern;
 
     /**
      * @var string current route callable
@@ -89,9 +87,9 @@ class Route
      * @param string $pattern URL pattern
      * @param string|array $property Callback function or options
      */
-    public function __construct($method, $pattern, $property = array())
+    public function __construct($method, $route, $property = array())
     {
-        $this->tag = Arr::get($property, 'as');
+        $this->tag = Arr::get($property, 'tag');
 
         $this->name = Arr::get($property, 'name', $this->tag);
 
@@ -99,13 +97,15 @@ class Route
 
         $this->menu = Arr::get($property, 'menu')?:Arr::get($property['group'],'menu');
 
-        $this->group = $property['group']['tag'];
+        $this->route = $route;
+
+        $this->regex =  Arr::get($property, 'regex', $this->route);
+
+        $this->group =  Arr::get(Arr::get($property, 'group'),'tag');
 
         $this->methods = array_map('strtoupper', is_array($method) ? $method : array($method));
 
-        $this->pattern = $this->parsePattern($pattern, $property);
-
-        $this->callable = Arr::get($property, 'to');
+        $this->callable = Arr::get($property, 'call');
 
         $this->namespace = Arr::get($property, 'namespace')?:Arr::get($property['group'],'namespace');
 
@@ -120,26 +120,13 @@ class Route
             throw new  NotFoundHttpException('The route property no available of to the ' . $property . ' action');
         }
 
-        if ($arguments[0]) {
+        if ($arguments) {
             $this->$property = $arguments[0];
             return $this;
         }
         return $this->$property;
     }
 
-
-    /**
-     * parse pattern of the route path
-     * @param $pattern
-     * @param $property
-     * @return string
-     */
-    private function parsePattern($pattern, $property)
-    {
-        $prefix = Arr::get($property,'prefix') ?: Arr::get($property['group'],'prefix');
-        $pattern = '/'.trim(trim($prefix,'/').'/'.trim($pattern, '/'),'/');
-        return $pattern;
-    }
 
     /**
      * get route callable

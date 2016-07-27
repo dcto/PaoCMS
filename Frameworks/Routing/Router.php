@@ -36,9 +36,9 @@ class Router
     /**
      * Matched Route, the current found Route, if any.
      *
-     * @var $route object $matched Route
+     * @var Route object $matched Route
      */
-    private $route;
+    private $router;
 
     /**
      * Array of routes
@@ -110,10 +110,10 @@ class Router
             throw new NotFoundHttpException('Invalid Parameter Of The Router');
         }
 
-        $action = array_shift($params);
+        $property = array_shift($params);
 
         // Register the Route.
-        return $this->register($method, $route, $action);
+        return $this->register($method, $route, $property);
     }
 
     /**
@@ -125,16 +125,19 @@ class Router
         $request = $this->container->make('request');
 
         // Get the Method and Path.
+        $url = trim(urldecode($request->path()));
         $method = $request->method();
 
-        $path = '/'.trim(urldecode($request->path()),'/');
         // Execute the Routes matching loop.
-        foreach ($this->routes as $route) {
-            if ($this->matching($path, $method, $route)) {
+        foreach ($this->routes as $router) {
+            if ($this->Matching($url, $method, $router)) {
                 // Found a valid Route; process it.
-                $this->route = $route;
-                if(!$group = Arr::get($this->group,$route->group)){
-                    throw new NotFoundHttpException('Does not define '.$route->group. ' of router group');
+                $router->url = $url;
+                $router->method = $method;
+                $this->router = $router;
+
+                if(!$group = Arr::get($this->group, $router->group)){
+                    throw new NotFoundHttpException('Does not define '.$router->group. ' of router group');
                 }
                 if($callback = Arr::get($group,'call')){
                     if(is_array($callback)) {
@@ -143,11 +146,11 @@ class Router
                         $this->ThroughRoute($callback);
                     }
                 }
-                return $this->ThroughRoute($route->getCallable(), $route->parameters);
+                return $this->ThroughRoute($router->getCallable(), $router->parameters);
             }
         }
         // No valid Route found; send an Error 404 NotFoundHttpException Response.
-        throw new NotFoundHttpException("Can not match route of path '$path' from current url: ". $request->url());
+        throw new NotFoundHttpException("Can not match route of path '$url' from current url: ". $request->url());
     }
 
 
@@ -247,21 +250,29 @@ class Router
      */
     public function regex($key = null, $regex = null)
     {
-        $this->regex[$key] = $regex;
+        if($regex){
+            $this->regex[$key] = $regex;
+        }else if($key){
+            return $this->regex[$key];
+        }else{
+            return $this->regex;
+        }
     }
-
 
     /**
      * return route object default return current route
      * @param null $tag
      * @return array|object|Route
      */
-    public function route($tag = null)
+    public function router($tag = null)
     {
         if($tag){
             return isset($this->routes[$tag]) ? $this->routes[$tag] : [];
         }
-        return $this->route;
+        if(!$this->router){
+            throw new NotFoundHttpException('Current route can not available.');
+        }
+        return $this->router;
     }
 
 
@@ -278,6 +289,17 @@ class Router
                 $routes[$tag] = $route;
         }
         return $routes;
+    }
+
+
+    /**
+     * set current router
+     *
+     * @param $router
+     */
+    public function setRouter($router)
+    {
+        $this->router = $router;
     }
 
     /**
@@ -320,8 +342,6 @@ class Router
         return $groups;
     }
 
-
-
     /**
      * 匹配路由
      * @param $path
@@ -329,28 +349,20 @@ class Router
      * @param $route
      * @return bool
      */
-    private function matching($path, $method, $route)
+    private function Matching($url, $method, $router)
     {
-        if (!in_array($method, $route->methods)) return false;
-
-        $route->method = $method;
-
-        $route->path = $path;
-
-        $pattern = $route->pattern;
-
-        if($pattern == $path) return true;
-
+        if (!in_array($method, $router->methods)) return false;
+        if($router->route == $url) return true;
+        /**
         if (strpos($pattern, ':')) {
             $pattern = str_replace(array_keys($this->regex), array_values($this->regex), $pattern);
         }
-
-        $regex = str_replace(array('(/', ')'), array('(?:/', ')?'), $pattern);
-        $route->regex = $regex;
+        $regex = str_replace(array('(/', ')'), array('(?:/', ')?'), $router->regex);
+         */
         //if (preg_match($reg = '#^(?:([a-z]{2})?/?)?'.$pattern.'(?:\?.*)?$#', $path, $matches)) {
-        if (preg_match('#^'.$regex.'$#', $route->path, $matches)) {
+        if (preg_match('#^'.$router->regex.'$#i', $url, $matches)) {
             array_shift($matches);
-            $route->parameters = $this->parameters($matches);
+            $router->parameters = $this->parameters($matches);
             return true;
         }
         return false;
@@ -367,7 +379,6 @@ class Router
         if($callback instanceof Response){
             return $callback;
         }
-
         if($callback instanceof  \Closure){
             return call_user_func($callback, $parameters);
         }
@@ -386,7 +397,7 @@ class Router
      * @param string $route URL pattern to match
      * @param callback $callback Callback object
      */
-    protected function register($method, $path, $property)
+    protected function register($method, $route, $property)
     {
         // Prepare the route Methods.
         if (is_string($method) && (strtolower($method) == 'any')) {
@@ -398,7 +409,7 @@ class Router
         }
 
         if(!$property){
-            throw new SystemException('Invalid route parameter of the '.$path);
+            throw new SystemException('Invalid route parameter of the '.$route);
         }
 
         // Pre-process the Action information.
@@ -408,7 +419,11 @@ class Router
             $property['group'] = end($this->group);
         }
 
-       return $this->addPushToRoutes(new Route($methods, $path, $property));
+        $route = $this->parseRoute($route, $property);
+
+        $property['regex'] = str_replace(array_keys($this->regex), array_values($this->regex), $route);
+
+       return $this->addPushToRoutes(new Route($methods, $route, $property));
     }
 
 
@@ -416,18 +431,30 @@ class Router
      * addPushRoute
      * @param $route
      */
-    protected function addPushToRoutes(Route $route)
+    protected function addPushToRoutes(Route $router)
     {
-        $tag = $route->tag;
-        if($tag && isset($this->routes[$tag])){
-            throw new SystemException("The route name [$tag] was exist");
+        if($tag = $router->tag){
+            if(isset($this->routes[$tag])){
+                throw new SystemException("The route name [$tag] exist");
+            }
+           return $this->routes[$tag] = $router;
         }
-        if($tag){
-           return $this->routes[$tag] = $route;
-        }
-        return $this->routes[] = $route;
+        return $this->routes[] = $router;
     }
 
+
+    /**
+     * parse pattern of the route path
+     * @param $pattern
+     * @param $property
+     * @return string
+     */
+    private function parseRoute($route, $property)
+    {
+        $prefix = Arr::get($property,'prefix') ?: Arr::get($property['group'],'prefix');
+        $route = '/'.trim(trim($prefix,'/').'/'.trim($route, '/'),'/');
+        return $route;
+    }
 
     /**
      * Parse the Route Action into a standard array.
@@ -439,13 +466,14 @@ class Router
     {
         if (is_string($property) || is_callable($property)) {
             // A string or Closure is given as Action.
-            return array('to' => $property);
-        } else if(!isset($property['to'])) {
+            return array('call' => $property);
+        } else if(!isset($property['call'])) {
             // Find the Closure in the Action array.
-            $property['to'] = $this->findClosure($property);
+            $property['call'] = $this->findClosure($property);
         }
         return $property;
     }
+
 
     /**
      * Find the Closure in an action array.
