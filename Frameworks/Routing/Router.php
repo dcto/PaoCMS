@@ -252,33 +252,32 @@ class Router
 
 
     /**
-     * Return current route
-     *
-     * @return object
+     * return route object default return current route
+     * @param null $tag
+     * @return array|object|Route
      */
-    public function route()
+    public function route($tag = null)
     {
+        if($tag){
+            return isset($this->routes[$tag]) ? $this->routes[$tag] : [];
+        }
         return $this->route;
     }
 
 
     /**
-     * Return the available Routes.
-     *
+     * return routes array access current params route name
      * @return array
      */
-    public function routes($group = null)
+    public function routes()
     {
-        if($group){
-            $routes = array();
-            foreach ($this->routes as $route) {
-                if($route->group == $group){
-                    $route->tag ? $routes[$route->tag] = $route : $routes[] = $route;
-                }
-            }
-            return $routes;
+        $tags = func_get_args();
+        $routes = array();
+        foreach ($this->routes as $tag => $route) {
+            if($tags && !in_array($tag, $tags, true)) continue;
+                $routes[$tag] = $route;
         }
-        return $this->routes;
+        return $routes;
     }
 
     /**
