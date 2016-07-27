@@ -2,21 +2,34 @@
 Router::group(['prefix'=>'/', 'namespace'=>'Admin\Controller'], function(){
 
     Router::get('/', 'Index@index');
+    Router::get('/access/login', 'Index@index')->tag('login');
+    Router::get('/access/logout', 'Index@index')->tag('logout');
 
-
-    Router::group(['tag'=>'user', 'name'=>'会员', 'icon'=>'user', 'prefix'=>'/user', 'menu'=>true], function(){
-        Router::get('/','User@index')->tag('user')->name('会员列表');
-        Router::any('/create','User@create')->tag('user_create')->name('创建会员');
-        Router::any('/update','User@update')->tag('user_update')->name('修改会员');
-        Router::get('/delete','User@delete')->tag('user_delete')->name('删除会员');
+    Router::group(['tag'=>'article', 'name'=>'menu.article', 'icon'=>'file', 'prefix'=>'/article'], function(){
+        Router::get('/','Group@index')->tag('article')->name('menu.article')->menu('true');;
+        Router::any('/create','Article@create')->tag('article_create')->name('menu.article_create')->menu(true);
+        Router::any('/update','Article@update')->tag('article_update')->name('menu.article_update');
+        Router::get('/delete','Article@delete')->tag('article_delete')->name('menu.article_delete');
     });
 
-    Router::group(['tag'=>'group', 'name'=>'组', 'icon'=>'group', 'prefix'=>'/group'], function(){
-        Router::get('/','Group@index')->tag('group')->name('组列表');
-        Router::any('/create','Group@create')->tag('group_create')->name('创建组');
-        Router::any('/update','Group@update')->tag('group_update')->name('修改组');
-        Router::get('/delete','Group@delete')->tag('group_delete')->name('删除组');
+    Router::group(['tag'=>'trees', 'name'=>'menu.trees', 'icon'=>'th-list', 'prefix'=>'/trees'], function(){
+        Router::get('/','Group@index')->tag('trees')->name('文章表');
+        Router::any('/create','Trees@create')->tag('trees_create')->name('menu.trees_create')->menu(true);
+        Router::any('/update','Trees@update')->tag('trees_update')->name('menu.trees_update');
+        Router::get('/delete','Trees@delete')->tag('trees_delete')->name('menu.trees_delete');
     });
 
+    Router::group(['tag'=>'user', 'name'=>'menu.user', 'icon'=>'user', 'prefix'=>'/user'], function(){
+        Router::get('/','User@index')->tag('user')->name('menu.user')->menu('true');
+        Router::any('/create','User@create')->tag('user_create')->name('menu.user_create')->menu(true);
+        Router::any('/update','User@update')->tag('user_update')->name('menu.user_update');
+        Router::get('/delete','User@delete')->tag('user_delete')->name('menu.user_delete');
+    });
 
+    Router::group(['tag'=>'group', 'name'=>'menu.group', 'icon'=>'group', 'prefix'=>'/group'], function(){
+        Router::get('/','Group@index')->tag('group')->name('menu.group')->menu('true');;
+        Router::any('/create','Group@create')->tag('group_create')->name('menu.group_create')->menu(true);
+        Router::any('/update','Group@update')->tag('group_update')->name('menu.group_update');
+        Router::get('/delete','Group@delete')->tag('group_delete')->name('menu.group_delete');
+    });
 });
