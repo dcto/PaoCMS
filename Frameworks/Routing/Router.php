@@ -386,8 +386,7 @@ class Router
         if(strpos($callback, '@')){
             return $this->container->call($callback, $parameters);
         }
-
-        throw new NotFoundHttpException('Invalid Route Target '.$callback. ' in '.static::$route->path() .' Of Your Route');
+        throw new NotFoundHttpException("Invalid Route Target [$callback] in {$this->router->route} Of Your Route");
     }
 
     /**
