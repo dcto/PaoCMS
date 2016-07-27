@@ -107,7 +107,7 @@
           <div class="menu-title"><i class="icon icon-{{ items.icon }}"></i>{{ lang(items.name) }}</div>
             <ul class="menu-item">
                 {% for item in items.routes if item.menu == true %}
-                <li class="{{ request.is(item.pattern) ? 'active' }}"><a href="{{url(item.pattern)}}">{{ lang(item.name) }}</a><i></i></li>
+                <li class="{{ request.is(item.route) ? 'active' }}"><a href="{{url(item.route)}}">{{ lang(item.name) }}</a><i></i></li>
                 {% endfor %}
             </ul>
           {% endfor %}
