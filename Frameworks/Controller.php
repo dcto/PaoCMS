@@ -42,7 +42,7 @@ abstract class Controller
     {
         $this->container = Container::getInstance();
 
-        $this->route = $this->container->make('router')->route();
+        $this->route = $this->container->make('router')->router();
 
         list($this->controller, $this->action) = explode('@',$this->route->callable);
 

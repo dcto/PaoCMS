@@ -2,8 +2,8 @@
 Router::group(['prefix'=>'/', 'namespace'=>'Admin\Controller'], function(){
 
     Router::get('/', 'Index@index');
-    Router::get('/access/login', 'Index@index')->tag('login');
-    Router::get('/access/logout', 'Index@index')->tag('logout');
+    Router::get('/access/login', ['tag'=>'login', 'call'=>'Index@index']);
+    Router::get('/access/logout', ['tag'=>'logout', 'call'=>'Index@index']);
 
     Router::group(['tag'=>'article', 'name'=>'menu.article', 'icon'=>'file', 'prefix'=>'/article'], function(){
         Router::get('/','Group@index')->tag('article')->name('menu.article')->menu('true');;
