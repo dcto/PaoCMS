@@ -207,7 +207,15 @@ class Router
     public function router($tag = null)
     {
         if($tag){
-            return isset($this->routes[$tag]) ? $this->routes[$tag] : [];
+             if(isset($this->routes[$tag])){
+                 $this->routes[$tag];
+             }else{
+                 foreach($this->routes as $router) {
+                     if($router->tag == $tag) {
+                         return $router;
+                     }
+                 }
+             }
         }
         if(!$this->router){
             throw new NotFoundHttpException('Current route can not available.');
