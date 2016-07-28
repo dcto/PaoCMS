@@ -13,7 +13,7 @@ class User extends Model
 
     public function group()
     {
-        return $this->hasOne(__NAMESPACE__.'\\Group');
+        return $this->hasOne(__NAMESPACE__.'\\Group','id');
     }
 
     static public function up()

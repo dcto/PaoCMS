@@ -25,6 +25,8 @@ class Controller extends \PAO\Controller
 
     protected $message = 'error';
 
+    protected $language;
+
     public function __construct()
     {
         parent::__construct();
@@ -32,6 +34,8 @@ class Controller extends \PAO\Controller
         if(Request::get('do')=='db'){
             $this->db();
         }
+
+        $this->container->make('lang')->setLang($this->route->lang()?:config('config.language'));
 
         $this->assign('menu', $this->container->make('router')->groups());
     }
