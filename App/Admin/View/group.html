@@ -25,12 +25,12 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for mod in modules %}
+                            {% for mod in menu %}
                             <tr>
                                 <th class="info">{{ lang(mod.name) }}</th>
                                 <td>
-                                    {% for route, val in mod.route %}
-                                        {{ forms.checkbox(route, 0, lang(val.name)) }}
+                                    {% for route in mod.routes %}
+                                        {{ forms.checkbox(route.tag, 0, lang(route.name)) }}
                                     {% endfor %}
                                 </td>
                                 <td class="text-center"><div class="checkbox"><input id="selectAll-{{ loop.index }}" type="checkbox" onclick="$(this).parents('tr').find('input[type=checkbox]').prop('checked', this.checked);" /><label for="selectAll-{{ loop.index }}"></label></div></td>

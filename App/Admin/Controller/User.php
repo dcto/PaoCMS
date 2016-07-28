@@ -45,7 +45,7 @@ class User extends Controller
      */
 	public function create(Request $request, Response $response)
 	{
-        if(!$request->isMethod('POST')) return $response->redirect(url('@user').'#create');
+        if(!$request->isMethod('POST')) return $response->url(url('@user').'#create');
         $admin = $request->all();
         if(!$this->checkForm($admin)) return $this->alert();
             $user = \App\Model\User::whereUsername($request->get('username'))->first();
