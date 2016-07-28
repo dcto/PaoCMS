@@ -104,13 +104,13 @@ class Request extends HttpFoundation\Request
         if($tag[0] == '@'){
             $router = $this->container->make('router');
             if(!$route = $router->router(ltrim($tag, '@'))) throw new NotFoundHttpException("The $tag route does not found");
-            if(!strpos($route->route(),':')) return $baseUrl.trim($route->route().'/');
+            if(!strpos($route->route(),':')) return $baseUrl.trim($route->route(), '/');
             $url = preg_replace("/\([^)]+\)/", '%s', $route->route);
             return $baseUrl.trim(vsprintf($url, $args));
         }else if($tag[0]=='$'){
             $router = $this->container->make('router')->route();
             $url = str_replace(array('$controller','$action'), explode('@', $router->callable()), $tag);
-            return $baseUrl.trim($url,'/');
+            return $baseUrl.trim($url, '/');
         }else{
             return $baseUrl.trim($tag, '/');
         }
