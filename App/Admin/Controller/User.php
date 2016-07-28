@@ -44,6 +44,7 @@ class User extends Controller
      */
 	public function create(Request $request)
 	{
+        if(!$request->isMethod('POST')) return \Response::redirect(url('@user').'#create');
         $admin = $request->all();
         if(!$this->checkForm($admin)) return $this->alert();
             $user = \App\Model\User::whereUsername($request->get('username'))->first();
@@ -108,7 +109,7 @@ class User extends Controller
         if(!$id) throw new NotFoundHttpException(lang('alert.404'));
         $user = \App\Model\User::with('group')->find($id)->toArray();
 
-        return Response::Json($user);
+        return \Response::Json($user);
 	}
 
     /**
