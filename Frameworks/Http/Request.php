@@ -106,7 +106,7 @@ class Request extends HttpFoundation\Request
             if(!$route = $router->router(ltrim($tag, '@'))) throw new NotFoundHttpException("The $tag route does not found");
             if(!strpos($route->route(),':')) return $route->route();
             $url = preg_replace("/\([^)]+\)/", '%s', $route->route);
-            return vsprintf($url, $args);
+            return $baseUrl.vsprintf($url, $args);
         }else if($tag[0]=='$'){
             $router = $this->container->make('router')->route();
             $url = str_replace(array('$controller','$action'), explode('@', $router->callable()), $tag);
