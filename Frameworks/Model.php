@@ -178,4 +178,94 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model
 
     }
 
+
+    protected function seeder()
+    {
+$sql=<<<EOF
+DROP PROCEDURE IF EXISTS SEEDER;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SEEDER`(IN db_name varchar(255), IN table_name varchar(255), IN rows bigint(255))
+MAIN:BEGIN
+
+declare v_maxcol integer;
+	declare v_sql longtext;
+	declare i integer;
+ 
+	set @max=null;
+	set @v_sql=null;
+	set @success =-1;
+ 
+	-- check parameters
+	if db_name is null or table_name is null or rows is null or rows <=0 then
+		leave main;
+	elseif rows >50000000 then
+		set rows =50000000;
+	end if;
+	
+	-- get columns number
+	select max(ordinal_position) into v_maxcol from information_schema.columns t where t.table_schema=db_name and t.table_name=table_name;
+	if v_maxcol is null then leave main; end if;
+ 
+	-- query maximum value of primary key or unique key
+	select concat('select greatest(0,',group_concat(newcol separator ','),') from ',db_name,'.',table_name,' into @max') into v_sql from(
+		select concat('max(',column_name,')') newcol
+		from information_schema.columns t 
+		where t.table_schema=db_name and t.table_name =table_name
+			and data_type in('int','bigint','decimal','double','float','TINYINT') and column_key in('PRI','UNI')
+	) t1;
+ 
+	if v_sql is not null then
+		set @v_sql =v_sql;
+		prepare statm from @v_sql;
+		execute statm;
+	end if;
+	if @max is null then set @max=0; end if;
+ 
+	-- build insert statement
+	set v_sql =concat('insert into ',db_name,'.',table_name);
+	set v_sql =concat(v_sql,' select ');
+	-- transform random value from columns to one row data
+	set i=1;
+	while i <=v_maxcol do
+		set v_sql =concat(v_sql,'max(case when ordinal_position=',i,' then cdata end) cdata',i,',');
+		set i =i+1;
+	end while;
+	-- build random value for every column
+	set v_sql =concat(substr(v_sql,1,length(v_sql)-1),' from(
+	SELECT ordinal_position,
+	    case when column_key in(''PRI'',''UNI'') then @max
+				when data_type in(''int'',''tinyint'',''smallint'',''bigint'',''decimal'',''double'',''float'') then rand()*power(10,
+					case when numeric_precision-numeric_scale-1>9 then 9 else numeric_precision-numeric_scale-1 end)
+				when data_type in(''char'',''varchar'') then concat(''X'',floor(rand()*power(10,
+					case when t.character_maximum_length-1>30 then 30 else t.character_maximum_length-1 end)))
+				when data_type in(''timestamp'',''datetime'',''date'',''time'') then now()
+	    	else null
+	    end cdata
+	FROM information_schema.columns t
+	WHERE table_schema =''',db_name,''' AND table_name =''',table_name,''' order by 1) a');
+	set @v_sql =v_sql;
+	prepare statm from @v_sql;
+ 
+	-- loop insert with transaction per 10000 rows
+	set i=1;
+	start transaction;
+	while i <=rows do
+		set @max=@max+1;
+		execute statm;
+		set i =i+1;
+		if mod(i,10000)=0 then commit;start transaction;end if;
+	end while;
+	commit;
+ 
+	-- release resource
+	deallocate prepare statm;
+	
+	-- select @v_sql;
+ 
+	set @success =0;
+
+END;
+EOF;
+        return $sql;
+    }
+
 }
