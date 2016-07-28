@@ -52,7 +52,7 @@ function config()
  * @param array $header
  * @return mixed
  */
-function response($content, $status = 200, $header = array())
+function response($content = '', $status = 200, $header = array())
 {
     return app('response')->make($content, $status, $header);
 }
