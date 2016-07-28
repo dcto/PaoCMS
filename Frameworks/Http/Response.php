@@ -5,11 +5,10 @@ namespace PAO\Http;
 
 use Illuminate\Container\Container;
 use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Support\Traits\Macroable;
 use Symfony\Component\HttpFoundation;
 
-class Response implements  ResponseFactory
+class Response
 {
     use Macroable;
 
@@ -182,6 +181,19 @@ class Response implements  ResponseFactory
         return $this->json($data, $status, $headers)->setCallback($callback);
     }
 
+    /**
+     * [redirect 跳转 别名]
+     *
+     * @param       $url [地址]
+     * @param int   $status [状态值]
+     * @param array $headers [header]
+     * @return HttpFoundation\RedirectResponse
+     * @author 11.
+     */
+    public function url($url, $status = 302, $headers = [])
+    {
+        return $this->redirect($url, $status, $headers);
+    }
 
     /**
      * [stream 数据流响应]
@@ -235,17 +247,6 @@ class Response implements  ResponseFactory
 
         return $this;
     }
-
-    public function redirectTo($path, $status = 302, $headers = [], $secure = null){}
-
-    public function redirectToRoute($route, $parameters = [], $status = 302, $headers = []){}
-
-    public function redirectToAction($action, $parameters = [], $status = 302, $headers = []){}
-
-    public function redirectGuest($path, $status = 302, $headers = [], $secure = null){}
-
-    public function redirectToIntended($default = '/', $status = 302, $headers = [], $secure = null){}
-
 
     /**
      * [__call]
