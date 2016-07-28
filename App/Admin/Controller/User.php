@@ -4,6 +4,7 @@ namespace Admin\Controller;
 
 use PAO\Exception\NotFoundHttpException;
 use PAO\Http\Request;
+use PAO\Http\Response;
 
 class User extends Controller
 {
@@ -42,9 +43,9 @@ class User extends Controller
      * [create创建]
      * @return mixed
      */
-	public function create(Request $request)
+	public function create(Request $request, Response $response)
 	{
-        if(!$request->isMethod('POST')) return \Response::redirect(url('@user').'#create');
+        if(!$request->isMethod('POST')) return $response->redirect(url('@user').'#create');
         $admin = $request->all();
         if(!$this->checkForm($admin)) return $this->alert();
             $user = \App\Model\User::whereUsername($request->get('username'))->first();
