@@ -59,7 +59,7 @@ function response($content = '', $status = 200, $header = array())
 
 
 /**
- * view
+ * view response
  * @param $view
  * @param array $data
  * @param int $status
@@ -69,4 +69,28 @@ function response($content = '', $status = 200, $header = array())
 function view($view, array $data = [], $status = 200, array $headers = [])
 {
     return app('response')->view($view, $data, $status, $headers);
+}
+
+/**
+ * json response
+ * @param array $data
+ * @param int $status
+ * @param array $headers
+ * @return mixed
+ */
+function json($data = [], $status = 200, array $headers = [])
+{
+    return app('response')->json($data, $status, $headers);
+}
+
+/**
+ * redirect to url
+ * @param $url
+ * @param int $status
+ * @param array $headers
+ * @return mixed
+ */
+function redirect($url, $status = 302, $headers = [])
+{
+    return app('response')->redirect($url, $status, $headers);
 }
