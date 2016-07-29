@@ -13,7 +13,7 @@ Router::group(['prefix'=>'/', 'namespace'=>'Admin\Controller'], function(){
     });
 
     Router::group(['tag'=>'trees', 'name'=>'menu.trees', 'icon'=>'th-list', 'prefix'=>'/trees'], function(){
-        Router::get('/','Group@index')->tag('trees')->name('文章表');
+        Router::get('/','Trees@index')->tag('trees')->name('menu.trees')->menu(true);
         Router::any('/create','Trees@create')->tag('trees_create')->name('menu.trees_create')->menu(true);
         Router::any('/update','Trees@update')->tag('trees_update')->name('menu.trees_update');
         Router::any('/delete','Trees@delete')->tag('trees_delete')->name('menu.trees_delete');
