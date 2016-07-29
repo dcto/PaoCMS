@@ -75,7 +75,7 @@
                         <td>{{v.id}}</td>
                         <td>{{v.name}}</td>
                         <td>{{v.nickname}}</td>
-                        <td>{{forms.status(v.status)}}</td>
+                        <td>{{forms.status(v.status, v.id)}}</td>
                         <td class="text-center">{{forms.operate(v.id, v.name)}}</td>
                     </tr>
                 {%endfor%}
