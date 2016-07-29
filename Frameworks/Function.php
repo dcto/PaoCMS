@@ -44,6 +44,14 @@ function config()
     return call_user_func_array(array(app('config'), 'get'), func_get_args());
 }
 
+/**
+ * request object
+ * @return object
+ */
+function request()
+{
+    return app('request');
+}
 
 /**
  * response
