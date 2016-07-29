@@ -15,12 +15,6 @@ class Group extends Model
 
     protected $casts = ['permission'=>'array'];
 
-
-    public function getPermissionAttribute()
-    {
-        return is_array($this->attributes['permission']) ? $this->attributes['permission'] : array();
-    }
-
     public function users()
     {
         return $this->belongsTo(__NAMESPACE__.'\\User');

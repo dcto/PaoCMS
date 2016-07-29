@@ -67,7 +67,7 @@ class Group extends Controller
         if(!$id = $request->get('id')) throw new NotFoundHttpException;
 
         $group = \App\Model\Group::find($id)->toArray();
-        $group = array_merge($group, $group['permission']);
+        $group = array_merge($group, (array) $group['permission']);
         unset($group['permission']);
         return \Response::Json($group);
     }

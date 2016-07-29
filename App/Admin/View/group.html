@@ -7,7 +7,7 @@
 <div class="row tab-content">
     <!--TAB create-->
     <div id="create" class="tab-pane col-md-10 col-center">
-                        <form class="form-horizontal" action="{{url('@group-create')}}">
+                        <form class="form-horizontal" action="{{url('@group_create')}}">
                             <fieldset>
                                 {{ forms.text('name') }}
                                 {{ forms.text('nickname') }}
@@ -50,7 +50,7 @@
 
     <!--TAB update-->
     <div id="update" class="tab-pane col-md-10 col-center">
-            <form action="{{url('@group-update')}}" class="form-horizontal"></form>
+            <form action="{{url('@group_update')}}" class="form-horizontal"></form>
     </div>
     <!--TAB update end-->
 
