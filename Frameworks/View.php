@@ -279,7 +279,7 @@ class View
      */
     public function render($template, $variables)
     {
-        $template = $template . $this->container->config('template.suffix');
+        $template = $template . $this->container->config('template.append');
 
         $variables = array_merge($this->variables, $variables);
         try {
