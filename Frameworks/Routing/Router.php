@@ -208,7 +208,7 @@ class Router
     {
         if($tag){
              if(isset($this->routes[$tag])){
-                 $this->routes[$tag];
+                 return $this->routes[$tag];
              }else{
                  foreach($this->routes as $router) {
                      if($router->tag == $tag) {
@@ -216,6 +216,7 @@ class Router
                      }
                  }
              }
+            throw new NotFoundHttpException('Can not found the ['.$tag. '] router.');
         }
         if(!$this->router){
             throw new NotFoundHttpException('Current route can not available.');
