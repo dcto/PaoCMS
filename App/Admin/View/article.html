@@ -12,7 +12,7 @@
 <div class="row tab-content">
     <!--TAB create-->
     <div id="create" class="tab-pane">
-            <form class="form-horizontal form-group-sm" action="{{url('@article-create')}}">
+            <form class="form-horizontal form-group-sm" action="{{url('@article_create')}}">
                 <fieldset>
                     <legend>{{ lang.menu.article_create }}</legend>
                     {{ forms.text('title',4) }}
@@ -32,7 +32,7 @@
 
     <!--TAB update-->
     <div id="update" class="tab-pane">
-            <form action="{{url('@article-update')}}" class="form-horizontal"></form>
+            <form action="{{url('@article_update')}}" class="form-horizontal"></form>
     </div>
     <!--TAB update end-->
 
@@ -44,11 +44,7 @@
             <thead>
             <tr>
                 <th><input type="checkbox" /></th>
-                <th>{{lang.id}}</th>
-                <th>{{lang.articlename}}</th>
-                <th>{{lang.menu.group}}</th>
-                <th>{{lang.email}}</th>
-                <th>{{lang.times}}</th>
+                <th>{{lang.title}}</th>
                 <th>{{lang.created_at}}</th>
                 <th>{{lang.updated_at}}</th>
                 <th>{{lang.status}}</th>
@@ -61,13 +57,6 @@
             {% for v in list %}
                 <tr>
                     <td><input name="id[]" type="checkbox" value="{{v.id}}"/></td>
-                    <td>{{v.id}}</td>
-                    <td>{{v.articlename}}</td>
-                    <td>{{v.group.name|default }}</td>
-                    <td>{{v.email}}</td>
-                    <td>{{v.times}}</td>
-                    <td>{{v.created_at}}</td>
-                    <td>{{v.updated_at}}</td>
                     <td>{{forms.status(v.status, v.id)}}</td>
                     <td class="text-center">{{forms.operate(v.id, v.articlename)}}</td>
                 </tr>
