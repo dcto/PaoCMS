@@ -304,9 +304,12 @@ class Router
                 }
                 if($callback = Arr::get($group,'call')){
                     if(is_array($callback)) {
-                        $this->ThroughRoute(array_shift($callback), array_shift($callback));
+                        $callback = $this->ThroughRoute(array_shift($callback), array_shift($callback));
                     }else{
-                        $this->ThroughRoute($callback);
+                        $callback = $this->ThroughRoute($callback);
+                    }
+                    if($callback instanceof Response){
+                        return $callback;
                     }
                 }
                 return $this->ThroughRoute($router->getCallable(), $router->parameters);
@@ -478,9 +481,11 @@ class Router
             //unset($this->group[$attributes['pid']]);
         }
         $tag = $attributes['tag'] = Arr::get($attributes,'tag', crc32(serialize($attributes)));
+        /*
         if(isset($this->group[$tag])){
             throw new SystemException('The Route Group exist');
         }
+        */
 
         $this->group[$tag] = $this->groupStack[] = $attributes;
     }
