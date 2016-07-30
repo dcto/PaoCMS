@@ -13,7 +13,7 @@ class Article extends Controller
     {
         $this->assign('title', lang('menu.article'));
 
-        return view('article');
+        return view('admin/article');
     }
 
 

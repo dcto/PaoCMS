@@ -26,7 +26,7 @@ class User extends Controller
             $assign['list'] = \App\Model\User::with('group')->paginate(config('config.page'));
         }
             $assign['group'] = \App\Model\Group::all();
-	 	return view('user', $assign);
+	 	return view('admin/user', $assign);
 	}
 
     /**
@@ -36,7 +36,7 @@ class User extends Controller
     public function detail(Request $request)
     {
         $id = $request->get('id');
-        return view('user');
+        return view('admin/user');
     }
 
     /**
@@ -111,7 +111,7 @@ class User extends Controller
         if(!$id) throw new NotFoundHttpException(lang('alert.404'));
         $user = \App\Model\User::with('group')->find($id)->toArray();
 
-        return \Response::Json($user);
+        return json($user);
 	}
 
     /**

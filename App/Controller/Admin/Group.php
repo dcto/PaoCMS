@@ -15,7 +15,7 @@ class Group extends Controller
     {
         $this->assign('title', lang('menu.group'));
         $var['group'] = \App\Model\Group::all();
-        return view('group', $var);
+        return view('admin/group', $var);
     }
 
 
