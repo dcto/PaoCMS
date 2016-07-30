@@ -151,7 +151,7 @@ class View
            if(Str::startsWith($path, '/')){
                return $url.str_replace('//','/', trim($path, '/'));
            }else{
-               return $url.str_replace('//', '/', trim(strtolower(basename(APP)).'/'.$path, '/'));
+               return $url.str_replace('//', '/', trim(strtolower(NAME).'/'.$path, '/'));
            }
         });
         $twig->addFunction($asset);
