@@ -1,7 +1,7 @@
-{% extends 'layout.html' %}
+{% extends 'admin/layout.html' %}
 {% block content%}
     <!--TAB Panel start -->
-    {% include 'header.html' with {'search':{'w':''}} %}
+    {% include 'admin/header.html' with {'search':{'w':''}} %}
     <!--TAB Panel end -->
 <div class="row tab-content">
     <!--TAB create-->
@@ -67,7 +67,7 @@
             </tbody>
         </table>
         </div>
-        {% include "footer.html" %}
+        {% include "admin/footer.html" %}
     </div>
     <!--TAB index end-->
 
