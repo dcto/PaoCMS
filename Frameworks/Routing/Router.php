@@ -479,7 +479,7 @@ class Router
         }
         $tag = $attributes['tag'] = Arr::get($attributes,'tag', crc32(serialize($attributes)));
         if(isset($this->group[$tag])){
-            throw new SystemException('The Route Group exist');
+            //throw new SystemException('The Route Group exist');
         }
 
         $this->group[$tag] = $this->groupStack[] = $attributes;

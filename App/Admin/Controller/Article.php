@@ -3,6 +3,9 @@
 namespace Admin\Controller;
 
 
+use PAO\Http\Request;
+use PAO\Http\Response;
+
 class Article extends Controller
 {
 
@@ -14,10 +17,9 @@ class Article extends Controller
     }
 
 
-    public function create()
+    public function create(Request $request, Response $response)
     {
-
-        return $this->alert();
+        if(!$request->isMethod('post')) return $response->url(url('@article').'#create');
 
     }
 

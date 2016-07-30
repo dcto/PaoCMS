@@ -69,7 +69,7 @@ class Group extends Controller
         $group = \App\Model\Group::find($id)->toArray();
         $group = array_merge($group, (array) $group['permission']);
         unset($group['permission']);
-        return \Response::Json($group);
+        return json($group);
     }
 
     /**

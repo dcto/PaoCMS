@@ -41,9 +41,9 @@ class Controller extends \PAO\Controller
     }
 
 
-    protected function auth()
+    public function Access()
     {
-        return new Response('未登陆');
+         echo 'd';die;
     }
 
     /**
