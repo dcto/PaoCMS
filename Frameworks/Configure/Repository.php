@@ -172,23 +172,14 @@ class Repository implements ArrayAccess, ConfigContract
     {
         $key = trim($key,'.');
         $name = trim(strstr($key,'.') ? strstr($key, '.', true) : $key);
-        $PaoConfig = PAO.DIRECTORY_SEPARATOR.'Config'.DIRECTORY_SEPARATOR.strtolower($name).'.php';
-        $AppConfig = APP.DIRECTORY_SEPARATOR.'Config'.DIRECTORY_SEPARATOR.strtolower($name).'.php';
+        $PaoConfig = PAO.DIRECTORY_SEPARATOR.'.'.$name;
+        $AppConfig = APP.DIRECTORY_SEPARATOR.'Config'.DIRECTORY_SEPARATOR.$name.'.php';
 
-        $Config = array();
+        if(is_readable($AppConfig)) require($AppConfig);
+        if(is_readable($PaoConfig)) require($PaoConfig);
 
-        if(is_readable($PaoConfig)){
-            $Config = (array) require($PaoConfig);
-        }
+        $this->set($name, $$name);
 
-        if(is_readable($AppConfig))
-        {
-            $Config = array_replace_recursive($Config, (array) require($AppConfig));
-        }else{
-
-        }
-        $this->set($name, $Config);
-
-        return $Config;
+        return $$name;
     }
 }

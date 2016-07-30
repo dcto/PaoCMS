@@ -133,20 +133,20 @@ class Translator
 
         $language = $language ? $this->language = $language : $this->language;
 
-        $PaoLanguage = PAO.DIRECTORY_SEPARATOR.'Language'.DIRECTORY_SEPARATOR.$language.'.ini';
         $AppLanguage = APP.DIRECTORY_SEPARATOR.'Language'.DIRECTORY_SEPARATOR.$language.'.ini';
+
+        $SubLanguage = APP.DIRECTORY_SEPARATOR.'Language'.DIRECTORY_SEPARATOR.NAME.DIRECTORY_SEPARATOR.$language.'.ini';
+
         $readable = false;
 
-        if(is_readable($PaoLanguage))
-        {
-            $this->items = (array) parse_ini_file($PaoLanguage, true);
-
+        if(is_readable($AppLanguage)){
+            $this->items = (array) parse_ini_file($AppLanguage, true);
             $readable = true;
         }
 
-        if(is_readable($AppLanguage))
+        if(is_readable($SubLanguage))
         {
-            $this->items = array_replace_recursive($this->items, (array) parse_ini_file($AppLanguage, true));
+            $this->items = array_replace_recursive($this->items, (array) parse_ini_file($SubLanguage, true));
 
             $readable = true;
         }

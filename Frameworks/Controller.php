@@ -3,7 +3,6 @@
 namespace PAO;
 
 use Illuminate\Container\Container;
-use PAO\Routing\Route;
 
 
 abstract class Controller
@@ -32,21 +31,14 @@ abstract class Controller
      */
     protected $assign = [];
 
-    /**
-     * @var Route
-     */
-    protected $route;
-
 
     public function __construct()
     {
         $this->container = Container::getInstance();
 
-        $this->route = $this->container->make('router')->router();
+        //$this->controller = $this->container->make('route')->getController();
 
-        list($this->controller, $this->action) = explode('@',$this->route->callable);
-
-        $this->assign['ROUTE'] = $this->route;
+        //$this->action = $this->container->make('route')->getAction();
 
         $this->assign['CONTROLLER'] = $this->controller;
 

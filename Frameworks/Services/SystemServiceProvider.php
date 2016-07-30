@@ -26,7 +26,7 @@ class SystemServiceProvider extends ServiceProvider
         /**
          * 注册路由
          */
-        require (APP.'/Route.php');
+        require(APP . '/Route.php');
 
         /**
          * 加载系统function
