@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Admin\Controller;
+namespace App\Controller\Admin;
 
 use PAO\Exception\NotFoundHttpException;
 use PAO\Http\Request;

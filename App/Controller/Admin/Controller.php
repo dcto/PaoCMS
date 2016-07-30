@@ -1,6 +1,7 @@
 <?php
 
-namespace Admin\Controller;
+namespace App\Controller\Admin;
+
 use App\Model\Article;
 use App\Model\Billboard;
 use App\Model\Comment;
@@ -10,7 +11,7 @@ use App\Model\Setting;
 use App\Model\Trees;
 use App\Model\User;
 
-class Controller extends \PAO\Controller
+class Controller extends \App\Controller\Controller
 {
 
     protected $status = false;

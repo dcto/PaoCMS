@@ -3,9 +3,4 @@
 namespace App\Controller;
 
 
-class Controller extends \PAO\Controller
-{
-
-
-
-}
+class Controller extends \PAO\Controller{}

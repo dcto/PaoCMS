@@ -26,6 +26,12 @@ abstract class Controller
     protected $action = null;
 
     /**
+     * [$route 当前路由]
+     * @var object
+     */
+    protected $router = null;
+
+    /**
      * [$var 预置公共变量]
      * @var array
      */
@@ -35,6 +41,8 @@ abstract class Controller
     public function __construct()
     {
         $this->container = Container::getInstance();
+
+        $this->router = $this->container->make('router')->router();
 
         //$this->controller = $this->container->make('route')->getController();
 

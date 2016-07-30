@@ -1,5 +1,5 @@
 <?php
-namespace Admin\Controller;
+namespace App\Controller\Admin;
 
 use DB;
 use Lang;
