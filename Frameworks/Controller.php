@@ -26,6 +26,12 @@ abstract class Controller
     protected $action = null;
 
     /**
+     * [$route 当前路由]
+     * @var object
+     */
+    protected $router = null;
+
+    /**
      * [$var 预置公共变量]
      * @var array
      */
@@ -36,9 +42,9 @@ abstract class Controller
     {
         $this->container = Container::getInstance();
 
-        //$this->controller = $this->container->make('route')->getController();
+        $this->router = $this->container->make('router')->router();
 
-        //$this->action = $this->container->make('route')->getAction();
+        list($this->controller, $this->action) = explode('@',$this->router->callable());
 
         $this->assign['CONTROLLER'] = $this->controller;
 
