@@ -18,6 +18,18 @@ function app($make = null, $parameters = [])
 }
 
 /**
+ * 服务加载器
+ *
+ * @param $make
+ * @param array $parameters
+ * @return mixed
+ */
+function service($make, $parameters = [])
+{
+    return app()->servcie($make, $parameters);
+}
+
+/**
  * get request url
  * @return mixed
  */
