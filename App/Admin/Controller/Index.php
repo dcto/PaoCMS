@@ -21,7 +21,7 @@ class Index extends Controller
 
     public function index()
     {
-        return \Response::view('index');
+        return view('index');
     }
 
     public function test()

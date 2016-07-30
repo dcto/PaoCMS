@@ -6,9 +6,9 @@
 <div class="row tab-content">
     <!--TAB create-->
     <div id="create" class="tab-pane">
-            <form class="form-horizontal col-md-10 col-md-offset-1 form-group-sm" action="{{url('@user-create')}}">
+            <form class="form-horizontal col-md-10 col-md-offset-1 form-group-sm" action="{{url('@user_create')}}">
                 <fieldset>
-                    <legend>{{ lang.menu.user_create }}</legend>
+                    <legend>{{ lang.menu.user}}</legend>
                     {{ forms.text('username',2) }}
                     {{ forms.text('password') }}
                     {{ forms.select('gid', group, lang.menu.group, 2) }}
@@ -23,7 +23,7 @@
 
     <!--TAB update-->
     <div id="update" class="tab-pane">
-            <form action="{{url('@user-update')}}" class="form-horizontal"></form>
+            <form action="{{url('@user_update')}}" class="form-horizontal"></form>
     </div>
     <!--TAB update end-->
 

@@ -1,7 +1,7 @@
 <?php
 Router::group(['prefix'=>'/', 'namespace'=>'Admin\Controller'], function(){
 
-    Router::get('/', 'Index@index');
+    Router::get('/', ['tag'=>'index','call'=>'Index@index']);
     Router::get('/access/login', ['tag'=>'login', 'call'=>'Index@index']);
 
     Router::group(['call'=>'Admin\Controller\Controller@Access'], function(){
