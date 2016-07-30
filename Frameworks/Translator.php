@@ -135,7 +135,7 @@ class Translator
 
         $AppLanguage = APP.DIRECTORY_SEPARATOR.'Language'.DIRECTORY_SEPARATOR.$language.'.ini';
 
-        $SubLanguage = APP.DIRECTORY_SEPARATOR.'Language'.DIRECTORY_SEPARATOR.NAME.$language.'.ini';
+        $SubLanguage = APP.DIRECTORY_SEPARATOR.'Language'.DIRECTORY_SEPARATOR.NAME.DIRECTORY_SEPARATOR.$language.'.ini';
 
         $readable = false;
 

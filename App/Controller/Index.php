@@ -19,6 +19,8 @@ class Index extends Controller
     public function index( \PAO\Http\Request $request)
     {
 
+        echo lang('title');
+
 echo '<pre>';
 //print_r(\Router::router());
         print_r(url('@a','aaa','bbb'));
