@@ -36,9 +36,9 @@ abstract class Controller
     {
         $this->container = Container::getInstance();
 
-        $this->controller = $this->container->make('route')->getController();
+        //$this->controller = $this->container->make('route')->getController();
 
-        $this->action = $this->container->make('route')->getAction();
+        //$this->action = $this->container->make('route')->getAction();
 
         $this->assign['CONTROLLER'] = $this->controller;
 
