@@ -19,38 +19,38 @@ class Trees extends Controller
     public function index()
     {
 
-        if(Request::isMethod('POST')){
-           if(Request::get('id')>0) {
-               $Trees['nodes'] = \App\Model\Trees::getTreeById(Request::get('id'));//= \App\Model\Trees::where('pid', Request::get('id'))->get() ?: array();
+        if(request()->isMethod('POST')){
+           if(request()::get('id')>0) {
+               $Trees['nodes'] = \App\Model\Trees::getTreeById(request()->get('id'));//= \App\Model\Trees::where('pid', Request::get('id'))->get() ?: array();
            }else{
-               $Trees['nodes'][0] = \App\Model\Trees::getNodeById(Request::get('pid'));
+               $Trees['nodes'][0] = \App\Model\Trees::getNodeById(request()->get('pid'));
            }
-            return Response::Json($Trees);
+            return json($Trees);
         }
 
         $Trees = \App\Model\Trees::where('pid',0)->get();
 
-        return Response::view('trees', ['trees'=>$Trees]);
+        return view('/admin/trees', ['trees'=>$Trees]);
     }
 
 
     public function create()
     {
-        if(Request::isMethod('POST')){
+        if(request()->isMethod('POST')){
 
-            if(!Request::get('pid')){
-                if(!$this->checkForm(Request::all(),['id'])) return $this->alert();
-                if(\App\Model\Trees::where('tag',Request::get('tag'))->exists()){
+            if(!request()->get('pid')){
+                if(!$this->checkForm(request()->all(),['id'])) return $this->alert();
+                if(\App\Model\Trees::where('tag',request()->get('tag'))->exists()){
                     return $this->alert(0, lang('alert.exist', lang('tag')));
                 }
             }
-            $data = $this->setNode(Request::all());
+            $data = $this->setNode(request()->all());
 
             $create = \App\Model\Trees::create($data);
-            if(!$create) return Response::make(lang('alert.create_failure', lang('menu.trees')), 500);
+            if(!$create) return response(lang('alert.create_failure', lang('menu.trees')), 500);
 
-            if(!Request::get('pid')) return $this->alert(1, lang('alert.create_success', lang('menu.trees')));
-            return Response::Json($create);
+            if(!request()->get('pid')) return $this->alert(1, lang('alert.create_success', lang('menu.trees')));
+            return json($create);
         }
 
     }

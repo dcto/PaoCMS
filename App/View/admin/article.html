@@ -1,7 +1,7 @@
-{% extends 'layout.html' %}
+{% extends 'admin/layout.html' %}
 {% block content%}
     <!--TAB Panel start -->
-    {% include 'header.html' with {'search':{'w':''}} %}
+    {% include 'admin/header.html' with {'search':{'w':''}} %}
     {% block head %}
         <link rel="stylesheet" href="{{ asset('/plugins/webuploader/webuploader.css') }}">
         <script type="text/javascript" src="{{ asset('/plugins/webuploader/webuploader.min.js')}}"></script>
@@ -65,7 +65,7 @@
             </tbody>
         </table>
         </div>
-        {% include "footer.html" %}
+        {% include "admin/footer.html" %}
     </div>
     <!--TAB index end-->
 </div><!--ROW end-->
