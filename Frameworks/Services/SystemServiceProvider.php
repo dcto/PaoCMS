@@ -2,7 +2,9 @@
 
 namespace PAO\Services;
 
+use PAO\Exception\SystemException;
 use Illuminate\Support\ServiceProvider;
+
 
 class SystemServiceProvider extends ServiceProvider
 {
@@ -26,11 +28,32 @@ class SystemServiceProvider extends ServiceProvider
         /**
          * 注册路由
          */
-        require(APP . '/Route.php');
+        $router = APP . '/Router/'.NAME.'.php';
+        if(is_readable($router)){
+            require($router);
+        }else{
+            throw new SystemException('Undefined router file in the App Path '. $router);
+        }
 
         /**
          * 加载系统function
          */
-        require (dirname(__DIR__).'/Function.php');
+        require(dirname(__DIR__).'/Function.php');
+
+        /**
+         * 加载App function
+         */
+        if(is_readable($function = APP.'/Function/function.php')){
+            require($function);
+        }
+
+        $functions = (array) config('function');
+
+        $functions = array_unique($functions);
+        foreach ($functions as $function){
+            if(is_readable($function = APP.'/Function/'.$function)){
+                require_once ($function);
+            }
+        }
     }
 }

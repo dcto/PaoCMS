@@ -2,8 +2,8 @@
 
 namespace PAO;
 
-use PAO\Exception\PAOException;
 use PAO\Http\Response;
+use PAO\Exception\PAOException;
 use PAO\Support\Facades\Facade;
 use PAO\Exception\SystemException;
 use PAO\Services\SystemServiceProvider;
@@ -65,11 +65,15 @@ class Frameworks extends Container
 
         $this->instance('Illuminate\Container\Container', $this);
 
-
         /**
          * 注册核心容器
          */
         $this->registerContainerAliases();
+
+        /**
+         * 配置系统环境
+         */
+        $this->registerSystemEnvironment();
 
         /**
          * 异常模块注入
@@ -81,17 +85,10 @@ class Frameworks extends Container
          */
         Facade::setFacadeApplication($this);
 
-
-        /**
-         * 配置系统环境
-         */
-        $this->registerSystemEnvironment();
-
         /**
          * 基本服务注册
          */
         $this->registerBaseServiceProviders();
-
 
         /**
          * 启航
@@ -150,7 +147,6 @@ class Frameworks extends Container
     private function Navigate()
     {
         $response = $this->make('router')->dispatch();
-        //$response = $this->make('route')->Dispatch();
 
         //重置Response
         if(!$response instanceof Response)
@@ -269,11 +265,6 @@ class Frameworks extends Container
         $this->register(new SystemServiceProvider($this));
 
         /**
-         * 系统服务
-         */
-        $this->register(new SystemServiceProvider($this));
-
-        /**
          * 事件服务
          */
         $this->register(new EventServiceProvider($this));
@@ -292,13 +283,15 @@ class Frameworks extends Container
      */
     private function registerSystemEnvironment()
     {
-
         /**
          * 设置错误报告
          */
-        if(!$this->config('config.debug'))
-        {
+        if($this->config('config.debug')) {
+            error_reporting(E_ALL);
+            ini_set('display_errors', 'On');
+        }else{
             error_reporting(0);
+            ini_set('display_errors', 'Off');
         }
 
         /**
