@@ -297,15 +297,6 @@ class Request extends HttpFoundation\Request
     }
 
     /**
-     * 上传文件getPathname
-     * @param array $config
-     */
-    public function upload($file = array())
-    {
-            return Upload::save($file);
-    }
-
-    /**
      * @param array $files
      * @return array
      */
