@@ -20,7 +20,7 @@ class Trees extends Controller
     {
 
         if(request()->isMethod('POST')){
-           if(request()::get('id')>0) {
+           if(request()->get('id')>0) {
                $Trees['nodes'] = \App\Model\Trees::getTreeById(request()->get('id'));//= \App\Model\Trees::where('pid', Request::get('id'))->get() ?: array();
            }else{
                $Trees['nodes'][0] = \App\Model\Trees::getNodeById(request()->get('pid'));
