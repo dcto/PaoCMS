@@ -178,8 +178,11 @@ class Repository implements ArrayAccess, ConfigContract
         if(is_readable($AppConfig)) require($AppConfig);
         if(is_readable($PaoConfig)) require($PaoConfig);
 
-        $this->set($name, $$name);
-
-        return $$name;
+        if(isset($$name)){
+            $this->set($name, $$name);
+            return $$name;
+        }else{
+            return array();
+        }
     }
 }

@@ -300,17 +300,20 @@ class Router
                 $router->method = $method;
                 $this->router = $router;
 
-                if(!$group = Arr::get($this->group, $router->group)){
-                    throw new NotFoundHttpException('Does not define '.$router->group. ' of router group');
-                }
-                if($callback = Arr::get($group,'call')){
-                    if(is_array($callback)) {
-                        $callback = $this->ThroughRoute(array_shift($callback), array_shift($callback));
-                    }else{
-                        $callback = $this->ThroughRoute($callback);
+                if($router->group) {
+                    if (!$group = Arr::get($this->group, $router->group)) {
+                        throw new NotFoundHttpException('Does not define ' . $router->group . ' of router group');
+
                     }
-                    if($callback instanceof Response){
-                        return $callback;
+                    if ($callback = Arr::get($group, 'call')) {
+                        if (is_array($callback)) {
+                            $callback = $this->ThroughRoute(array_shift($callback), array_shift($callback));
+                        } else {
+                            $callback = $this->ThroughRoute($callback);
+                        }
+                        if ($callback instanceof Response) {
+                            return $callback;
+                        }
                     }
                 }
                 return $this->ThroughRoute($router->getCallable(), $router->parameters);
@@ -431,7 +434,7 @@ class Router
      */
     private function parseRoute($route, $property)
     {
-        $prefix = Arr::get($property,'prefix') ?: Arr::get($property['group'],'prefix');
+        $prefix = Arr::get($property,'prefix') ?: Arr::get(Arr::get($property,'group'),'prefix');
         $route = '/'.trim(trim($prefix,'/').'/'.trim($route, '/'),'/');
         return $route;
     }
