@@ -18,12 +18,12 @@ class Index extends Controller
 
     public function index( \PAO\Http\Request $request)
     {
+       echo \Captcha::make();
 
+        die;
         echo lang('title');
 
 echo '<pre>';
-//print_r(\Router::router());
-        print_r(url('@a','aaa','bbb'));
 
         echo '<hr />';
         //print_r($this->container->make('request')->all());

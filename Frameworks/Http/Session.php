@@ -22,7 +22,7 @@ class Session implements SessionInterface, \IteratorAggregate, \Countable
 {
 
     /**
-     * SESSION±êÇ©Ãû
+     * SESSIONï¿½ï¿½Ç©ï¿½ï¿½
      *
      * @var
      */
@@ -36,7 +36,7 @@ class Session implements SessionInterface, \IteratorAggregate, \Countable
     protected $flash;
 
     /**
-     * µ±Ç°´æ´¢ÒýÇæ
+     * ï¿½ï¿½Ç°ï¿½æ´¢ï¿½ï¿½ï¿½ï¿½
      *
      * @var
      */
@@ -51,9 +51,12 @@ class Session implements SessionInterface, \IteratorAggregate, \Countable
         $handler = (string) Container::getInstance()->config('config.session') ?: 'files';
         $session = (array) Container::getInstance()->config('session');
 
+        $session['options'] = isset($session['options'])?$session['options']:array();
+
         if(!in_array($handler, array_keys($session['storage']))) {
             throw new SystemException('The session handler ['.$handler.'] was not found! you can use handles by "'. implode('","', array_keys($session)).'"');
         }
+
 
         switch($handler)
         {
