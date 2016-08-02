@@ -18,9 +18,9 @@ class Index extends Controller
 
     public function index( \PAO\Http\Request $request)
     {
-       echo \Captcha::make();
+        \Captcha::make();
 
-        die;
+
         echo lang('title');
 
 echo '<pre>';

@@ -15,7 +15,7 @@ use PAO\Exception\SystemException;
 class Captcha {
 
     /**
-     * ÉèÖÃ×ÖÌå
+     * è®¾ç½®å­—ä½“
      * @var array
      */
     public $fonts;
@@ -24,13 +24,13 @@ class Captcha {
     protected $token;
 
     /**
-     * ¿í¶È
+     * å®½åº¦
      * @var int
      */
     protected $width;
 
     /**
-     * ¸ß¶È
+     * é«˜åº¦
      * @var int
      */
     protected $height;
@@ -68,9 +68,9 @@ class Captcha {
     /**
      * [make]
      *
-     * @param int $width [¿í¶È]
-     * @param int $height [¸ß¶È]
-     * @param int $obstruct [¸ÉÈÅ¶È]
+     * @param int $width [å®½åº¦]
+     * @param int $height [é«˜åº¦]
+     * @param int $obstruct [å¹²æ‰°åº¦]
      * @return mixed
      * @author 11.
      */
@@ -79,45 +79,45 @@ class Captcha {
         if (!extension_loaded("gd"))  throw new SystemException ("Captcha Unable Load GD Library Copyright PaoCMS System");
 
         /**
-         * ÉèÖÃ¿í¶È
+         * è®¾ç½®å®½åº¦
          */
         $this->width = $width;
 
         /**
-         * ÉèÖÃ¸ß¶È
+         * è®¾ç½®é«˜åº¦
          */
         $this->height = $height;
 
 
         /**
-         * »ñÈ¡Ëæ»úÂë
+         * è·å–éšæœºç 
          */
         $phrase = $this->getRandomCode(4);
 
         /**
-         * ¹¹½¨»­²¼
+         * æ„å»ºç”»å¸ƒ
          */
         $images = $this->CreateCanvas();
 
         /**
-         * ÉèÖÃ±³¾°
+         * è®¾ç½®èƒŒæ™¯
          */
         $this->setBackground($images);
 
         /**
-         * ÉèÖÃ¸ÉÈÅÂë
+         * è®¾ç½®å¹²æ‰°ç 
          */
         $this->setInterference($images, $obstruct);
 
         /**
-         * ÉèÖÃËæ»úÂë
+         * è®¾ç½®éšæœºç 
          */
         $this->setImageString($images, $phrase);
 
         $container = Container::getInstance();
 
         /**
-         * Session¼ÇÂ¼
+         * Sessionè®°å½•
          */
         $container->make('session')->set($this->token, $phrase);
 
@@ -141,7 +141,7 @@ class Captcha {
 
 
     /**
-     * [CreateCanvas ¹¹½¨»­²¼]
+     * [CreateCanvas æ„å»ºç”»å¸ƒ]
      *
      * @return resource
      * @author 11.
@@ -153,7 +153,7 @@ class Captcha {
 
 
     /**
-     * [setBackground ÉèÖÃÍ¼Æ¬±³¾°]
+     * [setBackground è®¾ç½®å›¾ç‰‡èƒŒæ™¯]
      *
      * @param $images
      * @return mixed
@@ -169,7 +169,7 @@ class Captcha {
 
 
     /**
-     * [setInterference ÉèÖÃÍ¼Æ¬¸ÉÈÅ]
+     * [setInterference è®¾ç½®å›¾ç‰‡å¹²æ‰°]
      *
      * @param $images
      * @author 11.
@@ -185,12 +185,12 @@ class Captcha {
 
             $color = imagecolorallocate($images, rand(40,140),rand(40,140),rand(40,140));
             /**
-             * ÏßÌõ¸ÉÈÅ
+             * çº¿æ¡å¹²æ‰°
              */
             imageline($images, rand(0,$this->width), rand(0,$this->height), rand(0,$this->width), rand(0, $this->height), $color);
 
             /**
-             * ×Ö·û¸ÉÈÅ
+             * å­—ç¬¦å¹²æ‰°
              */
             $codes = $this->getRandomCode(rand(1,5), '0123456789~!@#$%^&*()_+=|');
             imagestring($images,rand(5,10), $x, $y, $codes, $color);
@@ -198,7 +198,7 @@ class Captcha {
     }
 
     /**
-     * [setImageString ÉèÖÃÑéÖ¤Âë]
+     * [setImageString è®¾ç½®éªŒè¯ç ]
      *
      * @param $images
      * @param $phrase
@@ -224,7 +224,7 @@ class Captcha {
     }
 
     /**
-     * [getRandomCode »ñÈ¡Ëæ»ú×Ö·û´®]
+     * [getRandomCode è·å–éšæœºå­—ç¬¦ä¸²]
      *
      * @param int  $length
      * @param null $pool
@@ -238,7 +238,7 @@ class Captcha {
     }
 
     /**
-     * [getFont »ñÈ¡×ÖÌå]
+     * [getFont è·å–å­—ä½“]
      *
      * @param null $font
      * @return string
