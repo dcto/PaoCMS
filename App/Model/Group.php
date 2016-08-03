@@ -29,7 +29,7 @@ class Group extends Model
             $table->string('tag',32)->comment('组标签');
             $table->string('name',48)->comment('组名称');
             $table->string('nickname',96)->nullable()->comment('组头衔/别名');
-            $table->json('permission')->nullable()->comment('组权限');
+            $table->text('permission')->nullable()->comment('组权限');
             $table->boolean('status')->default(0)->comment('状态');
 
             $table->timestamps();

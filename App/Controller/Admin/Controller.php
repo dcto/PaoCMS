@@ -8,6 +8,7 @@ use App\Model\Comment;
 use App\Model\Group;
 use App\Model\Layout;
 use App\Model\Setting;
+use App\Model\Tags;
 use App\Model\Trees;
 use App\Model\User;
 
@@ -123,6 +124,8 @@ class Controller extends \App\Controller\Controller
         User::up();
         Group::down();
         Group::up();
+        Tags::down();
+        Tags::up();
     }
 }
 
