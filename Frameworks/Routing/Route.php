@@ -93,9 +93,9 @@ class Route
 
         $this->name = Arr::get($property, 'name', $this->tag);
 
-        $this->lang = Arr::get($property, 'lang')?:Arr::get($property['group'],'lang');
+        $this->lang = Arr::get($property, 'lang')?:Arr::get(Arr::get($property, 'group'),'lang');
 
-        $this->menu = Arr::get($property, 'menu')?:Arr::get($property['group'],'menu');
+        $this->menu = Arr::get($property, 'menu')?:Arr::get(Arr::get($property, 'group'),'menu');
 
         $this->route = $route;
 
@@ -107,7 +107,7 @@ class Route
 
         $this->callable = Arr::get($property, 'call');
 
-        $this->namespace = Arr::get($property, 'namespace')?:Arr::get($property['group'],'namespace');
+        $this->namespace = Arr::get($property, 'namespace')?:Arr::get(Arr::get($property, 'group'),'namespace');
 
         if (in_array('GET', $this->methods) && !in_array('HEAD', $this->methods)) {
             $this->methods[] = 'HEAD';
