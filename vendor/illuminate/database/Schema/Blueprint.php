@@ -344,7 +344,7 @@ class Blueprint
      * @param  string  $name
      * @return \Illuminate\Support\Fluent
      */
-    public function primary($columns, $name = null)
+    public function incrementsprimary($columns, $name = null)
     {
         return $this->indexCommand('primary', $columns, $name);
     }

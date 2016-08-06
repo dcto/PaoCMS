@@ -6,17 +6,19 @@ namespace App\Model;
 use Illuminate\Database\Schema\Blueprint;
 use PAO\Support\Facades\Schema;
 
-class Layout extends Model
+class Feedback extends Model
 {
-    protected $table = 'layout';
+    protected $table = 'feedback';
 
     static public function up()
     {
-        Schema::create('layout', function(Blueprint $table) {
-            $table->string('id',48)->comment('标识');
-            $table->string('name',96)->nullable()->comment('名称');
+        Schema::create('feedback', function(Blueprint $table) {
+            $table->increments('id');
+            $table->unsignedInteger('pid')->comment('父ID');
+            $table->string('name',32)->nullable()->comment('名称');
+            $table->string('email',96)->nullable()->comment('Email');
             $table->string('title',96)->nullable()->comment('标题');
-            $table->mediumText('content')->nullable()->comment('内容');
+            $table->text('content')->nullable()->comment('内容');
             $table->boolean('status')->default(0)->comment('0=无效,1=正常');
 
             $table->timestamps();
@@ -30,6 +32,6 @@ class Layout extends Model
 
     static public function down()
     {
-        Schema::dropIfExists('layout');
+        Schema::dropIfExists('feedback');
     }
 }
