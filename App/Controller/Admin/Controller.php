@@ -55,7 +55,7 @@ class Controller extends \App\Controller\Controller
     public function captcha()
     {
 
-         app('captcha')->make();
+        return app('captcha')->make(114,46);
     }
 
     /**

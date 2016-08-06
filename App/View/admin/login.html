@@ -21,7 +21,7 @@
         <ul>
             <li><input name="username" type="text" class="username" placeholder="{{ lang.form.input~lang.username }}" /></li>
             <li><input name="password" type="text" class="password" placeholder="{{ lang.form.input~lang.password }}" /></li>
-            <li class="captcha"><span><input name="captcha" type="text" /></span><cite>X3D5S</cite></li>
+            <li class="captcha"><span><input name="captcha" type="text" placeholder="{{ lang.form.input~lang.captcha }}" /></span><cite><img src="{{ url('@captcha') }}" onclick="javascript:this.src='{{ url('@captcha') }}'" /></cite></li>
             <li>
                 <button name="submit" type="submit" class="submit"> {{ lang.signin }} </button>
                 <label><input name="remember" type="checkbox" value checked="checked" />{{ lang.form.remember_password }}</label>

@@ -43,4 +43,4 @@ h2{font-weight:normal;}
 .captcha{width:341px; height:46px; background:url(../images/yzmbg.png) no-repeat; padding-bottom:5px;}
 .captcha span{display:block; float:left;width:227px; height:46px;}
 .captcha span input{background:none; border:none; width:183px; height:46px; line-height:46px;padding-left:44px;font-size:14px; color:#cee4f1;}
-.captcha cite{float:right; width:114px; height:46px; line-height:46px; font-size:18px; color:#fff; text-align:center;}
+.captcha cite{float:right; width:114px; height:46px; line-height:46px; text-align:center;}

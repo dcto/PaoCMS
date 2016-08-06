@@ -131,7 +131,7 @@
 
   <footer class="navbar navbar-fixed-bottom footer">
     <div class="row-fluid">
-      <div class="col-sm-6 col-md-6">Web Design / Logo &copy; {{"now"|date('Y')}} PaoCMS Inc. All rights reserved </div>
+      <div class="col-sm-6 col-md-6">{{ lang.COPYRIGHT|raw }}</div>
       <div class="col-sm-6 col-md-6 text-right">GMT{{"now"|date('O')}} Processed in  {{size(memory_get_usage(true))}}, {{microtime(true) - request.server('REQUEST_TIME_FLOAT')}} second(s).</div>
     </div>
   </footer>
