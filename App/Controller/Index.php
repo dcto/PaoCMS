@@ -2,6 +2,10 @@
 
 namespace App\Controller;
 
+
+
+use PAO\Support\Facades\Cache;
+
 class Index extends Controller
 {
 
@@ -18,6 +22,10 @@ class Index extends Controller
 
     public function index( \PAO\Http\Request $request)
     {
+
+       return \Captcha::make();
+
+        $redis = Cache::Redis();
 
         echo lang('title');
 

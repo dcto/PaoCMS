@@ -37,7 +37,6 @@ class Redis
 
                 if(isset($config['password']) && !empty($config['password']))
                 {
-                    echo 'password';
                     $redis->auth(trim($config['password']));
                 }
 

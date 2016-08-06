@@ -1,0 +1,46 @@
+*{font-size:9pt;border:0;margin:0;padding:0;}
+body{font-family:'微软雅黑'; margin:0 auto;min-width:980px;background-color:#1c77ac; background-image:url('../images/light.png'); background-repeat:no-repeat; background-position:center top; overflow:hidden;}
+ul{display:block;margin:0;padding:0;list-style:none;}
+li{display:block;margin:0;padding:0;list-style: none;}
+img{border:0;}
+dl,dt,dd,span{margin:0;padding:0;display:block;}
+a,a:focus{text-decoration:none;color:#000;outline:none;blr:expression(this.onFocus=this.blur());}
+a:hover{color:#00a4ac;text-decoration:none;}
+table{border-collapse:collapse;border-spacing: 0;}
+cite{font-style:normal;}
+h2{font-weight:normal;}
+
+
+/*login*/
+.top{height:50px; position:absolute; top:0; background:url(../images/loginbg1.png) repeat-x;z-index:100; width:100%;}
+.top .title{line-height:50px; text-indent:20px; color:#afc5d2; float:left;  font-weight:bold;}
+.top ul{float:right; padding-right:30px;}
+.top ul li{float:left; margin-left:20px; line-height:47px;}
+.top ul li a{color:#afc5d2;}
+.top ul li a:hover{color:#fff;}
+.body{background:url(../images/loginbg3.png) no-repeat center center; width:100%;  margin: 0 auto;}
+.logo{background:url(../images/loginlogo.png) no-repeat center;width:100%; height:70px; margin-top: 60px; }
+.login{width:692px; height:336px; background:url(../images/logininfo.png) no-repeat; margin: 0 auto;}
+.login ul{padding-top:80px; padding-left:285px;}
+.login ul li{margin-bottom:10px;}
+.login ul li label{color:#687f92; padding-left:25px;}
+.login ul li label a{color:#687f92;}
+.login ul li label a:hover{color:#3d96c9;}
+.login ul li label input{margin-right:5px;}
+.username{width:299px; height:48px; background:url(../images/loginuser.png) no-repeat; border:none; line-height:48px; padding-left:44px; font-size:14px; font-weight:bold;}
+.password{width:299px; height:48px; background:url(../images/loginpassword.png) no-repeat; border:none;line-height:48px; padding-left:44px; font-size:14px; color:#90a2bc;}
+.submit{width:111px;height:35px; background:url(../images/buttonbg.png) repeat-x; font-size:14px; font-weight:bold; color:#fff;cursor:pointer; line-height:35px;}
+.copyright{height:50px; line-height:50px; text-align:center; background:url(../images/loginbg2.png) repeat-x;position:absolute; bottom:0; width:100%; color:#0b3a58;}
+.copyright a{font-weight:bold;color:#0b3a58;}
+.copyright a:hover{color:#fff;}
+
+.login1{background:url(../images/logininfo1.png) no-repeat;}
+.login1 ul li{margin-bottom:16px;}
+.login2{background:url(../images/logininfo2.png) no-repeat;}
+.login2 ul li{margin-bottom:16px;}
+.login3{background:url(../images/logininfo3.png) no-repeat;}
+.login3 ul li{margin-bottom:16px;}
+.captcha{width:341px; height:46px; background:url(../images/yzmbg.png) no-repeat; padding-bottom:5px;}
+.captcha span{display:block; float:left;width:227px; height:46px;}
+.captcha span input{background:none; border:none; width:183px; height:46px; line-height:46px;padding-left:44px;font-size:14px; color:#cee4f1;}
+.captcha cite{float:right; width:114px; height:46px; line-height:46px; font-size:18px; color:#fff; text-align:center;}

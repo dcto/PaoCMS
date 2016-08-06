@@ -15,6 +15,8 @@ use App\Model\User;
 class Controller extends \App\Controller\Controller
 {
 
+    protected $uid;
+
     protected $status = false;
 
     protected $message = 'error';
@@ -35,11 +37,6 @@ class Controller extends \App\Controller\Controller
     }
 
 
-    public function Access()
-    {
-      //return response('无权限操作');
-    }
-
     /**
      * 根据路由获取模块
      * @return array
@@ -49,6 +46,16 @@ class Controller extends \App\Controller\Controller
         $modules = (array) config('route');
         unset($modules['/']);
         return $modules;
+    }
+
+
+    /**
+     * 验证码
+     */
+    public function captcha()
+    {
+
+         app('captcha')->make();
     }
 
     /**

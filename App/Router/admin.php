@@ -1,13 +1,14 @@
 <?php
 Router::group(['prefix'=>'/', 'namespace'=>'App\Controller\Admin'], function(){
 
-    Router::get('/', ['tag'=>'index','call'=>'Index@index']);
-    Router::get('/access/login', ['tag'=>'login', 'call'=>'Index@index']);
+    Router::get('/login', ['tag'=>'login', 'call'=>'Access@login']);
+    Router::get('/captcha', ['tag'=>'captcha', 'call'=>'Controller@captcha']);
 
-    Router::group(['call'=>'App\Controller\Admin\Controller@Access'], function(){
+    Router::group(['call'=>'App\Controller\Admin\Access@checkAccess'], function(){
 
+        Router::get('/', ['tag'=>'index','call'=>'Index@index']);
 
-        Router::get('/access/logout', ['tag'=>'logout', 'call'=>'Index@index']);
+        Router::get('/access/logout', ['tag'=>'logout', 'call'=>'Access@logout']);
 
         Router::group(['tag'=>'article', 'name'=>'menu.article', 'icon'=>'file', 'prefix'=>'/article'], function(){
             Router::get('/', ['tag'=>'article','name'=>'menu.article', 'call'=>'Article@index'])->menu(true);
