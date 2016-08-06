@@ -1,9 +1,6 @@
 <?php
 namespace PAO\Captcha;
 
-
-
-use Illuminate\Support\Str;
 use Illuminate\Container\Container;
 use PAO\Exception\SystemException;
 
@@ -38,6 +35,8 @@ class Captcha {
 
     public function __construct($width = 100, $height = 30, $fonts = null)
     {
+        //fix the imagefttext bug before imagepng and imagedestroy
+        header("content-type: image/png");
         $this->width = $width;
         $this->height = $height;
         $this->token = 'pao_captcha_key';
@@ -217,8 +216,6 @@ class Captcha {
             $x = $span / 4 + $i * $span + 2;
             $y = $this->height / 2 + ($box[2] - $box[5]) / 4;
             imagefttext($images, $size, $angle, $x, $y, $color, $this->getFont(), $phrase[$i]);
-            //fix the imagefttext bug before imagepng and imagedestroy
-            header("content-type: image/png");
         }
         return $images;
     }
