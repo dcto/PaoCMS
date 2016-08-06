@@ -17,8 +17,8 @@ class Message extends Model
         Schema::create('message', function(Blueprint $table){
             $table->increments('id');
             $table->unsignedInteger('gid')->default(0)->comment('接收组');
-            $table->unsignedInteger('by_uid')->comment('发送者:0=系统发送,组消息');
-            $table->unsignedInteger('to_uid')->comment('接收者:0=系统消息,组消息');
+            $table->unsignedInteger('by_uid')->default(0)->comment('发送者:0=系统发送,组消息');
+            $table->unsignedInteger('to_uid')->default(0)->comment('接收者:0=系统消息,组消息');
             $table->string('title',64)->comment('标题');
             $table->text('content')->comment('内容');
             $table->boolean('status')->default(0)->comment('状态:0=未读,1已读');
