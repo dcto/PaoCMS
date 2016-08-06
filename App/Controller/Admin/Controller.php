@@ -5,8 +5,10 @@ namespace App\Controller\Admin;
 use App\Model\Article;
 use App\Model\Billboard;
 use App\Model\Comment;
+use App\Model\Feedback;
 use App\Model\Group;
 use App\Model\Layout;
+use App\Model\Message;
 use App\Model\Setting;
 use App\Model\Tags;
 use App\Model\Trees;
@@ -133,6 +135,10 @@ class Controller extends \App\Controller\Controller
         Group::up();
         Tags::down();
         Tags::up();
+        Feedback::down();
+        Feedback::up();
+        Message::down();
+        Message::up();
     }
 }
 

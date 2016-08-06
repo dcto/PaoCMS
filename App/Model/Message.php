@@ -27,7 +27,7 @@ class Message extends Model
             $table->softDeletes();
 
             $table->index('gid');
-            $table->index('to_uid');
+            $table->index('by_uid');
             $table->index('to_uid');
             $table->index('status');
 
