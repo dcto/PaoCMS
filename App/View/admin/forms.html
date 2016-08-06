@@ -47,7 +47,7 @@
 {% endmacro %}
 
 {#radio表单#}
-{% macro radio(name, checked, size=3) %}
+{% macro radio(name, checked = 1, size=3) %}
     {% set id = name|default(random()) %}
 <div class="form-group">
     <div class="col-md-{{ size }}">
