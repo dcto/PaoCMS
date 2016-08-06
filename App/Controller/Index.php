@@ -22,6 +22,8 @@ class Index extends Controller
 
     public function index( \PAO\Http\Request $request)
     {
+        \Captcha::make();
+
 
        return \Captcha::make();
 
@@ -30,8 +32,6 @@ class Index extends Controller
         echo lang('title');
 
 echo '<pre>';
-//print_r(\Router::router());
-        print_r(url('@a','aaa','bbb'));
 
         echo '<hr />';
         //print_r($this->container->make('request')->all());

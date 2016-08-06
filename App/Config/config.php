@@ -7,7 +7,7 @@ $config['token']        = 'pao_'; //网站标识
 $config['timezone']     = 'PRC'; //系统时区
 $config['charset']      = 'utf-8'; //系统编码
 $config['language']     = 'zh-CN'; //默认语言包
-$config['session']      = 'files'; //Session存储方式
+$config['session']      = 'redis'; //Session存储方式
 
 $config['dir']['pao']   = PAO;//系统根目录
 $config['dir']['web']   = PAO.DIRECTORY_SEPARATOR.'web'; //公共资源目录
