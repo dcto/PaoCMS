@@ -9,6 +9,7 @@
     <div id="create" class="tab-pane col-md-10 col-center">
                         <form class="form-horizontal" action="{{url('@group_create')}}">
                             <fieldset>
+                                {{ forms.text('tag') }}
                                 {{ forms.text('name') }}
                                 {{ forms.text('nickname') }}
                                 {{ forms.radio('status', 1) }}
@@ -62,6 +63,7 @@
                 <thead>
                 <tr>
                     <th>{{lang.id}}</th>
+                    <th>{{lang.tag}}</th>
                     <th>{{lang.name}}</th>
                     <th>{{lang.nickname}}</th>
                     <th>{{lang.status}}</th>
@@ -73,6 +75,7 @@
                 {% for v in group%}
                     <tr>
                         <td>{{v.id}}</td>
+                        <td>{{v.tag}}</td>
                         <td>{{v.name}}</td>
                         <td>{{v.nickname}}</td>
                         <td>{{forms.status(v.status, v.id)}}</td>
