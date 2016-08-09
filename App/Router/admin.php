@@ -8,7 +8,7 @@ Router::group(['prefix'=>'/', 'namespace'=>'App\Controller\Admin'], function(){
 
         Router::get('/', ['tag'=>'index','call'=>'Index@index']);
 
-        Router::get('/access/logout', ['tag'=>'logout', 'call'=>'Access@logout']);
+        Router::get('/logout', ['tag'=>'logout', 'call'=>'Access@logout']);
 
         Router::group(['tag'=>'article', 'name'=>'menu.article', 'icon'=>'file', 'prefix'=>'/article'], function(){
             Router::get('/', ['tag'=>'article','name'=>'menu.article', 'call'=>'Article@index'])->menu(true);

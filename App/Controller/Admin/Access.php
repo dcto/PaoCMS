@@ -17,7 +17,7 @@ class Access extends Controller
 
     public function logout()
     {
-
+        return redirect(url('@login'));
     }
 
 
