@@ -8,20 +8,20 @@ class Cache
 {
 
     /**
-     * ÈİÆ÷
+     * å®¹å™¨
      * @var \Illuminate\Container\Container\
      */
     protected $container;
 
 
     /**
-     * »º´æÏîÄ¿
+     * ç¼“å­˜é¡¹ç›®
      * @var array
      */
     protected $cache = [];
 
     /**
-     * ³õÊ¼»¯»º´æ
+     * åˆå§‹åŒ–ç¼“å­˜
      * @param \Illuminate\Container\Container $container
      */
     public function __construct()
@@ -33,7 +33,7 @@ class Cache
 
 
     /**
-     * [File ÎÄ¼ş»º´æ]
+     * [File æ–‡ä»¶ç¼“å­˜]
      *
      * @param null $cache
      * @return \PAO\Cache\FileSystem
@@ -51,9 +51,9 @@ class Cache
 
 
     /**
-     * [Redis ÊµÀı]
+     * [Redis å®ä¾‹]
      *
-     * @param string $server Á¬½ÓµÄ·şÎñÆ÷Ãû³Æ
+     * @param string $server è¿æ¥çš„æœåŠ¡å™¨åç§°
      * @return mixed
      * @author 11.
      */
