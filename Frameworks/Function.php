@@ -114,3 +114,23 @@ function redirect($url, $status = 302, $headers = [])
 {
     return app('response')->redirect($url, $status, $headers);
 }
+
+
+//调试函数,方便显示调试函数的位置和文件
+function dump()
+{
+    $args = func_get_args();
+
+    // 调用栈,debug_backtrace()
+    $backtrace = debug_backtrace();
+
+    $file = $backtrace[0]['file'];
+    $line = $backtrace[0]['line'];
+    echo "<b>$file: $line</b><hr />";
+    echo "<pre>";
+    foreach ($args as $arg) {
+        var_dump($arg);
+    }
+    echo "</pre>";
+    die;
+}
