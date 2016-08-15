@@ -18,6 +18,17 @@ function app($make = null, $parameters = [])
 }
 
 /**
+ * make alias name for app
+ * @param null $make
+ * @param array $parameters
+ * @return object
+ */
+function make($make = null, $parameters = [])
+{
+    return app($make, $parameters);
+}
+
+/**
  * 服务加载器
  *
  * @param $make
