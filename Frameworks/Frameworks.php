@@ -204,6 +204,7 @@ class Frameworks extends Container
             'validator' => 'PAO\Validator',
             'lang' => 'PAO\Translator',
             'view' => 'PAO\View',
+            'curl' => 'PAO\Http\Curl',
             'file' => 'PAO\FileSystem\Files',
             'cache' => 'PAO\Cache\Cache',
             'log' => 'PAO\Logger',
