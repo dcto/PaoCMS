@@ -22,6 +22,12 @@ class Index extends Controller
 
     public function index( \PAO\Http\Request $request)
     {
+
+        $curl = app('curl');
+
+        print_r( $curl->get('http://pao11.com'));
+
+        die;
         \Captcha::make();
 
 
