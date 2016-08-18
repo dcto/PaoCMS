@@ -119,7 +119,7 @@ class Route
 
         $this->namespace = Arr::get($property, 'namespace')?:Arr::get(Arr::get($property, 'group'),'namespace');
 
-        list($this->controller, $this->action) = explode('@', trim(strrchr($this->callable,'\\'), '\\'));
+        list($this->controller, $this->action) = explode('@', trim(strrchr($this->callable?:$this->callable,'\\'), '\\'));
 
         if (in_array('GET', $this->methods) && !in_array('HEAD', $this->methods)) {
             $this->methods[] = 'HEAD';
