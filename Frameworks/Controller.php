@@ -44,7 +44,9 @@ abstract class Controller
 
         $this->router = $this->container->make('router')->router();
 
-        list($this->controller, $this->action) = explode('@',$this->router->callable());
+        $this->controller = $this->router->getController();
+
+        $this->action = $this->router->getAction();
 
         $this->assign['CONTROLLER'] = $this->controller;
 
