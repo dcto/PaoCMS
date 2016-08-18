@@ -126,6 +126,15 @@ function redirect($url, $status = 302, $headers = [])
     return app('response')->redirect($url, $status, $headers);
 }
 
+/**
+ * random string
+ * @param int $length
+ */
+function random($length = 16)
+{
+    \PAO\Support\Str::quickRandom($length);
+}
+
 
 //调试函数,方便显示调试函数的位置和文件
 function dump()
