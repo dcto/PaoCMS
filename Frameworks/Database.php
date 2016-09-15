@@ -61,7 +61,7 @@ class Database extends  \Illuminate\Database\Capsule\Manager
         /**
          * 判断是否打开调式sql模式
          */
-        if($this->getContainer()->config('config.debug')) {
+        if($this->getContainer()->config('config.debug') || $this->getContainer()->config('config.log')) {
             $this->connection()->enableQueryLog();
         }
 

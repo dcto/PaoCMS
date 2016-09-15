@@ -2,9 +2,7 @@
 
 namespace PAO;
 
-use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
 use Illuminate\Container\Container;
 use PAO\Exception\SystemException;
 
