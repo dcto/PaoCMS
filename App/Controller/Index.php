@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use Illuminate\Support\Facades\Log;
+
 class Index extends Controller
 {
 
@@ -20,6 +22,8 @@ class Index extends Controller
     {
         echo $this->controller;
         echo $this->action;
+
+        $this->make('log')->debug('ddd');
 
         die;
         \Captcha::make();
