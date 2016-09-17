@@ -9,13 +9,24 @@ use ReflectionFunction;
 
 class PAOException
 {
-    protected $container;
-
+    /**
+     * 错误报告调用日志类型
+     * @var array
+     */
     protected $levels = array(
         1   =>  'error',
         2   =>  'warning',
         4   =>  'critical',
         8   =>  'notice',
+        16  =>  'error',
+        32  =>  'warning',
+        64  =>  'error',
+        128 =>  'warning',
+        256 =>  'error',
+        512 =>  'warning',
+        1024=>  'notice',
+        2048=>  'notice',
+        4096=>  'error',
     );
 
     /**
@@ -58,7 +69,7 @@ class PAOException
     public function handleError($level, $message, $file = '', $line = 0, $context = array())
     {
         if (error_reporting() & $level) {
-            throw new \ErrorException($message, 0, $level, $file, $line);
+            throw new \ErrorException($message, $level, $level, $file, $line);
         }
     }
 
@@ -130,73 +141,38 @@ class PAOException
      * @param string $errorMsg
      * @param string $phpMsg
      */
-    public function display($code, $message, $errorExplain = '')
+    public function display($code, $message, $debugBacktrace = '')
     {
         ob_end_clean();
         $content = <<<EOT
 <!DOCTYPE html">
 <html>
 <head>
- <title>Pao Frameworks Error</title>
- <meta http-equiv="Content-Type" content="text/html; charset="utf-8" />
- <meta name="robots" content="NOINDEX,NOFOLLOW,NOARCHIVE" />
+ <title>Pao Frameworks Debug</title>
+ <meta charset="utf-8" />
+ <meta name="robots" content="none" />
  <style type="text/css">
  <!--
- body { background-color: white; color: black; font: 9pt/11pt verdana, arial, sans-serif;}
- #container {margin: 10px;}
- #message {width: 1024px; color: black;}
- .red {color: red;}
- a:link {font: 9pt/11pt verdana, arial, sans-serif; color: red;}
- a:visited {font: 9pt/11pt verdana, arial, sans-serif; color: #4e4e4e;}
- h1 {color: #FF0000; font: 18pt "Verdana"; margin-bottom: 0.5em;}
- .bg1 {background-color: #FFFFCC;}
- .bg2 {background-color: #EEEEEE;}
- .table {background: #AAAAAA; font: 11pt Menlo,Consolas,"Lucida Console"}
- .info {
-  background: none repeat scroll 0 0 #F3F3F3;
-  border: 0px solid #aaaaaa;
-  border-radius: 10px 10px 10px 10px;
-  color: #000000;
-  font-size: 11pt;
-  line-height: 160%;
-  margin-bottom: 1em;
-  padding: 1em;
- }
-
- .help {
-  background: #F3F3F3;
-  border-radius: 10px 10px 10px 10px;
-  font: 12px verdana, arial, sans-serif;
-  text-align: center;
-  line-height: 160%;
-  padding: 1em;
- }
-
- .sql {
-  background: none repeat scroll 0 0 #FFFFCC;
-  border: 1px solid #aaaaaa;
-  color: #000000;
-  font: arial, sans-serif;
-  font-size: 9pt;
-  line-height: 160%;
-  margin-top: 1em;
-  padding: 4px;
- }
+ body {font: 12pt verdana; margin: 10px;}
+ h3 {color: #f00; font-weight: normal}
+ div {background: #f5f5f5; border-radius: 5px; line-height: 200%; margin-bottom: 1em; padding: 1em;}
+ table {background: #aaa;}
+ .bg1 {background-color: #ffc;}
+ .bg2 {background-color: #eee;}
  -->
  </style>
 </head>
 <body>
-<div id="container">
-<h1>PAO Frameworks System Error {Response Status Code: $code}</h1>
-<div class='info'>{$message}</div>
+<h3>Status Code: $code</h3>
+<div>{$message}</div>
 EOT;
-            if (!empty($errorExplain)) {
-                $content .= '<div class="info">';
-                $content .= '<p><strong>PAO Debug</strong></p>';
+            if (!empty($debugBacktrace)) {
+                $content .= '<div class="title">';
+                $content .= '<p><strong>PAO Debug Trace</strong></p>';
                 $content .= '<table cellpadding="5" cellspacing="1" width="100%" class="table"><tbody>';
-                if (is_array($errorExplain)) {
+                if (is_array($debugBacktrace)) {
                     $content .= '<tr class="bg2"><td>No.</td><td>File</td><td>Line</td><td>Code</td></tr>';
-                    foreach ($errorExplain as $k => $error) {
+                    foreach ($debugBacktrace as $k => $error) {
                         $k++;
                         $content .= '<tr class="bg1">';
                         $content .= '<td>' . $k . '</td>';
@@ -206,7 +182,7 @@ EOT;
                         $content .= '</tr>';
                     }
                 } else {
-                    $content .= '<tr><td><ul>' . $errorExplain . '</ul></td></tr>';
+                    $content .= '<tr><td><ul>' . $debugBacktrace . '</ul></td></tr>';
                 }
                 $content .= '</tbody></table></div>';
             }

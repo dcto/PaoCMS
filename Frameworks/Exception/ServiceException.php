@@ -2,10 +2,10 @@
 
 namespace PAO\Exception;
 
-class ServiceException extends PAOException
+class ServiceException extends \ErrorException
 {
     protected $code = 501;
 
-    protected $message = '501 The PaoCMS System Service Was Error';
+    protected $message = 'The service was error';
 
 }
