@@ -20,14 +20,6 @@ class Index extends Controller
 
     public function index( \PAO\Http\Request $request)
     {
-        echo $this->controller;
-        echo $this->action;
-
-        $this->make('log')->debug('ddd');
-
-        die;
-        \Captcha::make();
-
 
         echo lang('title');
 

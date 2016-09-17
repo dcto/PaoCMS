@@ -44,7 +44,7 @@ class Logger implements Log{
         'error'     => MonologLogger::ERROR,
         'critical'  => MonologLogger::CRITICAL,
         'alert'     => MonologLogger::ALERT,
-        'emergency' => MonologLogger::EMERGENCY,
+        'emergencyc' => MonologLogger::EMERGENCY,
     ];
 
 

@@ -6,16 +6,17 @@ namespace PAO\Exception;
 use Exception;
 use ReflectionMethod;
 use ReflectionFunction;
-use Illuminate\Container\Container;
 
 class PAOException
 {
     protected $container;
 
-    public function __construct()
-    {
-        $this->container = Container::getInstance();
-    }
+    protected $levels = array(
+        1   =>  'error',
+        2   =>  'warning',
+        4   =>  'critical',
+        8   =>  'notice',
+    );
 
     /**
      * [Exception]
@@ -28,24 +29,63 @@ class PAOException
      */
     public function Exception($e)
     {
-        if($this->container->config('config.log')){
-            $this->container->make('log')->error($e);
+        if(config('config.log')){
+            if(isset($this->levels[$e->getCode()])){
+                app('log')->{$this->levels[$e->getCode()]}($e->getMessage(),$this->debugBacktrace($e));
+            }else{
+                app('log')->alert($e->getMessage(),$this->debugBacktrace($e));
+            }
         }
         $httpCode = $e->getCode()>200 ? $e->getCode() : 500;
         http_response_code($httpCode);
-        if($this->container->config('config.debug')) {
-            die($this->HandleError($httpCode, $e));
+        if(config('config.debug')) {
+            die($this->display($httpCode,$e->getMessage(),$this->debugBacktrace($e)));
         }
         die($e->getMessage());
     }
 
-    public function HandleError($code, $e)
+    /**
+     * Handle a PHP error for the application.
+     *
+     * @param  int     $level
+     * @param  string  $message
+     * @param  string  $file
+     * @param  int     $line
+     * @param  array   $context
+     *
+     * @throws \ErrorException
+     */
+    public function handleError($level, $message, $file = '', $line = 0, $context = array())
     {
-        $message = $e->getMessage();
+        if (error_reporting() & $level) {
+            throw new \ErrorException($message, 0, $level, $file, $line);
+        }
+    }
+
+    /**
+     * Handle the PHP shutdown event.
+     *
+     * @return void
+     */
+    public function handleShutdown()
+    {
+        $e = error_get_last();
+        if (is_array($e)) {
+            $this->Exception(new \ErrorException($e['message'], $e['type'], 0, $e['file'], $e['line']));
+        }
+    }
+
+    /**
+     * @param $code
+     * @param $e
+     * @return string
+     */
+    public function debugBacktrace($e)
+    {
         $trace = $e->getTrace();
         krsort($trace);
         $trace[] = array('file' => $e->getFile(), 'line' => $e->getLine(), 'function' => 'break');
-        $errorExplain = array();
+        $traces = array();
 
         foreach ($trace as $error) {
             if (!empty($error['function'])) {
@@ -78,56 +118,10 @@ class PAOException
             if (!isset($error['line'])) {
                 continue;
             }
-            $errorExplain[] = array('file' => str_replace(array(PAO, ''), array('', '/'), $error['file']), 'line' => $error['line'], 'function' => $error['function']);
+            $traces[] = array('file' => str_replace(array(PAO, ''), array('', '/'), $error['file']), 'line' => $error['line'], 'function' => $error['function']);
         }
-        return $this->display($code, $message, $errorExplain);
-
+        return $traces;
     }
-
-
-    /**
-     * [debugBacktrace ����ִ�й��̻�����Ϣ]
-     *
-     *
-     */
-    public static function debugBacktrace()
-    {
-        $skipFunc[] = 'Error->debugBacktrace';
-
-        $show = $log = '';
-        $debugBacktrace = debug_backtrace();
-        ksort($debugBacktrace);
-        foreach ($debugBacktrace as $k => $error) {
-            if (!isset($error['file'])) {
-                try {
-                    if (isset($error['class'])) {
-                        $reflection = new ReflectionMethod($error['class'], $error['function']);
-                    } else {
-                        $reflection = new ReflectionFunction($error['function']);
-                    }
-                    $error['file'] = $reflection->getFileName();
-                    $error['line'] = $reflection->getStartLine();
-                } catch (Exception $e) {
-                    continue;
-                }
-            }
-
-            $file = str_replace(PAO, '', $error['file']);
-            $func = isset($error['class']) ? $error['class'] : '';
-            $func .= isset($error['type']) ? $error['type'] : '';
-            $func .= isset($error['function']) ? $error['function'] : '';
-            if (in_array($func, $skipFunc)) {
-                break;
-            }
-            $error['line'] = sprintf('%04d', $error['line']);
-
-            $show .= '<li>[Line: ' . $error['line'] . ']' . $file . '(' . $func . ')</li>';
-            $log .= !empty($log) ? ' -> ' : '';
-            $log .= $file . ':' . $error['line'];
-        }
-        return array($show, $log);
-    }
-
 
     /**
      * @static
@@ -138,7 +132,7 @@ class PAOException
      */
     public function display($code, $message, $errorExplain = '')
     {
-        //ob_end_clean();
+        ob_end_clean();
         $content = <<<EOT
 <!DOCTYPE html">
 <html>
@@ -224,5 +218,4 @@ EOT;
 EOT;
         return $content;
     }
-
 }
