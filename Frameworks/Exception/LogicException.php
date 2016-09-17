@@ -2,7 +2,7 @@
 
 namespace PAO\Exception;
 
-class LogicException extends \Exception
+class LogicException extends \ErrorException
 {
     protected $code = 412;
 

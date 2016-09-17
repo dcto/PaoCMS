@@ -227,30 +227,16 @@ class Frameworks extends Container
     {
         $PAOException = new PAOException();
 
-        //设置异常错误处理
-        set_error_handler(function ($level, $message, $file = null, $line = 0) {
-            if (error_reporting() & $level) {
-                throw new \ErrorException($message, 0, $level, $file, $line);
-            }
-        });
-
         //设置抛出异常
         set_exception_handler(function ($e)use($PAOException) {
             $PAOException->Exception($e);
         });
 
+        //异常错误处理
+        set_error_handler(array($PAOException, 'handleError'));
+
         //致命错误处理
-        register_shutdown_function(function()use($PAOException){
-
-            $e = error_get_last();
-
-            if(in_array($e['type'], [E_ERROR, E_CORE_ERROR, E_COMPILE_ERROR, E_PARSE]))
-            {
-                $e['function'] = $e['type'];
-                $error[] = $e;
-                die($PAOException->display($e['type'], $e['message'], $error));
-            }
-        });
+        register_shutdown_function(array($PAOException,'handleShutdown'));
     }
 
     /**
