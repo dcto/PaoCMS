@@ -2,10 +2,7 @@
 
 namespace PAO\Exception;
 
-
 use Exception;
-use ReflectionMethod;
-use ReflectionFunction;
 
 class PAOException
 {
