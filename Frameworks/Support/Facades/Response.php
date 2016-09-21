@@ -1,10 +1,13 @@
 <?php
 
 namespace PAO\Support\Facades;
+
+use Illuminate\Support\Facades\Facade;
+
 /**
  * @see \Illuminate\Contracts\Routing\ResponseFactory
  */
-class Response extends \Illuminate\Support\Facades\Response
+class Response extends Facade
 {
     /**
      * Get the registered name of the component.

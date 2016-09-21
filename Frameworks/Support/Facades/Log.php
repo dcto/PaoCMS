@@ -3,7 +3,9 @@
 namespace PAO\Support\Facades;
 
 
-class Log extends \Illuminate\Support\Facades\Log
+use Illuminate\Support\Facades\Facade;
+
+class Log extends Facade
 {
     /**
      * Get the registered name of the component.

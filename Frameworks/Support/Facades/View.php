@@ -3,7 +3,9 @@
 namespace PAO\Support\Facades;
 
 
-class View extends \Illuminate\Support\Facades\View
+use Illuminate\Support\Facades\Facade;
+
+class View extends Facade
 {
     /**
      * Get the registered name of the component.

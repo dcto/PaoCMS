@@ -3,7 +3,9 @@
 namespace PAO\Support\Facades;
 
 
-class Cookie extends \Illuminate\Support\Facades\Cookie
+use Illuminate\Support\Facades\Facade;
+
+class Cookie extends Facade
 {
     /**
      * Get the registered name of the component.

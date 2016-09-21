@@ -2,7 +2,9 @@
 
 namespace PAO\Support\Facades;
 
-class Router extends \Illuminate\Support\Facades\Route
+use Illuminate\Support\Facades\Facade;
+
+class Router extends Facade
 {
     /**
      * Get the registered name of the component.

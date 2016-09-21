@@ -23,9 +23,8 @@ class Index extends Controller
 
     public function index( \PAO\Http\Request $request)
     {
-
 echo '<pre>';
-
+print_r(get_included_files());
         echo '<hr />';
         //print_r($this->container->make('request')->all());
       echo $s = \Crypt::encrypt('我是中国人~@#$%%&*（*)————|。、吧c~~~~<>?）');

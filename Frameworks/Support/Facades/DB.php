@@ -3,7 +3,9 @@
 namespace PAO\Support\Facades;
 
 
-class DB extends \Illuminate\Support\Facades\DB
+use Illuminate\Support\Facades\Facade;
+
+class DB extends Facade
 {
     /**
      * Get the registered name of the component.
