@@ -2,8 +2,6 @@
 
 namespace App\Controller;
 
-use Illuminate\Support\Facades\Log;
-
 class Index extends Controller
 {
 
@@ -17,11 +15,14 @@ class Index extends Controller
         return view('未登录');
     }
 
+    public function autoload($class)
+    {
+        echo $class;die;
+    }
+
 
     public function index( \PAO\Http\Request $request)
     {
-
-        echo lang('title');
 
 echo '<pre>';
 

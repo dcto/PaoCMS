@@ -2,11 +2,8 @@
 
 namespace PAO\Support\Facades;
 
-/**
- * Class Curl
- * @see PAO\Http\Curl
- * @package PAO\Support\Facades
- */
+use Illuminate\Support\Facades\Facade;
+
 class Curl extends Facade
 {
     /**

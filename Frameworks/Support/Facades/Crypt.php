@@ -2,10 +2,8 @@
 
 namespace PAO\Support\Facades;
 
-/**
- * @see \Illuminate\Encryption\Encrypter
- */
-class Crypt extends Facade
+
+class Crypt extends \Illuminate\Support\Facades\Crypt
 {
     /**
      * Get the registered name of the component.

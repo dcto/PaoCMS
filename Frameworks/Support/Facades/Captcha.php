@@ -2,9 +2,10 @@
 
 namespace PAO\Support\Facades;
 
-/**
- * @see \Illuminate\Encryption\Encrypter
- */
+
+use Illuminate\Support\Facades\Facade;
+
+
 class Captcha extends Facade
 {
     /**

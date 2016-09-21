@@ -2,11 +2,8 @@
 
 namespace PAO\Support\Facades;
 
-/**
- * @see \Illuminate\Cache\CacheManager
- * @see \Illuminate\Cache\Repository
- */
-class Cache extends Facade
+
+class Cache extends \Illuminate\Support\Facades\Cache
 {
     /**
      * Get the registered name of the component.

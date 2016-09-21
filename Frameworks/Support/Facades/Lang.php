@@ -2,10 +2,8 @@
 
 namespace PAO\Support\Facades;
 
-/**
- * @see \Illuminate\Translation\Translator
- */
-class Lang extends Facade
+
+class Lang extends \Illuminate\Support\Facades\Lang
 {
     /**
      * Get the registered name of the component.
@@ -14,6 +12,6 @@ class Lang extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'translator';
+        return 'lang';
     }
 }

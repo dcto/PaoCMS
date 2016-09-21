@@ -2,11 +2,8 @@
 
 namespace PAO\Support\Facades;
 
-/**
- * @see \Illuminate\Database\DatabaseManager
- * @see \Illuminate\Database\Connection
- */
-class DB extends Facade
+
+class DB extends \Illuminate\Support\Facades\DB
 {
     /**
      * Get the registered name of the component.

@@ -2,10 +2,7 @@
 
 namespace PAO\Support\Facades;
 
-/**
- * @see \Illuminate\Validation\Factory
- */
-class Validator extends Facade
+class Validator extends \Illuminate\Support\Facades\Validator
 {
     /**
      * Get the registered name of the component.

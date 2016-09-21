@@ -2,10 +2,8 @@
 
 namespace PAO\Support\Facades;
 
-/**
- * @see \Illuminate\Filesystem\Filesystem
- */
-class File extends Facade
+
+class File extends \Illuminate\Support\Facades\File
 {
     /**
      * Get the registered name of the component.
@@ -14,6 +12,6 @@ class File extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'files';
+        return 'file';
     }
 }

@@ -132,7 +132,7 @@ function redirect($url, $status = 302, $headers = [])
  */
 function random($length = 16)
 {
-    \PAO\Support\Str::quickRandom($length);
+    return \Illuminate\Support\Str::quickRandom($length);
 }
 
 

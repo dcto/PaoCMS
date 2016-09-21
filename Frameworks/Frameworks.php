@@ -4,10 +4,10 @@ namespace PAO;
 
 use PAO\Http\Response;
 use PAO\Exception\PAOException;
-use PAO\Support\Facades\Facade;
 use PAO\Exception\SystemException;
 use PAO\Services\SystemServiceProvider;
 use Illuminate\Container\Container;
+use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Events\EventServiceProvider;
 use Illuminate\Pagination\PaginationServiceProvider;
@@ -82,6 +82,7 @@ class Frameworks extends Container
 
         /**
          * 初始化外观模式
+         * @var $this \Illuminate\Contracts\Foundation\Application
          */
         Facade::setFacadeApplication($this);
 
@@ -156,6 +157,7 @@ class Frameworks extends Container
 
         /**
          * 响应请求
+         * @var $response \Symfony\Component\HttpFoundation\Response
          */
         $response->send();
     }
@@ -178,11 +180,13 @@ class Frameworks extends Container
             return;
         }
         $this->is_providers[$providerName] = true;
+
         $provider->register();
+        /**
+         * @var $provider \PAO\Services\SystemServiceProvider
+         */
         $provider->boot();
     }
-
-
 
     /**
      * [注册核心容器中的别名]
@@ -191,8 +195,7 @@ class Frameworks extends Container
      */
     private function registerContainerAliases()
     {
-        $this->aliases = [
-            'route' => 'PAO\Route',
+        $this->aliases = array(
             'router' => 'PAO\Routing\Router',
             'config' => 'PAO\Configure\Repository',
             'request' => 'PAO\Http\Request',
@@ -209,15 +212,14 @@ class Frameworks extends Container
             'cache' => 'PAO\Cache\Cache',
             'log' => 'PAO\Logger',
             'db' => 'PAO\Database'
-        ];
+        );
 
-        foreach($this->aliases as $alias=>$value)
+        foreach($this->aliases as $alias => $value)
         {
             $alias = ucfirst($alias);
             class_alias(__NAMESPACE__.'\\Support\\Facades\\'.$alias, $alias);
         }
     }
-
 
     /**
      * [registerExceptionHandling 异常服务注册]
@@ -225,6 +227,8 @@ class Frameworks extends Container
      */
     private function registerExceptionHandling()
     {
+
+        //实例化异常类
         $PAOException = new PAOException();
 
         //设置抛出异常
@@ -248,16 +252,19 @@ class Frameworks extends Container
     {
         /**
          * 系统服务
+         * @var $this \Illuminate\Contracts\Foundation\Application
          */
         $this->register(new SystemServiceProvider($this));
 
         /**
          * 事件服务
+         * @var $this \Illuminate\Contracts\Foundation\Application
          */
         $this->register(new EventServiceProvider($this));
 
         /**
          * 分页服务
+         * @var $this \Illuminate\Contracts\Foundation\Application
          */
         $this->register(new PaginationServiceProvider($this));
     }
@@ -290,7 +297,6 @@ class Frameworks extends Container
 
         /**
          * 设置环境编码
-         * @var [type]
          */
         if ($charset = $this->config('config.charset')) {
             mb_internal_encoding($charset);
