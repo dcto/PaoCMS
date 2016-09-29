@@ -1,10 +1,8 @@
 <?php
 
-namespace PAO\Support\Facades;
 
-/**
- * @see \Illuminate\Config\Repository
- */
+use Illuminate\Support\Facades\Facade;
+
 class Config extends Facade
 {
     /**

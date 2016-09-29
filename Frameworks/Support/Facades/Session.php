@@ -1,11 +1,7 @@
 <?php
 
-namespace PAO\Support\Facades;
+use Illuminate\Support\Facades\Facade;
 
-/**
- * @see \Illuminate\Session\SessionManager
- * @see \Illuminate\Session\Store
- */
 class Session extends Facade
 {
     /**

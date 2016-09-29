@@ -1,10 +1,7 @@
 <?php
 
-namespace PAO\Support\Facades;
+use Illuminate\Support\Facades\Facade;
 
-/**
- * @see \Illuminate\Routing\Router
- */
 class Router extends Facade
 {
     /**

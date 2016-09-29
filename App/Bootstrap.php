@@ -15,7 +15,7 @@ defined('RUNTIME') || define('RUNTIME', dirname(__DIR__).'/RunTime');
 $loader = require('../vendor/autoload.php');
 
 //创建实例构建应用
-$app = new \PAO\Frameworks();
+$app = new \PAO\Frameworks($loader);
 
 //发布应用
 $app->Issue();

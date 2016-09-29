@@ -1,6 +1,6 @@
 <?php
 
-namespace PAO\Support\Facades;
+use Illuminate\Support\Facades\Facade;
 
 /**
  * @see \Illuminate\Contracts\Routing\ResponseFactory

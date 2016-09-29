@@ -1,10 +1,8 @@
 <?php
 
-namespace PAO\Support\Facades;
+use Illuminate\Support\Facades\Facade;
 
-/**
- * @see \Illuminate\Encryption\Encrypter
- */
+
 class Captcha extends Facade
 {
     /**

@@ -1,12 +1,7 @@
 <?php
 
-namespace PAO\Support\Facades;
+use Illuminate\Support\Facades\Facade;
 
-/**
- * Class Curl
- * @see PAO\Http\Curl
- * @package PAO\Support\Facades
- */
 class Curl extends Facade
 {
     /**

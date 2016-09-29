@@ -1,10 +1,7 @@
 <?php
 
-namespace PAO\Support\Facades;
+use Illuminate\Support\Facades\Facade;
 
-/**
- * @see \Illuminate\Translation\Translator
- */
 class Lang extends Facade
 {
     /**
@@ -14,6 +11,6 @@ class Lang extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'translator';
+        return 'lang';
     }
 }

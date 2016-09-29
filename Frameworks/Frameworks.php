@@ -2,12 +2,13 @@
 
 namespace PAO;
 
+use Composer\Autoload\ClassLoader;
 use PAO\Http\Response;
 use PAO\Exception\PAOException;
-use PAO\Support\Facades\Facade;
 use PAO\Exception\SystemException;
 use PAO\Services\SystemServiceProvider;
 use Illuminate\Container\Container;
+use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Events\EventServiceProvider;
 use Illuminate\Pagination\PaginationServiceProvider;
@@ -34,8 +35,11 @@ version_compare(PHP_VERSION,'5.5.0','ge') || die('The php version least must 5.5
  */
 class Frameworks extends Container
 {
-
-    const VERSION = 'v1.2';
+    /**
+     * 自动加载器
+     * @var \Composer\Autoload\ClassLoader $loader
+     */
+    private $loader;
 
     /**
      * 已注入的模块
@@ -52,6 +56,15 @@ class Frameworks extends Container
 
 
     /**
+     * Frameworks constructor.
+     * @param $loader
+     */
+    public function __construct($loader)
+    {
+        $this->loader = $loader;
+    }
+
+    /**
      * [Issue 核心应用构造方法]
      */
     public function Issue()
@@ -66,7 +79,7 @@ class Frameworks extends Container
         $this->instance('Illuminate\Container\Container', $this);
 
         /**
-         * 注册核心容器
+         * 注册系统组件
          */
         $this->registerContainerAliases();
 
@@ -81,9 +94,15 @@ class Frameworks extends Container
         $this->registerExceptionHandling();
 
         /**
-         * 初始化外观模式
+         * 初始外观模式
+         * @var $this \Illuminate\Contracts\Foundation\Application
          */
         Facade::setFacadeApplication($this);
+
+        /**
+         * 注册外观别名
+         */
+        $this->registerFacadesAlias();
 
         /**
          * 基本服务注册
@@ -156,6 +175,7 @@ class Frameworks extends Container
 
         /**
          * 响应请求
+         * @var $response \Symfony\Component\HttpFoundation\Response
          */
         $response->send();
     }
@@ -178,11 +198,13 @@ class Frameworks extends Container
             return;
         }
         $this->is_providers[$providerName] = true;
+
         $provider->register();
+        /**
+         * @var $provider \PAO\Services\SystemServiceProvider
+         */
         $provider->boot();
     }
-
-
 
     /**
      * [注册核心容器中的别名]
@@ -191,8 +213,7 @@ class Frameworks extends Container
      */
     private function registerContainerAliases()
     {
-        $this->aliases = [
-            'route' => 'PAO\Route',
+        $this->aliases = array(
             'router' => 'PAO\Routing\Router',
             'config' => 'PAO\Configure\Repository',
             'request' => 'PAO\Http\Request',
@@ -209,13 +230,23 @@ class Frameworks extends Container
             'cache' => 'PAO\Cache\Cache',
             'log' => 'PAO\Logger',
             'db' => 'PAO\Database'
-        ];
+        );
+    }
 
-        foreach($this->aliases as $alias=>$value)
-        {
+    /**
+     * [registerFacadesAlias 注册门面别名]
+     */
+    private function registerFacadesAlias()
+    {
+        $classMap = array(
+            'Arr' => __DIR__.'/Support/Arr.php',
+            'Str' => __DIR__.'/Support/Str.php'
+        );
+        foreach($this->aliases as $alias => $class) {
             $alias = ucfirst($alias);
-            class_alias(__NAMESPACE__.'\\Support\\Facades\\'.$alias, $alias);
+            $classMap[$alias] = __DIR__.'/Support/Facades/'.$alias.'.php';
         }
+        $this->loader->addClassMap($classMap);
     }
 
 
@@ -225,6 +256,8 @@ class Frameworks extends Container
      */
     private function registerExceptionHandling()
     {
+
+        //实例化异常类
         $PAOException = new PAOException();
 
         //设置抛出异常
@@ -248,16 +281,19 @@ class Frameworks extends Container
     {
         /**
          * 系统服务
+         * @var $this \Illuminate\Contracts\Foundation\Application
          */
         $this->register(new SystemServiceProvider($this));
 
         /**
          * 事件服务
+         * @var $this \Illuminate\Contracts\Foundation\Application
          */
         $this->register(new EventServiceProvider($this));
 
         /**
          * 分页服务
+         * @var $this \Illuminate\Contracts\Foundation\Application
          */
         $this->register(new PaginationServiceProvider($this));
     }
@@ -290,7 +326,6 @@ class Frameworks extends Container
 
         /**
          * 设置环境编码
-         * @var [type]
          */
         if ($charset = $this->config('config.charset')) {
             mb_internal_encoding($charset);

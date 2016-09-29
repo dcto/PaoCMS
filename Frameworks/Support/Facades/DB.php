@@ -1,11 +1,7 @@
 <?php
 
-namespace PAO\Support\Facades;
+use Illuminate\Support\Facades\Facade;
 
-/**
- * @see \Illuminate\Database\DatabaseManager
- * @see \Illuminate\Database\Connection
- */
 class DB extends Facade
 {
     /**

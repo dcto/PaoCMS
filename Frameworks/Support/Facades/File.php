@@ -1,10 +1,7 @@
 <?php
 
-namespace PAO\Support\Facades;
+use Illuminate\Support\Facades\Facade;
 
-/**
- * @see \Illuminate\Filesystem\Filesystem
- */
 class File extends Facade
 {
     /**
@@ -14,6 +11,6 @@ class File extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'files';
+        return 'file';
     }
 }
