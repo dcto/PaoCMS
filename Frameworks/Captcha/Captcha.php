@@ -113,6 +113,9 @@ class Captcha {
          */
         $this->setImageString($images, $phrase);
 
+        /**
+         * 获取容器
+         */
         $container = Container::getInstance();
 
         /**
