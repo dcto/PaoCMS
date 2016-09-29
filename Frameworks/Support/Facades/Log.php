@@ -1,8 +1,5 @@
 <?php
 
-namespace PAO\Support\Facades;
-
-
 use Illuminate\Support\Facades\Facade;
 
 class Log extends Facade
