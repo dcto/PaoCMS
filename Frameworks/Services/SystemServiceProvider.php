@@ -36,11 +36,6 @@ class SystemServiceProvider extends ServiceProvider
         }
 
         /**
-         * 加载系统function
-         */
-        require(dirname(__DIR__).'/Function.php');
-
-        /**
          * 加载App function
          */
         if(is_readable($function = APP.'/Function/function.php')){

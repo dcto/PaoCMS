@@ -15,6 +15,7 @@
     "psr-4": {
       "App\\": "App/",
       "PAO\\": "Frameworks/"
-    }
+    },
+    "files": ["Frameworks/Support/Function.php"]
   }
 }
