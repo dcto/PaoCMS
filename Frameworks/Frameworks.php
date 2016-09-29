@@ -238,12 +238,14 @@ class Frameworks extends Container
      */
     private function registerFacadesAlias()
     {
-        $classMap = array();
+        $classMap = array(
+            'Arr' => __DIR__.'/Support/Arr.php',
+            'Str' => __DIR__.'/Support/Str.php'
+        );
         foreach($this->aliases as $alias => $class) {
             $alias = ucfirst($alias);
-            $classMap[$alias] = PAO.'/Frameworks/Support/Facades/'.$alias.'.php';
+            $classMap[$alias] = __DIR__.'/Support/Facades/'.$alias.'.php';
         }
-
         $this->loader->addClassMap($classMap);
     }
 
