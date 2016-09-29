@@ -90,6 +90,46 @@ function response($content = '', $status = 200, $header = array())
 
 
 /**
+ * redirect to url
+ * @param $url
+ * @param int $status
+ * @param array $headers
+ * @return mixed
+ */
+function redirect($url, $status = 302, $headers = [])
+{
+    return app('response')->redirect($url, $status, $headers);
+}
+
+/**
+ * session object
+ */
+function session($k = false, $v = false)
+{
+    if($k && $v) {
+        return app('session')->set($k, $v);
+    }else if($k) {
+        return app('session')->get($k);
+    }else{
+        return app('session');
+    }
+}
+
+/**
+ * cookie object
+ */
+function cookie($k = false, $v = false)
+{
+    if($k && $v) {
+        return app('cookie')->set($k, $v);
+    }else if($k) {
+        return app('cookie')->get($k);
+    }else{
+        return app('cookie');
+    }
+}
+
+/**
  * view response
  * @param $view
  * @param array $data
@@ -114,17 +154,6 @@ function json($data = [], $status = 200, array $headers = [])
     return app('response')->json($data, $status, $headers);
 }
 
-/**
- * redirect to url
- * @param $url
- * @param int $status
- * @param array $headers
- * @return mixed
- */
-function redirect($url, $status = 302, $headers = [])
-{
-    return app('response')->redirect($url, $status, $headers);
-}
 
 /**
  * random string
@@ -132,7 +161,7 @@ function redirect($url, $status = 302, $headers = [])
  */
 function random($length = 16)
 {
-    return \Illuminate\Support\Str::quickRandom($length);
+    return Str::quickRandom($length);
 }
 
 
