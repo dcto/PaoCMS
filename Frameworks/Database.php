@@ -2,12 +2,10 @@
 
 namespace PAO;
 
-
 use PAO\Exception\DBException;
+use Illuminate\Events\Dispatcher;
 use Illuminate\Container\Container;
-
-
-
+use Illuminate\Pagination\PaginationServiceProvider;
 
 class Database extends  \Illuminate\Database\Capsule\Manager
 {
@@ -17,7 +15,7 @@ class Database extends  \Illuminate\Database\Capsule\Manager
         /**
          * 设置容器
          */
-        $this->setupContainer(Container::getInstance());
+        $this->setupContainer(app());
 
         /**
          * 创建数据库实例
@@ -27,7 +25,7 @@ class Database extends  \Illuminate\Database\Capsule\Manager
         /**
          * 设置配置
          */
-        $database = $this->getContainer()->make('config')->get('database');
+        $database = config('database');
 
         /**
          * 批量加数数据连接
@@ -41,7 +39,7 @@ class Database extends  \Illuminate\Database\Capsule\Manager
         /**
          * 注册数据库监听
          */
-        $this->setEventDispatcher(new \Illuminate\Events\Dispatcher($this->getContainer()));
+        $this->setEventDispatcher(new Dispatcher(app()));
 
         /**
          * 设置默认数据库为default
@@ -61,24 +59,16 @@ class Database extends  \Illuminate\Database\Capsule\Manager
         /**
          * 判断是否打开调式sql模式
          */
-        if($this->getContainer()->config('config.debug') || $this->getContainer()->config('config.log')) {
+        if(config('config.debug') || config('config.log')) {
             $this->connection()->enableQueryLog();
         }
 
         /**
          * 注入分页服务
+         * @var Container $container
          */
-        //$container->register('Illuminate\Pagination\PaginationServiceProvider');
+        app()->register(new PaginationServiceProvider((app())));
 
-        /*
-        Paginator::currentPathResolver(function () {
-            return $this->make('request')->url();
-        });
-
-        Paginator::currentPageResolver(function ($pageName = 'page') {
-            return $this->make('request')->get($pageName);
-        });
-        */
     }
 
 
