@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+
+
 class Index extends Controller
 {
 
@@ -9,6 +11,7 @@ class Index extends Controller
     {
         return $this->container->make('captcha')->make();
     }
+
 
     public function checkLogin()
     {
@@ -23,12 +26,16 @@ class Index extends Controller
 
     public function index( \PAO\Http\Request $request)
     {
+
 echo '<pre>';
-print_r(get_included_files());
+
         echo '<hr />';
         //print_r($this->container->make('request')->all());
       echo $s = \Crypt::encrypt('我是中国人~@#$%%&*（*)————|。、吧c~~~~<>?）');
-        echo '<br />';
+        echo '<hr />';
+
+        echo \Crypt::decrypt($s).'<br />';
+        print_r(get_included_files());die;
      // return Response::make('test');
 
         //print_r($this->make('request')->header);
