@@ -2,6 +2,7 @@
 
 namespace PAO;
 
+use Composer\Autoload\ClassLoader;
 use PAO\Http\Response;
 use PAO\Exception\PAOException;
 use PAO\Exception\SystemException;
@@ -34,8 +35,11 @@ version_compare(PHP_VERSION,'5.5.0','ge') || die('The php version least must 5.5
  */
 class Frameworks extends Container
 {
-
-    const VERSION = 'v1.2';
+    /**
+     * 自动加载器
+     * @var \Composer\Autoload\ClassLoader $loader
+     */
+    private $loader;
 
     /**
      * 已注入的模块
@@ -52,6 +56,15 @@ class Frameworks extends Container
 
 
     /**
+     * Frameworks constructor.
+     * @param $loader
+     */
+    public function __construct($loader)
+    {
+        $this->loader = $loader;
+    }
+
+    /**
      * [Issue 核心应用构造方法]
      */
     public function Issue()
@@ -66,7 +79,7 @@ class Frameworks extends Container
         $this->instance('Illuminate\Container\Container', $this);
 
         /**
-         * 注册核心容器
+         * 注册系统组件
          */
         $this->registerContainerAliases();
 
@@ -81,10 +94,15 @@ class Frameworks extends Container
         $this->registerExceptionHandling();
 
         /**
-         * 初始化外观模式
+         * 初始外观模式
          * @var $this \Illuminate\Contracts\Foundation\Application
          */
         Facade::setFacadeApplication($this);
+
+        /**
+         * 注册外观别名
+         */
+        $this->registerFacadesAlias();
 
         /**
          * 基本服务注册
@@ -213,13 +231,22 @@ class Frameworks extends Container
             'log' => 'PAO\Logger',
             'db' => 'PAO\Database'
         );
-
-        foreach($this->aliases as $alias => $value)
-        {
-            $alias = ucfirst($alias);
-            class_alias(__NAMESPACE__.'\\Support\\Facades\\'.$alias, $alias);
-        }
     }
+
+    /**
+     * [registerFacadesAlias 注册门面别名]
+     */
+    private function registerFacadesAlias()
+    {
+        $classMap = array();
+        foreach($this->aliases as $alias => $class) {
+            $alias = ucfirst($alias);
+            $classMap[$alias] = PAO.'/Frameworks/Support/Facades/'.$alias.'.php';
+        }
+
+        $this->loader->addClassMap($classMap);
+    }
+
 
     /**
      * [registerExceptionHandling 异常服务注册]
