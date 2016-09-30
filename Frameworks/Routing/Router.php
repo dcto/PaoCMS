@@ -8,7 +8,7 @@
 
 namespace PAO\Routing;
 
-use PAO\Support\Arr;
+use Arr;
 use PAO\Http\Response;
 use PAO\Exception\SystemException;
 use PAO\Exception\NotFoundHttpException;

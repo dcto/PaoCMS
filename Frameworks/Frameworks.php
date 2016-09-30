@@ -2,7 +2,6 @@
 
 namespace PAO;
 
-use Composer\Autoload\ClassLoader;
 use PAO\Http\Response;
 use PAO\Exception\PAOException;
 use PAO\Exception\SystemException;
@@ -11,7 +10,6 @@ use Illuminate\Container\Container;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Events\EventServiceProvider;
-use Illuminate\Pagination\PaginationServiceProvider;
 
 
 /**
@@ -290,12 +288,6 @@ class Frameworks extends Container
          * @var $this \Illuminate\Contracts\Foundation\Application
          */
         $this->register(new EventServiceProvider($this));
-
-        /**
-         * 分页服务
-         * @var $this \Illuminate\Contracts\Foundation\Application
-         */
-        $this->register(new PaginationServiceProvider($this));
     }
 
 

@@ -1,8 +1,9 @@
 <?php
 namespace PAO\Routing;
 
+use Arr;
 use PAO\Exception\NotFoundHttpException;
-use PAO\Support\Arr;
+
 
 /**
  * The Route class is responsible for routing an HTTP request to an assigned Callback function.

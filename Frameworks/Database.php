@@ -6,8 +6,9 @@ use PAO\Exception\DBException;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Container\Container;
 use Illuminate\Pagination\PaginationServiceProvider;
+use Illuminate\Database\Capsule\Manager as DatabaseManager;
 
-class Database extends  \Illuminate\Database\Capsule\Manager
+class Database extends DatabaseManager
 {
 
     public function __construct()
@@ -71,7 +72,6 @@ class Database extends  \Illuminate\Database\Capsule\Manager
 
     }
 
-
     /**
      * [__call 魔术方法实现Facades的呼叫]
      *
@@ -84,8 +84,6 @@ class Database extends  \Illuminate\Database\Capsule\Manager
     {
         return call_user_func_array([$this->connection(), $method], $parameters);
     }
-
-
 
     /**
      * [getSql 返回查询语句]
