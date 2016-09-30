@@ -1,6 +1,5 @@
 <?php
 
-
 use Illuminate\Support\Facades\Facade;
 
 class Config extends Facade
