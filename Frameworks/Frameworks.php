@@ -138,7 +138,7 @@ class Frameworks extends Container
     }
 
     /**
-     * [service 应用服务注册器]
+     * [event 事件操作注册器]
      *
      * @param $abstract
      * @param array $parameters
