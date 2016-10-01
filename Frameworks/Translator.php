@@ -131,9 +131,9 @@ class Translator
 
         $language = $language ? $this->language = $language : $this->language;
 
-        $AppLanguage = APP.DIRECTORY_SEPARATOR.'Language'.DIRECTORY_SEPARATOR.$language.'.ini';
+        $AppLanguage = APP.DIRECTORY_SEPARATOR.'Lang'.DIRECTORY_SEPARATOR.$language.'.ini';
 
-        $SubLanguage = APP.DIRECTORY_SEPARATOR.'Language'.DIRECTORY_SEPARATOR.NAME.DIRECTORY_SEPARATOR.$language.'.ini';
+        $SubLanguage = APP.DIRECTORY_SEPARATOR.'Lang'.DIRECTORY_SEPARATOR.NAME.DIRECTORY_SEPARATOR.$language.'.ini';
 
         $readable = false;
 

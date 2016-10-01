@@ -38,7 +38,7 @@ class SystemServiceProvider extends ServiceProvider
         /**
          * 加载App function
          */
-        if(is_readable($function = APP.'/Function/function.php')){
+        if(is_readable($function = APP.'/Helper/function.php')){
             require($function);
         }
 
@@ -46,7 +46,7 @@ class SystemServiceProvider extends ServiceProvider
 
         $functions = array_unique($functions);
         foreach ($functions as $function){
-            if(is_readable($function = APP.'/Function/'.$function)){
+            if(is_readable($function = APP.'/Helper/'.$function)){
                 require_once ($function);
             }
         }
