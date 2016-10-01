@@ -36,9 +36,21 @@ class Crypt
 	public function __construct($key = null, $bit = 128, $iv = "")
 	{
 		$this->key = $bit == 256 ? hash('SHA256', $key, true) : hash('MD5', $key, true);
+        $this->bit = $bit;
 		$this->iv = $iv != "" ? hash('MD5', $iv, true) : str_repeat(chr(0), 16);
 	}
 
+    /**
+     * set get key
+     *
+     * @param $key
+     */
+	public function key($key = null)
+    {
+        if(!$key) return $this->key;
+        $this->key = $key;
+        return true;
+    }
 
 	/**
 	 * [encrypt 加密字符串]

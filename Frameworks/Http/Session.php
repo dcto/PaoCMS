@@ -138,6 +138,16 @@ class Session implements SessionInterface, \IteratorAggregate, \Countable
     }
 
     /**
+     * remove alias
+     * @param $name
+     * @return mixed
+     */
+    public function del($name)
+    {
+        return $this->remove($name);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function replace(array $attributes)

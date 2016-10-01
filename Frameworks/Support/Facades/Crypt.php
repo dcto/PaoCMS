@@ -2,6 +2,13 @@
 
 use Illuminate\Support\Facades\Facade;
 
+/**
+ * Class Crypt
+ *
+ * @method static Crypt key(string $str = null)
+ * @method static Crypt encrypt(string $str)
+ * @method static Crypt decrypt(string $str)
+ */
 class Crypt extends Facade
 {
     /**

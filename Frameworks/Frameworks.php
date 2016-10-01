@@ -68,12 +68,18 @@ class Frameworks extends Container
     public function Issue()
     {
         /**
-         * 核心框架注入
+         * 核心注入
          */
         static::setInstance($this);
 
+        /**
+         * 单例模式
+         */
         $this->instance('app', $this);
 
+        /**
+         * 注入容器
+         */
         $this->instance('Illuminate\Container\Container', $this);
 
         /**

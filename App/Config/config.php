@@ -10,7 +10,7 @@ $config['language']     = 'zh-CN'; //默认语言包
 $config['session']      = 'redis'; //Session存储方式
 
 $config['dir']['pao']   = PAO;//系统根目录
-$config['dir']['web']   = PAO.DIRECTORY_SEPARATOR.'web'; //公共资源目录
-$config['dir']['log']   = PAO.DIRECTORY_SEPARATOR.'RunTime'.DIRECTORY_SEPARATOR.'Logs'; //日志存放目录
+$config['dir']['web']   = PAO.'/web'; //公共资源目录
+$config['dir']['log']   = RUNTIME.'/Logs'; //日志存放目录
 $config['dir']['file']  = 'archives'; //文件上传目录
-$config['dir']['cache'] = PAO.DIRECTORY_SEPARATOR.'RunTime'.DIRECTORY_SEPARATOR.'Cache'; //缓存存放目录
+$config['dir']['cache'] = RUNTIME.'/Cache'; //缓存存放目录

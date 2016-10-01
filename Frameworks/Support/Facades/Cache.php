@@ -2,6 +2,12 @@
 
 use Illuminate\Support\Facades\Facade;
 
+/**
+ * Class Cache
+ *
+ * @method static Cache file(string $cache = 'default')
+ * @method static Cache redis(string $server = 'default')
+ */
 class Cache extends Facade
 {
     /**

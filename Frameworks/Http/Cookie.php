@@ -2,14 +2,12 @@
 
 namespace PAO\Http;
 
-
 use Illuminate\Container\Container;
 
-class Cookie
-{
+class Cookie{
 
     /**
-     * 容器
+     * 瀹瑰櫒
      * @var static
      */
     protected $container;
@@ -22,7 +20,7 @@ class Cookie
     }
 
     /**
-     * [set 设置cookie]
+     * [set 璁剧疆cookie]
      *
      * @param            $name
      * @param null       $value
@@ -46,7 +44,7 @@ class Cookie
 
 
     /**
-     * [has 判断cookie是否存在]
+     * [has 鍒ゆ柇cookie鏄惁瀛樺湪]
      *
      * @author 11.
      */
@@ -56,7 +54,7 @@ class Cookie
     }
 
     /**
-     * [get 获取cookie]
+     * [get 鑾峰彇cookie]
      *
      * @param $name
      * @return mixed
@@ -68,7 +66,7 @@ class Cookie
     }
 
     /**
-     * [all 返回全部cookie]
+     * [all 杩斿洖鍏ㄩ儴cookie]
      *
      * @return mixed
      * @author 11.
@@ -80,7 +78,7 @@ class Cookie
 
 
     /**
-     * [del 删除cookie]
+     * [del 鍒犻櫎cookie]
      *
      * @param $name
      * @author 11.

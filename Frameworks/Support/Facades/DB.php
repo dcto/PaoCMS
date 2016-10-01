@@ -2,6 +2,11 @@
 
 use Illuminate\Support\Facades\Facade;
 
+/**
+ * Class DB
+ *
+ * @method static DB
+ */
 class DB extends Facade
 {
     /**

@@ -1,7 +1,7 @@
 <?php
+
 namespace PAO\Cache;
 
-use PAO\Cache\Redis;
 use Illuminate\Container\Container;
 
 class Cache
@@ -9,7 +9,7 @@ class Cache
 
     /**
      * 容器
-     * @var \Illuminate\Container\Container\
+     * @var \Illuminate\Container\Container
      */
     protected $container;
 
@@ -39,7 +39,7 @@ class Cache
      * @return \PAO\Cache\FileSystem
      * @author 11.
      */
-    public function File($cache = 'default')
+    public function file($cache = 'default')
     {
         if(isset($this->cache['file'][$cache]))
         {
@@ -54,10 +54,10 @@ class Cache
      * [Redis 实例]
      *
      * @param string $server 连接的服务器名称
-     * @return mixed
+     * @return \Redis
      * @author 11.
      */
-    public function Redis($server = 'default')
+    public function redis($server = 'default')
     {
         if(isset($this->cache['redis'][$server]))
         {

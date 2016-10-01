@@ -140,10 +140,10 @@ class Request extends HttpFoundation\Request
      * @return array
      * @author 11.
      */
-    public function all($do = null)
+    public function all($key = null)
     {
-        if($do[0]=='!') {
-            return $this->not(ltrim($do,'!'));
+        if($key[0]=='!') {
+            return $this->not(ltrim($key,'!'));
         }
         return array_replace_recursive($this->input(), $this->files->all());
     }
