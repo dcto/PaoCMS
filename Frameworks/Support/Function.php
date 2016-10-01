@@ -35,9 +35,9 @@ function make($make = null, $parameters = [])
  * @param array $parameters
  * @return mixed
  */
-function service($make, $parameters = [])
+function event($make, $parameters = [])
 {
-    return app()->servcie($make, $parameters);
+    return app()->event($make, $parameters);
 }
 
 /**

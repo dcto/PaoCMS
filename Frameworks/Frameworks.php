@@ -144,9 +144,9 @@ class Frameworks extends Container
      * @param array $parameters
      * @return mixed
      */
-    public function service($abstract, array $parameters = [])
+    public function event($abstract, array $parameters = [])
     {
-        $abstract = 'App\\Service\\'.$abstract;
+        $abstract = 'App\\Events\\'.$abstract;
 
         return $this->make($abstract, $parameters);
     }
