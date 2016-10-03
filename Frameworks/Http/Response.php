@@ -162,7 +162,7 @@ class Response
         }
         $this->response = new HttpFoundation\JsonResponse($data, $status, $headers);
 
-        return $this->response;
+        return $this;
     }
 
 
@@ -208,7 +208,7 @@ class Response
     {
         $this->response = new HttpFoundation\StreamedResponse($callback, $status, $headers);
 
-        return $this->response;
+        return $this;
     }
 
 
@@ -228,7 +228,7 @@ class Response
         if (! is_null($name)) {
              $this->response->setContentDisposition($disposition, $name, str_replace('%', '', \Illuminate\Support\Str::ascii($name)));
         }
-        return $this->response;
+        return $this;
     }
 
 
@@ -245,7 +245,7 @@ class Response
     {
         $this->response = new HttpFoundation\RedirectResponse($url, $status, $headers);
 
-        return $this->response;
+        return $this;
     }
 
     /**
