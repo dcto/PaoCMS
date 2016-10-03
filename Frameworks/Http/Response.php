@@ -162,7 +162,7 @@ class Response
         }
         $this->response = new HttpFoundation\JsonResponse($data, $status, $headers);
 
-        return $this;
+        return $this->response;
     }
 
 
@@ -190,7 +190,7 @@ class Response
      * @return HttpFoundation\RedirectResponse
      * @author 11.
      */
-    public function url($url, $status = 302, $headers = [])
+    public function url($url, $status = 302, array $headers = [])
     {
         return $this->redirect($url, $status, $headers);
     }
@@ -208,7 +208,7 @@ class Response
     {
         $this->response = new HttpFoundation\StreamedResponse($callback, $status, $headers);
 
-        return $this;
+        return $this->response;
     }
 
 
@@ -228,7 +228,7 @@ class Response
         if (! is_null($name)) {
              $this->response->setContentDisposition($disposition, $name, str_replace('%', '', \Illuminate\Support\Str::ascii($name)));
         }
-        return $this;
+        return $this->response;
     }
 
 
@@ -245,7 +245,7 @@ class Response
     {
         $this->response = new HttpFoundation\RedirectResponse($url, $status, $headers);
 
-        return $this;
+        return $this->response;
     }
 
     /**

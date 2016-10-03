@@ -1,7 +1,2 @@
 <?php
-/**
- * 加载自定义function文件
- */
-$function = array(
-        'admin',
-);
+defined('PAO') || die('The PaoCMS Load Error');

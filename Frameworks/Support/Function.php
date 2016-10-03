@@ -6,7 +6,7 @@ use Illuminate\Container\Container;
  *
  * @param  string  $make
  * @param  array   $parameters
- * @return object
+ * @return Container
  */
 function app($make = null, $parameters = [])
 {
@@ -21,7 +21,7 @@ function app($make = null, $parameters = [])
  * make alias name for app
  * @param null $make
  * @param array $parameters
- * @return object
+ * @return mixed
  */
 function make($make = null, $parameters = [])
 {
@@ -33,11 +33,11 @@ function make($make = null, $parameters = [])
  *
  * @param $make
  * @param array $parameters
- * @return mixed
+ * @return Container
  */
-function service($make, $parameters = [])
+function event($make, $parameters = [])
 {
-    return app()->servcie($make, $parameters);
+    return app()->event($make, $parameters);
 }
 
 /**
@@ -60,7 +60,7 @@ function lang()
 
 /**
  * get config
- * @return mixed
+ * @return string
  */
 function config()
 {
@@ -69,11 +69,11 @@ function config()
 
 /**
  * request object
- * @return object
+ * @return \PAO\Http\Request
  */
 function request()
 {
-    return app('request');
+    return make('request');
 }
 
 /**
@@ -81,7 +81,7 @@ function request()
  * @param $content
  * @param int $code
  * @param array $header
- * @return mixed
+ * @return \PAO\Http\Response
  */
 function response($content = '', $status = 200, $header = array())
 {
@@ -103,6 +103,7 @@ function redirect($url, $status = 302, $headers = [])
 
 /**
  * session object
+ * @return \PAO\Http\Session
  */
 function session($k = false, $v = false)
 {
@@ -117,6 +118,7 @@ function session($k = false, $v = false)
 
 /**
  * cookie object
+ * @return \PAO\Http\Cookie
  */
 function cookie($k = false, $v = false)
 {
@@ -135,7 +137,7 @@ function cookie($k = false, $v = false)
  * @param array $data
  * @param int $status
  * @param array $headers
- * @return mixed
+ * @return \PAO\View
  */
 function view($view, array $data = [], $status = 200, array $headers = [])
 {
@@ -147,17 +149,27 @@ function view($view, array $data = [], $status = 200, array $headers = [])
  * @param array $data
  * @param int $status
  * @param array $headers
- * @return mixed
+ * @return \Symfony\Component\HttpFoundation\JsonResponse
  */
 function json($data = [], $status = 200, array $headers = [])
 {
     return app('response')->json($data, $status, $headers);
 }
 
+/**
+ * redis
+ * @param string $server
+ * @return \Redis
+ */
+function redis($server = 'default')
+{
+    return app('cache')->redis($server);
+}
 
 /**
  * random string
  * @param int $length
+ * @return string
  */
 function random($length = 16)
 {

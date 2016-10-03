@@ -179,7 +179,7 @@ class FileSystem
     private function load()
     {
 
-        $this->file = Container::getInstance()->config('config.dir.cache').'/'.$this->file;
+        $this->file = Container::getInstance()->config('app.dir.cache').'/'.$this->file;
 
         if(!file_exists($this->file))
         {

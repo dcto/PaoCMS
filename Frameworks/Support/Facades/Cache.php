@@ -2,6 +2,12 @@
 
 use Illuminate\Support\Facades\Facade;
 
+/**
+ * Class Cache
+ *
+ * @method static \PAO\FileSystem\Files file(string $file = 'default')
+ * @method static \Redis redis(string $server = 'default');
+ */
 class Cache extends Facade
 {
     /**

@@ -37,7 +37,7 @@ class Translator
 
         $this->items = $items;
 
-		$this->language = $this->container->config('config.language');
+		$this->language = $this->container->config('app.language');
 
         $this->parseLanguage();
 	}
@@ -131,9 +131,9 @@ class Translator
 
         $language = $language ? $this->language = $language : $this->language;
 
-        $AppLanguage = APP.DIRECTORY_SEPARATOR.'Language'.DIRECTORY_SEPARATOR.$language.'.ini';
+        $AppLanguage = APP.DIRECTORY_SEPARATOR.'Lang'.DIRECTORY_SEPARATOR.$language.'.ini';
 
-        $SubLanguage = APP.DIRECTORY_SEPARATOR.'Language'.DIRECTORY_SEPARATOR.NAME.DIRECTORY_SEPARATOR.$language.'.ini';
+        $SubLanguage = APP.DIRECTORY_SEPARATOR.'Lang'.DIRECTORY_SEPARATOR.NAME.DIRECTORY_SEPARATOR.$language.'.ini';
 
         $readable = false;
 

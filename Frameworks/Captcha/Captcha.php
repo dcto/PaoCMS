@@ -15,9 +15,12 @@ class Captcha {
      * 设置字体
      * @var array
      */
-    public $fonts;
+    protected $fonts;
 
-
+    /**
+     * 随机验证码
+     * @var string
+     */
     protected $token;
 
     /**
@@ -61,6 +64,16 @@ class Captcha {
         }else{
             return false;
         }
+    }
+
+    /**
+     * set fonts
+     *
+     * @param array $fonts
+     */
+    public function fonts(array $fonts)
+    {
+        $this->fonts = $fonts;
     }
 
 

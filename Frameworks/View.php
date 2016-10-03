@@ -58,13 +58,13 @@ class View
             'cache' => $this->container->config('template.cache')?:false,
 
             //生成的模板会有一个__toString()方法，可以用来显示生成的Node（缺省为false）
-            'debug' => $this->container->config('config.debug')?:false,
+            'debug' => $this->container->config('app.debug')?:false,
 
             //当用Twig开发时，是有必要在每次模板变更之后都重新编译的。如果不提供一个auto_reload参数，他会从debug选项中取值
-            'auto_reload' => $this->container->config('config.debug')?:false,
+            'auto_reload' => $this->container->config('app.debug')?:false,
 
             //模板的字符集，缺省为utf-8。
-            'charset' => $this->container->config('config.charset'),
+            'charset' => $this->container->config('app.charset'),
 
             //如果设置为false，Twig会忽略无效的变量（无效指的是不存在的变量或者属性/方法），并将其替换为null。如果这个选项设置为true，那么遇到这种情况的时候，Twig会抛出异常。
             'strict_variables' =>false,
@@ -103,7 +103,7 @@ class View
          */
         $twig->addGlobal('PAO', PAO);
         $twig->addGlobal('APP', basename(APP));
-        $twig->addGlobal('config', $this->container->config('config'));
+        $twig->addGlobal('app', $this->container->config('app'));
         $twig->addGlobal('request', $this->container->make('request'));
         $twig->addGlobal('timezone', date_default_timezone_get());
         $twig->addGlobal('lang', $this->container->make('lang')->all());

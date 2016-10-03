@@ -68,12 +68,18 @@ class Frameworks extends Container
     public function Issue()
     {
         /**
-         * 核心框架注入
+         * 核心注入
          */
         static::setInstance($this);
 
+        /**
+         * 单例模式
+         */
         $this->instance('app', $this);
 
+        /**
+         * 注入容器
+         */
         $this->instance('Illuminate\Container\Container', $this);
 
         /**
@@ -132,15 +138,15 @@ class Frameworks extends Container
     }
 
     /**
-     * [service 应用服务注册器]
+     * [event 事件操作注册器]
      *
      * @param $abstract
      * @param array $parameters
      * @return mixed
      */
-    public function service($abstract, array $parameters = [])
+    public function event($abstract, array $parameters = [])
     {
-        $abstract = 'App\\Service\\'.$abstract;
+        $abstract = 'App\\Events\\'.$abstract;
 
         return $this->make($abstract, $parameters);
     }
@@ -150,7 +156,7 @@ class Frameworks extends Container
      *
      * @param $config [配置文件项]
      * @return mixed
-     * @example $this->config('config.debug');
+     * @example $this->config('app.debug');
      */
     public function config($config)
     {
@@ -301,7 +307,7 @@ class Frameworks extends Container
         /**
          * 设置错误报告
          */
-        if($this->config('config.debug')) {
+        if($this->config('app.debug')) {
             error_reporting(E_ALL);
             ini_set('display_errors', 'On');
         }else{
@@ -312,14 +318,14 @@ class Frameworks extends Container
         /**
          * 设置系统时区
          */
-        if ($timezone = $this->config('config.timezone')) {
+        if ($timezone = $this->config('app.timezone')) {
             date_default_timezone_set($timezone);
         }
 
         /**
          * 设置环境编码
          */
-        if ($charset = $this->config('config.charset')) {
+        if ($charset = $this->config('app.charset')) {
             mb_internal_encoding($charset);
         }
 

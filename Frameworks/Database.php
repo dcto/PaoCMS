@@ -4,7 +4,6 @@ namespace PAO;
 
 use PAO\Exception\DBException;
 use Illuminate\Events\Dispatcher;
-use Illuminate\Container\Container;
 use Illuminate\Pagination\PaginationServiceProvider;
 use Illuminate\Database\Capsule\Manager as DatabaseManager;
 
@@ -60,13 +59,12 @@ class Database extends DatabaseManager
         /**
          * 判断是否打开调式sql模式
          */
-        if(config('config.debug') || config('config.log')) {
+        if(config('app.debug') || config('app.log')) {
             $this->connection()->enableQueryLog();
         }
 
         /**
          * 注入分页服务
-         * @var Container $container
          */
         app()->register(new PaginationServiceProvider((app())));
 
@@ -77,7 +75,7 @@ class Database extends DatabaseManager
      *
      * @param $method
      * @param $parameters
-     * @return mixed
+     * @return $this->connection()
      * @author 11.
      */
     public function __call($method, $parameters)
