@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Facade;
 /**
  * Class Router
  * @method static Router group(array $attributes, Closure $callback)
+ * @method static Router any(string $url, array $params)
  * @method static Router get(string $url, array $params)
  * @method static Router post(string $url, array $params)
  * @method static Router put(string $url, array $params)
