@@ -156,7 +156,7 @@ class Frameworks extends Container
      *
      * @param $config [配置文件项]
      * @return mixed
-     * @example $this->config('config.debug');
+     * @example $this->config('app.debug');
      */
     public function config($config)
     {
@@ -307,7 +307,7 @@ class Frameworks extends Container
         /**
          * 设置错误报告
          */
-        if($this->config('config.debug')) {
+        if($this->config('app.debug')) {
             error_reporting(E_ALL);
             ini_set('display_errors', 'On');
         }else{
@@ -318,14 +318,14 @@ class Frameworks extends Container
         /**
          * 设置系统时区
          */
-        if ($timezone = $this->config('config.timezone')) {
+        if ($timezone = $this->config('app.timezone')) {
             date_default_timezone_set($timezone);
         }
 
         /**
          * 设置环境编码
          */
-        if ($charset = $this->config('config.charset')) {
+        if ($charset = $this->config('app.charset')) {
             mb_internal_encoding($charset);
         }
 

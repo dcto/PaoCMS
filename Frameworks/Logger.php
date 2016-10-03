@@ -54,7 +54,7 @@ class Logger implements Log{
         $this->container = Container::getInstance();
 
         $this->logger = new MonologLogger('PAO');
-        $this->logfile = $this->container->config('config.dir.log').'/'.trim(ucfirst(NAME),'/').'/'.date('Ymd').'.log';
+        $this->logfile = $this->container->config('app.dir.log').'/'.trim(ucfirst(NAME),'/').'/'.date('Ymd').'.log';
         $this->logger->pushHandler(new StreamHandler($this->logfile));
     }
 
@@ -180,7 +180,7 @@ class Logger implements Log{
      */
     public function useDailyFiles($path, $days = 0, $level = 'debug')
     {
-        $this->logfile = $this->container->config('config.dir.log').'/'.rtrim($path,'/').date('Y/m/d');
+        $this->logfile = $this->container->config('app.dir.log').'/'.rtrim($path,'/').date('Y/m/d');
         $this->logger->pushHandler(new StreamHandler($this->logfile));
     }
 

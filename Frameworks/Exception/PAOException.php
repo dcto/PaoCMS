@@ -37,7 +37,7 @@ class PAOException
      */
     public function Exception($e)
     {
-        if(config('config.log')){
+        if(config('app.log')){
             if(isset($this->levels[$e->getCode()])){
                 app('log')->{$this->levels[$e->getCode()]}($e->getMessage(),$this->debugBacktrace($e));
             }else{
@@ -46,7 +46,7 @@ class PAOException
         }
         $httpCode = $e->getCode()>200 ? $e->getCode() : 500;
         http_response_code($httpCode);
-        if(config('config.debug')) {
+        if(config('app.debug')) {
             die($this->display($httpCode,$e->getMessage(),$this->debugBacktrace($e)));
         }
         die($e->getMessage());

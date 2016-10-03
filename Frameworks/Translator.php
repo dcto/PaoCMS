@@ -37,7 +37,7 @@ class Translator
 
         $this->items = $items;
 
-		$this->language = $this->container->config('config.language');
+		$this->language = $this->container->config('app.language');
 
         $this->parseLanguage();
 	}

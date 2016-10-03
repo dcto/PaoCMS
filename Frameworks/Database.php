@@ -59,7 +59,7 @@ class Database extends DatabaseManager
         /**
          * 判断是否打开调式sql模式
          */
-        if(config('config.debug') || config('config.log')) {
+        if(config('app.debug') || config('app.log')) {
             $this->connection()->enableQueryLog();
         }
 

@@ -2,4 +2,4 @@
 
 namespace App\Events;
 
-abstract class Events{}
+abstract class Event{}

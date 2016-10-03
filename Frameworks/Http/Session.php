@@ -48,7 +48,7 @@ class Session implements SessionInterface, \IteratorAggregate, \Countable
     {
      //   parent::__construct(new PhpBridgeSessionStorage(), new  AttributeBag('pao_'));
 
-        $handler = (string) Container::getInstance()->config('config.session') ?: 'files';
+        $handler = (string) Container::getInstance()->config('app.session') ?: 'files';
         $session = (array) Container::getInstance()->config('session');
 
         $session['options'] = isset($session['options'])?$session['options']:array();
