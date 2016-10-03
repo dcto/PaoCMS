@@ -157,6 +157,17 @@ function json($data = [], $status = 200, array $headers = [])
 }
 
 /**
+ * input method
+ * @param null $key
+ * @param null $default
+ * @return string
+ */
+function input($key = null, $default = null)
+{
+    return make('request')->input($key, $default);
+}
+
+/**
  * redis
  * @param string $server
  * @return \Redis
