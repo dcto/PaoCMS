@@ -5,8 +5,8 @@ use Illuminate\Support\Facades\Facade;
 /**
  * Class Cache
  *
- * @method static Cache file(string $cache = 'default')
- * @method static Cache redis(string $server = 'default')
+ * @method static \PAO\FileSystem\Files file(string $file = 'default')
+ * @method static \Redis redis(string $server = 'default');
  */
 class Cache extends Facade
 {

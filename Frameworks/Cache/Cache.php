@@ -47,6 +47,7 @@ class Cache
         }
 
         return $this->cache['file'][$cache] =  new FileSystem($cache);
+
     }
 
 

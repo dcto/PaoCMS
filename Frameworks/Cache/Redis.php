@@ -89,14 +89,16 @@ class Redis
     public function command($method, array $parameters = [])
     {
         return call_user_func_array([$this->connection(), $method], $parameters);
+
     }
 
 
     /**
      * [__call 魔术调用redis方法]
      *
-     * @param $method 调用方法
-     * @param $parameters 调用参数
+     * @param $method
+     * @param $parameters
+     * @return static
      * @author 11.
      */
     public function __call($method, $parameters)
