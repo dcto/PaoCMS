@@ -2,7 +2,6 @@
 
 namespace PAO;
 
-use Illuminate\Support\Arr;
 use Illuminate\Container\Container;
 use PAO\Exception\SystemException;
 
@@ -31,7 +30,7 @@ class Translator
 	 * 初始化语言对象
 	 * @param [type] $items [预加载语言]
 	 */
-	public function __construct( $items = [])
+	public function __construct( $items = [] )
 	{
 		$this->container = Container::getInstance();
 
@@ -51,7 +50,7 @@ class Translator
 	{
         $args = func_get_args();
         $key = array_shift($args);
-        $lang = Arr::get($this->items, $key);
+        $lang = \Arr::get($this->items, $key);
         if(is_string($lang)){
             return $args ? $this->replacements($lang, $args) : $lang;
         }
@@ -69,10 +68,10 @@ class Translator
     {
         if (is_array($key)) {
             foreach ($key as $innerKey => $innerValue) {
-                Arr::set($this->items, $innerKey, $innerValue);
+                \Arr::set($this->items, $innerKey, $innerValue);
             }
         } else {
-            Arr::set($this->items, $key, $value);
+            \Arr::set($this->items, $key, $value);
         }
     }
 
@@ -126,14 +125,14 @@ class Translator
      * @param $language
      * @throws SystemException
      */
-    private function parseLanguage($language = null)
+    private function parseLanguage($lang = null)
     {
 
-        $language = $language ? $this->language = $language : $this->language;
+        $lang = $this->language = $lang?:$this->language;
 
-        $AppLanguage = APP.DIRECTORY_SEPARATOR.'Lang'.DIRECTORY_SEPARATOR.$language.'.ini';
+        $AppLanguage = APP.DIRECTORY_SEPARATOR.'Lang'.DIRECTORY_SEPARATOR.$lang.'.ini';
 
-        $SubLanguage = APP.DIRECTORY_SEPARATOR.'Lang'.DIRECTORY_SEPARATOR.NAME.DIRECTORY_SEPARATOR.$language.'.ini';
+        $SubLanguage = APP.DIRECTORY_SEPARATOR.'Lang'.DIRECTORY_SEPARATOR.NAME.DIRECTORY_SEPARATOR.$lang.'.ini';
 
         $readable = false;
 
@@ -149,7 +148,7 @@ class Translator
             $readable = true;
         }
 
-        if(!$readable) throw new SystemException('The ['.$language.'] language was not readable!');
+        if(!$readable) throw new SystemException('The ['.$lang.'] language was not readable!');
 
     }
 }
