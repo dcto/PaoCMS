@@ -2,7 +2,12 @@
 
 namespace App\Model;
 
-class Model extends \PAO\Model
+/**
+ * Class Model
+ * @package App\Model
+ *
+ */
+abstract class Model extends \PAO\Model
 {
 
     /**
@@ -11,7 +16,15 @@ class Model extends \PAO\Model
      */
     public $perPage = 10;
 
+    /**
+     * 自动维护时间 automatically maintained
+     * @var bool
+     */
     public $timestamps = true;
 
+    /**
+     * 是否开启软删除
+     * @var bool
+     */
     public $softDelete = true;
 }
