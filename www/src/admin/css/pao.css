@@ -7,7 +7,7 @@ body {
     font-family: "Microsoft YaHei", "微软雅黑",Helvetica, Tahoma, Arial, STXihei, "华文细黑", SimSun, "宋体", Heiti, "黑体", sans-serif;
     font-size: 12px;
     margin:0 auto;
-    /*background: #f1f3f6;*/
+    background: #f1f3f6;
 }
 ul{margin:0;padding:0;list-style:none;}
 li{margin:0;padding:0;list-style: none;}
