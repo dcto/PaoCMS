@@ -307,16 +307,16 @@ class Router
                     }
                     if ($callback = Arr::get($group, 'call')) {
                         if (is_array($callback)) {
-                            $callback = $this->ThroughRoute(array_shift($callback), array_shift($callback));
+                            $callback = $this->Fire(array_shift($callback), array_shift($callback));
                         } else {
-                            $callback = $this->ThroughRoute($callback);
+                            $callback = $this->Fire($callback);
                         }
                         if ($callback instanceof Response) {
                             return $callback;
                         }
                     }
                 }
-                return $this->ThroughRoute($router->getCallable(), $router->parameters);
+                return $this->Fire($router->getCallable(), $router->parameters);
             }
         }
         // No valid Route found; send an Error 404 NotFoundHttpException Response.
@@ -355,7 +355,7 @@ class Router
      * @param array $parameter
      * @return mixed
      */
-    protected function ThroughRoute($callback, $parameters = [])
+    protected function Fire($callback, $parameters = [])
     {
         if($callback instanceof Response){
             return $callback;
