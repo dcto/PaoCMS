@@ -2,4 +2,17 @@
 
 namespace App\Hook;
 
-abstract class Hooks{}
+abstract class Hooks
+{
+
+
+    public function register()
+    {
+
+    }
+
+    public function bootstrap()
+    {
+
+    }
+}
