@@ -33,9 +33,8 @@ echo '<pre>';
         //print_r($this->container->make('request')->all());
       echo $s = \Crypt::encrypt('我是中国人~@#$%%&*（*)————|。、吧c~~~~<>?）');
         echo '<hr />';
-
         echo \Crypt::decrypt($s).'<br />';
-        print_r(get_included_files());die;
+        print_r(get_included_files());
      // return Response::make('test');
 
         //print_r($this->make('request')->header);

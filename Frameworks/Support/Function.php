@@ -28,17 +28,6 @@ function make($make = null, $parameters = [])
     return app($make, $parameters);
 }
 
-/**
- * 服务加载器
- *
- * @param $make
- * @param array $parameters
- * @return Container
- */
-function event($make, $parameters = [])
-{
-    return app()->event($make, $parameters);
-}
 
 /**
  * get request url

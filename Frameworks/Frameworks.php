@@ -106,7 +106,7 @@ class Frameworks extends Container
         /**
          * 注册外观别名
          */
-        $this->registerFacadesAlias();
+        $this->registerClassMapAlias();
 
         /**
          * 基本服务注册
@@ -135,20 +135,6 @@ class Frameworks extends Container
         }
 
         return parent::make($abstract, $parameters);
-    }
-
-    /**
-     * [event 事件操作注册器]
-     *
-     * @param $abstract
-     * @param array $parameters
-     * @return mixed
-     */
-    public function event($abstract, array $parameters = [])
-    {
-        $abstract = 'App\\Events\\'.$abstract;
-
-        return $this->make($abstract, $parameters);
     }
 
     /**
@@ -238,9 +224,9 @@ class Frameworks extends Container
     }
 
     /**
-     * [registerFacadesAlias 注册门面别名]
+     * [registerClassMapAlias 注册门面别名]
      */
-    private function registerFacadesAlias()
+    private function registerClassMapAlias()
     {
         $classMap = array(
             'Arr' => __DIR__.'/Support/Arr.php',
