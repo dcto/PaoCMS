@@ -1,0 +1,3 @@
+<?php
+
+abstract class Widget{}
