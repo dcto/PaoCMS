@@ -13,22 +13,12 @@ use PAO\Http\Request;
 use PAO\Http\Response;
 use PAO\Exception\SystemException;
 use PAO\Exception\NotFoundHttpException;
-use Illuminate\Container\Container;
-
 
 /**
  * Router class will load requested Controller / Closure based on URL.
  */
 class Router
 {
-    /**
-     * The IoC container instance.
-     *
-     * @var \Illuminate\Container\Container
-     */
-    private $container;
-
-
     /*
      * @var $group
      */
@@ -37,14 +27,14 @@ class Router
     /**
      * Matched Route, the current found Route, if any.
      *
-     * @var Route object $matched Route
+     * @var $router Route
      */
     private $router;
 
     /**
      * Array of routes
      *
-     * @var $routes Route[] $routes
+     * @var $routes array
      */
     private $routes = array();
 
@@ -72,27 +62,11 @@ class Router
     );
 
     /**
-     * @var array router property
-     */
-    private $property = array();
-
-    /**
      * Array of Route Groups
      *
      * @var array $groupStack
      */
     private $groupStack = array();
-
-    /**
-     * Router constructor.
-     *
-     * @codeCoverageIgnore
-     */
-    public function __construct(Container $container)
-    {
-        $this->container = $container ?: Container::getInstance();
-    }
-
 
 
     /**
@@ -376,7 +350,7 @@ class Router
         }
 
         if(strpos($callback, '@')){
-            return $this->container->call($callback, $parameters);
+            return app()->call($callback, $parameters);
         }
         throw new NotFoundHttpException("Invalid Route Target [$callback] in {$this->router->route} Of Your Route");
     }

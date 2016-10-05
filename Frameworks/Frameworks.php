@@ -6,6 +6,7 @@ use PAO\Http\Request;
 use PAO\Http\Response;
 use PAO\Exception\PAOException;
 use PAO\Exception\SystemException;
+use PAO\Routing\Router;
 use PAO\Services\SystemServiceProvider;
 use Illuminate\Container\Container;
 use Illuminate\Support\Facades\Facade;
@@ -105,9 +106,9 @@ class Frameworks extends Container
         Facade::setFacadeApplication($this);
 
         /**
-         * 注册外观别名
+         * 注册自动加载
          */
-        $this->registerClassMapAlias();
+        $this->registerAutoLoadAlias();
 
         /**
          * 基本服务注册
@@ -173,6 +174,15 @@ class Frameworks extends Container
         $response->send();
     }
 
+    /**
+     * Autoload
+     *
+     * @return \Composer\Autoload\ClassLoader
+     */
+    public function loader()
+    {
+        return $this->loader;
+    }
 
     /**
      * [register 服务提供者注册器]
@@ -229,7 +239,7 @@ class Frameworks extends Container
     /**
      * [registerClassMapAlias 注册门面别名]
      */
-    private function registerClassMapAlias()
+    private function registerAutoLoadAlias()
     {
         $classMap = array(
             'Arr' => __DIR__.'/Support/Arr.php',
