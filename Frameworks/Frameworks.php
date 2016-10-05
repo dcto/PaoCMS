@@ -2,6 +2,7 @@
 
 namespace PAO;
 
+use PAO\Http\Request;
 use PAO\Http\Response;
 use PAO\Exception\PAOException;
 use PAO\Exception\SystemException;
@@ -155,17 +156,19 @@ class Frameworks extends Container
      */
     private function Navigate()
     {
-        $response = $this->make('router')->dispatch();
+        /**
+         * dispatch
+         */
+        $response = $this->make('router')->dispatch($this->make('request') , $this->make('response'));
 
         //重置Response
         if(!$response instanceof Response)
         {
-            throw new SystemException('The Response Must be Instance of PAO\Response');
+            throw new SystemException('The Output Must be Instance of PAO\Response');
         }
-
         /**
          * 响应请求
-         * @var $response \Symfony\Component\HttpFoundation\Response
+         * @var $response Response
          */
         $response->send();
     }

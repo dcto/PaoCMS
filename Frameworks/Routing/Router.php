@@ -9,6 +9,7 @@
 namespace PAO\Routing;
 
 use Arr;
+use PAO\Http\Request;
 use PAO\Http\Response;
 use PAO\Exception\SystemException;
 use PAO\Exception\NotFoundHttpException;
@@ -282,12 +283,10 @@ class Router
 
     /**
      * dispatch to the router
-     * @return bool
+     * @return mixed
      */
-    public function dispatch()
+    public function dispatch(Request $request, Response $response)
     {
-        $request = $this->container->make('request');
-
         // Get the Method and Path.
         $url = trim(urldecode($request->path()));
         $method = $request->method();
@@ -303,8 +302,11 @@ class Router
                 if($router->group) {
                     if (!$group = Arr::get($this->group, $router->group)) {
                         throw new NotFoundHttpException('Does not define ' . $router->group . ' of router group');
-
                     }
+
+                    /**
+                     * construct callback
+                     */
                     if ($callback = Arr::get($group, 'call')) {
                         if (is_array($callback)) {
                             $callback = $this->Fire(array_shift($callback), array_shift($callback));
@@ -316,7 +318,16 @@ class Router
                         }
                     }
                 }
-                return $this->Fire($router->getCallable(), $router->parameters);
+                /**
+                 * construct instance
+                 */
+                $instance = $this->Fire($router->getCallable(), $router->parameters);
+
+                if(is_string($instance)){
+                    return $response->make($instance);
+                }else{
+                    return $instance;
+                }
             }
         }
         // No valid Route found; send an Error 404 NotFoundHttpException Response.
