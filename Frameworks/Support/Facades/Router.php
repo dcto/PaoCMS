@@ -25,8 +25,8 @@ use Illuminate\Support\Facades\Facade;
  * @method static Router resource(string $url, string $controller)
  * @method static Router restful(string $url, string $controller)
  * @method static Router regex(string $key, string $regex)
- * @method static Router router(string $tag)
- * @method static Router routes(string $tag)
+ * @method static Router router(string $tag = null)
+ * @method static Router routes(string $tag = null)
  * @method static Router groups()
  * @method static Router dispatch()
  */
