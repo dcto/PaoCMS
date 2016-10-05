@@ -85,7 +85,7 @@ class Response
     /**
      * 全局响应
      *
-     * @var $response;
+     * @var $response HttpFoundation\Response;
      */
     private $response;
 
@@ -249,6 +249,17 @@ class Response
 
         return $this;
     }
+
+    /**
+     * Response send
+     *
+     * @return mixed
+     */
+    public function send()
+    {
+        return $this->response->send();
+    }
+
 
     /**
      * [__call]
