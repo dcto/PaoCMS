@@ -2,7 +2,6 @@
 
 namespace PAO;
 
-use PAO\Http\Response;
 use PAO\Exception\PAOException;
 use PAO\Exception\SystemException;
 use PAO\Services\SystemServiceProvider;
@@ -161,13 +160,13 @@ class Frameworks extends Container
         $response = $this->make('router')->dispatch($this->make('request') , $this->make('response'));
 
         //重置Response
-        if(!$response instanceof Response)
+        if(!$response instanceof \PAO\Http\Response)
         {
             throw new SystemException('The Output Must be Instance of PAO\Response');
         }
         /**
          * 响应请求
-         * @var $response Response
+         * @var $response \PAO\Http\Response
          */
         $response->send();
     }
