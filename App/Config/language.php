@@ -1,4 +1,7 @@
 <?php
+defined('PAO') || die('The PaoCMS Load Error');
+
+
 $language['zh_CN'] = array('name' => 'Chinese',     'local' => '中文简体');
 $language['zh_TW'] = array('name' => 'Chinese',     'local' => '中文繁體');
 $language['en_US'] = array('name' => 'English',     'local' => 'English');
