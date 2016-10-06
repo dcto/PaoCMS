@@ -2,11 +2,9 @@
 
 namespace PAO;
 
-use PAO\Http\Request;
 use PAO\Http\Response;
 use PAO\Exception\PAOException;
 use PAO\Exception\SystemException;
-use PAO\Routing\Router;
 use PAO\Services\SystemServiceProvider;
 use Illuminate\Container\Container;
 use Illuminate\Support\Facades\Facade;
@@ -15,7 +13,7 @@ use Illuminate\Events\EventServiceProvider;
 
 
 /**
- * [Nexus 框架核心驱动集成类]
+ * [框架核心驱动集成类]
  *
  * Class Frameworks
  *
@@ -237,7 +235,7 @@ class Frameworks extends Container
     }
 
     /**
-     * [registerClassMapAlias 注册门面别名]
+     * [registerAutoLoadAlias 注册自动加载]
      */
     private function registerAutoLoadAlias()
     {
