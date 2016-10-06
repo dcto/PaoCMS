@@ -5,14 +5,15 @@ namespace App\Hook;
 abstract class Hooks
 {
 
+    /**
+     * 勾子开始
+     */
+    public function on(){}
 
-    public function register()
-    {
 
-    }
 
-    public function bootstrap()
-    {
-
-    }
+    /**
+     * 勾子结束
+     */
+    public function off(){}
 }
