@@ -121,6 +121,16 @@ function cookie($k = false, $v = false)
 }
 
 /**
+ * \DB::table function
+ * @param $table
+ * @return \Illuminate\Database\Eloquent\Builder
+ */
+function DB($table)
+{
+    return \DB::table($table);
+}
+
+/**
  * view response
  * @param $view
  * @param array $data
