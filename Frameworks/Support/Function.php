@@ -28,6 +28,17 @@ function make($make = null, $parameters = [])
     return app($make, $parameters);
 }
 
+/**
+ * take alias name for app
+ *
+ * @param null $make
+ * @param array $parameters
+ * @return Container|\PAO\Frameworks
+ */
+function take($make = null, $parameters = [])
+{
+    return app($make, $parameters);
+}
 
 /**
  * get request url
