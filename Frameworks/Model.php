@@ -12,7 +12,7 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model
      *
      * @var array
      */
-    protected $guarded = ['id','created_at','updated_at'];
+    protected $guarded = ['id','created_at','updated_at','deleted_at'];
 
     /**
      * 字段白名单  属性指定了哪些字段支持批量赋值 。可以设定在类的属性里或是实例化后设定。
@@ -115,7 +115,7 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model
          */
         static::creating(function($event)
         {
-            //exit('creating');
+
         });
 
         /**
@@ -123,7 +123,7 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model
          */
         static::created(function($event)
         {
-           //exit('created');
+
         });
 
         /**
@@ -131,7 +131,7 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model
          */
         static::updating(function($event)
         {
-            //exit('updating');
+
         });
 
         /**
@@ -139,7 +139,7 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model
          */
         static::updated(function($event)
         {
-            //exit('updated');
+
         });
 
         /**
@@ -147,7 +147,7 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model
          */
         static::saving(function($event)
         {
-            //exit('saving');
+
         });
 
         /**
@@ -156,8 +156,6 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model
         static::saved(function ($event)
         {
 
-            //exit('saved');
-
         });
 
         /**
@@ -165,7 +163,7 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model
          */
         static::deleting(function($event)
         {
-            //exit('deleting');
+
         });
 
         /**
@@ -173,7 +171,7 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model
          */
         static::deleted(function($event)
         {
-            //exit('deleted');
+
         });
 
     }
