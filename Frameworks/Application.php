@@ -220,7 +220,7 @@ class Application extends Container
             'curl' => 'PAO\Http\Curl',
             'file' => 'PAO\FileSystem\Files',
             'cache' => 'PAO\Cache\Cache',
-            'log' => 'PAO\Logger\Log',
+            'log' => 'PAO\Logger\Logger',
             'db' => 'PAO\Database'
         );
     }
