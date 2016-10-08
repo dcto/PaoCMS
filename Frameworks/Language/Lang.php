@@ -1,6 +1,6 @@
 <?php
 
-namespace PAO;
+namespace PAO\Language;
 
 
 use PAO\Exception\SystemException;
