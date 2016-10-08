@@ -232,7 +232,8 @@ class Application extends Container
     {
         $classMap = array(
             'Arr' => __DIR__.'/Support/Arr.php',
-            'Str' => __DIR__.'/Support/Str.php'
+            'Str' => __DIR__.'/Support/Str.php',
+            'Schema' => __DIR__.'/Support/Facades/Schema.php'
         );
         foreach($this->aliases as $alias => $class) {
             $alias = $alias == 'db' ? strtoupper($alias) : ucfirst($alias);
