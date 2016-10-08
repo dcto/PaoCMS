@@ -214,6 +214,7 @@ class Frameworks extends Container
     private function registerContainerAliases()
     {
         $this->aliases = array(
+            'app' => 'PAO\Frameworks',
             'router' => 'PAO\Routing\Router',
             'config' => 'PAO\Configure\Repository',
             'request' => 'PAO\Http\Request',
