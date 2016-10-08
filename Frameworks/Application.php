@@ -11,24 +11,15 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Events\EventServiceProvider;
 
 
-/**
- * [框架核心驱动集成类]
- *
- * Class Frameworks
- *
- * @package PAO
- * @version 20151123
- *
- */
-defined('APP') || die('You must define APP name in your current script.');
+defined('PAO') || die('Invalid Construct System');
 
 version_compare(PHP_VERSION,'5.5.0','ge') || die('The php version least must 5.5.0 ');
 
-
 /**
- * 核心框架
- * Class Frameworks
+ * 框架核心驱动集成 Class Application
+ *
  * @package PAO
+ * @version 20151123
  */
 class Application extends Container
 {
