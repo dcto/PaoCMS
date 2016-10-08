@@ -214,13 +214,13 @@ class Application extends Container
             'session' => 'PAO\Http\Session',
             'crypt' => 'PAO\Crypt\Crypt',
             'captcha' => 'PAO\Captcha\Captcha',
-            'validator' => 'PAO\Validator',
-            'lang' => 'PAO\Translator',
+            'validator' => 'PAO\Form\Validator',
+            'lang' => 'PAO\Language\Lang',
             'view' => 'PAO\View',
             'curl' => 'PAO\Http\Curl',
             'file' => 'PAO\FileSystem\Files',
             'cache' => 'PAO\Cache\Cache',
-            'log' => 'PAO\Logger',
+            'log' => 'PAO\Logger\Log',
             'db' => 'PAO\Database'
         );
     }
