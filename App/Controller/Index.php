@@ -26,7 +26,6 @@ class Index extends Controller
 
     public function index( \PAO\Http\Request $request)
     {
-
 echo '<pre>';
 
         echo '<hr />';

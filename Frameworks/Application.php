@@ -30,7 +30,7 @@ version_compare(PHP_VERSION,'5.5.0','ge') || die('The php version least must 5.5
  * Class Frameworks
  * @package PAO
  */
-class Frameworks extends Container
+class Application extends Container
 {
     /**
      * 自动加载器
@@ -214,7 +214,7 @@ class Frameworks extends Container
     private function registerContainerAliases()
     {
         $this->aliases = array(
-            'app' => 'PAO\Frameworks',
+            'app' => 'PAO\Application',
             'router' => 'PAO\Routing\Router',
             'config' => 'PAO\Configure\Repository',
             'request' => 'PAO\Http\Request',
