@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Support\Facades;
+use Illuminate\Support\Facades\Facade;
 
 /**
  * @see \Illuminate\Database\Schema\Builder
