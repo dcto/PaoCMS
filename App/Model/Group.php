@@ -2,8 +2,6 @@
 
 namespace App\Model;
 
-use PAO\Support\Facades\DB;
-use PAO\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 
 
@@ -23,7 +21,7 @@ class Group extends Model
 
     static public function up()
     {
-        Schema::create('group', function(Blueprint $table) {
+        \Schema::create('group', function(Blueprint $table) {
             $table->increments('id');
             $table->integer('pid')->unsigned()->default(0)->comment('继承组id');
             $table->string('tag',32)->comment('组标签');
@@ -46,12 +44,12 @@ class Group extends Model
             ['id'=>'4', 'tag'=>'editor', 'name'=>'编辑部', 'nickname'=>'编辑部', 'status'=>1,'created_at'=>date('Y-m-d H:i:s')],
             ['id'=>'5', 'tag'=>'market', 'name'=>'市场部', 'nickname'=>'市场部', 'status'=>1,'created_at'=>date('Y-m-d H:i:s')],
         );
-        DB::table('group')->insert($groups);
+        \DB::table('group')->insert($groups);
     }
 
 
     static public function down()
     {
-        Schema::dropIfExists('group');
+        \Schema::dropIfExists('group');
     }
 }

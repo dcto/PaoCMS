@@ -2,7 +2,7 @@
 
 namespace App\Model;
 
-use PAO\Support\Facades\Schema;
+
 use Illuminate\Database\Schema\Blueprint;
 
 class User extends Model
@@ -18,7 +18,7 @@ class User extends Model
 
     static public function up()
     {
-        Schema::create('user', function(Blueprint $table){
+        \Schema::create('user', function(Blueprint $table){
             $table->increments('id');
             $table->integer('pid')->unsigned()->default(0)->comment('父id');
             $table->integer('group_id')->unsigned()->default(0)->comment('组id');
@@ -61,7 +61,7 @@ class User extends Model
 
     static public function down()
     {
-        Schema::dropIfExists('user');
+        \Schema::dropIfExists('user');
     }
 
 }

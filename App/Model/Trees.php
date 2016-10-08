@@ -5,7 +5,6 @@ namespace App\Model;
 
 
 use Illuminate\Database\Schema\Blueprint;
-use PAO\Support\Facades\Schema;
 
 
 class Trees extends Model
@@ -40,7 +39,7 @@ class Trees extends Model
 
     static public function up()
     {
-        Schema::create('trees', function(Blueprint $table){
+        \Schema::create('trees', function(Blueprint $table){
             $table->increments('id');
             /*
             $table->integer('lft')->unsigned()->default(0)->comment('左');
@@ -69,7 +68,7 @@ class Trees extends Model
 
     static public function down()
     {
-        Schema::dropIfExists('trees');
+        \Schema::dropIfExists('trees');
     }
 
 

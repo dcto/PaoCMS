@@ -3,7 +3,6 @@
 namespace App\Model;
 
 use Illuminate\Database\Schema\Blueprint;
-use PAO\Support\Facades\Schema;
 
 class Message extends Model
 {
@@ -14,7 +13,7 @@ class Message extends Model
     static public function up()
     {
 
-        Schema::create('message', function(Blueprint $table){
+        \Schema::create('message', function(Blueprint $table){
             $table->increments('id');
             $table->unsignedInteger('group_id')->default(0)->comment('接收组');
             $table->unsignedInteger('by_uid')->default(0)->comment('发送者:0=系统发送,组消息');
@@ -38,7 +37,7 @@ class Message extends Model
     static public function down()
     {
 
-       Schema::dropIfExists('message');
+       \Schema::dropIfExists('message');
     }
 
 }

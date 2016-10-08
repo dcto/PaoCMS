@@ -4,7 +4,6 @@ namespace App\Model;
 
 
 use Illuminate\Database\Schema\Blueprint;
-use PAO\Support\Facades\Schema;
 
 class Feedback extends Model
 {
@@ -12,7 +11,7 @@ class Feedback extends Model
 
     static public function up()
     {
-        Schema::create('feedback', function(Blueprint $table) {
+        \Schema::create('feedback', function(Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('pid')->comment('父ID');
             $table->string('name',32)->nullable()->comment('名称');
@@ -32,6 +31,6 @@ class Feedback extends Model
 
     static public function down()
     {
-        Schema::dropIfExists('feedback');
+        \Schema::dropIfExists('feedback');
     }
 }

@@ -3,7 +3,7 @@
 namespace App\Model;
 
 use Illuminate\Database\Schema\Blueprint;
-use PAO\Support\Facades\Schema;
+
 
 class Setting extends Model
 {
@@ -14,7 +14,7 @@ class Setting extends Model
     static public function up()
     {
 
-        Schema::create('setting', function(Blueprint $table){
+        \Schema::create('setting', function(Blueprint $table){
             $table->increments('id');
             $table->string('key',32)->comment('键');
             $table->string('value')->nullable()->comment('值');
@@ -31,7 +31,7 @@ class Setting extends Model
     static public function down()
     {
 
-       Schema::dropIfExists('setting');
+       \Schema::dropIfExists('setting');
     }
 
 }

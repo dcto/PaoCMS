@@ -4,7 +4,7 @@ namespace App\Model;
 
 
 use Illuminate\Database\Schema\Blueprint;
-use PAO\Support\Facades\Schema;
+
 
 class Layout extends Model
 {
@@ -12,7 +12,7 @@ class Layout extends Model
 
     static public function up()
     {
-        Schema::create('layout', function(Blueprint $table) {
+        \Schema::create('layout', function(Blueprint $table) {
             $table->string('id',48)->comment('标识');
             $table->string('name',96)->nullable()->comment('名称');
             $table->string('title',96)->nullable()->comment('标题');
@@ -30,6 +30,6 @@ class Layout extends Model
 
     static public function down()
     {
-        Schema::dropIfExists('layout');
+        \Schema::dropIfExists('layout');
     }
 }

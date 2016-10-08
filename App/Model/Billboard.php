@@ -3,7 +3,6 @@
 namespace App\Model;
 
 use Illuminate\Database\Schema\Blueprint;
-use PAO\Support\Facades\Schema;
 
 class Billboard extends  Model
 {
@@ -12,7 +11,7 @@ class Billboard extends  Model
 
     static public function up()
     {
-        Schema::create('billboard', function(Blueprint $table){
+        \Schema::create('billboard', function(Blueprint $table){
             $table->increments('id')->unsigned();
             $table->integer('pid')->unsigned()->comment('父id');
             $table->integer('gid')->unsigned()->comment('组id');
@@ -40,7 +39,7 @@ class Billboard extends  Model
 
     static public function down()
     {
-        Schema::dropIfExists('billboard');
+        \Schema::dropIfExists('billboard');
     }
 
 }

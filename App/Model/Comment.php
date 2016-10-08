@@ -4,7 +4,6 @@ namespace App\Model;
 
 
 use Illuminate\Database\Schema\Blueprint;
-use PAO\Support\Facades\Schema;
 
 class Comment extends Model
 {
@@ -23,7 +22,7 @@ class Comment extends Model
 
     static public function up()
     {
-        Schema::create('comment', function(Blueprint $table) {
+        \Schema::create('comment', function(Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('pid')->default(0)->comment('引用用户id');
             $table->unsignedInteger('user_id')->default(0)->comment('用户id');
@@ -48,6 +47,6 @@ class Comment extends Model
 
     static public function down()
     {
-        Schema::dropIfExists('comment');
+        \Schema::dropIfExists('comment');
     }
 }
