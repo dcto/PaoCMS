@@ -28,6 +28,11 @@ class Index extends Controller
     {
 echo '<pre>';
 
+
+        \DB::table('user')->update(array('dd','cc'));
+
+        print_r(\DB::getQueryLog());
+
         echo '<hr />';
         //print_r($this->container->make('request')->all());
       echo $s = \Crypt::encrypt('我是中国人~@#$%%&*（*)————|。、吧c~~~~<>?）');
