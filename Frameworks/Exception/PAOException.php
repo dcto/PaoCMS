@@ -3,6 +3,7 @@
 namespace PAO\Exception;
 
 use Exception;
+use Illuminate\Database\QueryException;
 
 class PAOException
 {
@@ -37,11 +38,18 @@ class PAOException
      */
     public function Exception($e)
     {
+
         if(config('app.log')){
             if(isset($this->levels[$e->getCode()])){
-                app('log')->{$this->levels[$e->getCode()]}($e->getMessage(),$this->debugBacktrace($e));
+                make('log')->{$this->levels[$e->getCode()]}($e->getMessage(),$this->debugBacktrace($e));
             }else{
-                app('log')->alert($e->getMessage(),$this->debugBacktrace($e));
+                make('log')->alert($e->getMessage(),$this->debugBacktrace($e));
+            }
+
+            if($e instanceof QueryException) {
+                $sql = str_replace(array('%', '?'), array('%%', '%s'), $e->getSql());
+                $error = vsprintf($sql, $e->getBindings());
+                make('log')->file('/Query/'.date('Ymd').'_error')->error($error);
             }
         }
         $httpCode = $e->getCode()>200 ? $e->getCode() : 500;

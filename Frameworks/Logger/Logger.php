@@ -2,8 +2,6 @@
 
 namespace PAO\Logger;
 
-
-use Illuminate\Container\Container;
 use Illuminate\Contracts\Logging\Log;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
@@ -15,11 +13,6 @@ use Monolog\Logger as MonologLogger;
 
 class Logger implements Log{
 
-    /**
-     * container
-     * @var static
-     */
-    private $container;
 
     /**
      * @var \Monolog\Logger
@@ -51,10 +44,8 @@ class Logger implements Log{
 
     public function __construct()
     {
-        $this->container = Container::getInstance();
-
         $this->logger = new MonologLogger('PAO');
-        $this->logfile = $this->container->config('app.dir.log').'/'.trim(ucfirst(NAME),'/').'/'.date('Ymd').'.log';
+        $this->logfile = config('app.dir.log').'/'.trim(ucfirst(NAME),'/').'/'.date('Ymd').'.log';
         $this->logger->pushHandler(new StreamHandler($this->logfile));
     }
 
@@ -156,6 +147,13 @@ class Logger implements Log{
     public function log($level, $message, array $context = [])
     {
         $this->pushToLogger($level, $message, $context);
+    }
+
+    public function file($path, $level = 'debug')
+    {
+        $path = rtrim(config('app.dir.log'),'/').'/'.rtrim(ltrim($path,'/'),'.log').'.log';
+        $this->useFiles($path, $level);
+        return $this;
     }
 
     /**
