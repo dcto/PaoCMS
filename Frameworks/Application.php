@@ -235,7 +235,7 @@ class Application extends Container
             'Str' => __DIR__.'/Support/Str.php'
         );
         foreach($this->aliases as $alias => $class) {
-            $alias = ucfirst($alias);
+            $alias = $alias == 'db' ? strtoupper($alias) : ucfirst($alias);
             $classMap[$alias] = __DIR__.'/Support/Facades/'.$alias.'.php';
         }
         $this->loader->addClassMap($classMap);
