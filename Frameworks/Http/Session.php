@@ -2,8 +2,6 @@
 
 namespace PAO\Http;
 
-
-use Illuminate\Container\Container;
 use PAO\Exception\SystemException;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpFoundation\Session\SessionBagInterface;
@@ -21,11 +19,6 @@ use Symfony\Component\HttpFoundation\Session\Storage\Handler\NativeFileSessionHa
 class Session implements SessionInterface, \IteratorAggregate, \Countable
 {
 
-    /**
-     * SESSION��ǩ��
-     *
-     * @var
-     */
     protected $tag;
 
     /**
@@ -36,9 +29,9 @@ class Session implements SessionInterface, \IteratorAggregate, \Countable
     protected $flash;
 
     /**
-     * ��ǰ�洢����
      *
-     * @var
+     *
+     * @var string
      */
     protected $storage;
 
@@ -46,17 +39,15 @@ class Session implements SessionInterface, \IteratorAggregate, \Countable
 
     public function __construct()
     {
-     //   parent::__construct(new PhpBridgeSessionStorage(), new  AttributeBag('pao_'));
+        $session = config('session', array());
 
-        $handler = (string) Container::getInstance()->config('app.session') ?: 'files';
-        $session = (array) Container::getInstance()->config('session');
+        $handler = \Arr::get($session, 'handler', 'files');
 
-        $session['options'] = isset($session['options'])?$session['options']:array();
+        $session['options'] = \Arr::get($session, 'options', array());
 
-        if(!in_array($handler, array_keys($session['storage']))) {
-            throw new SystemException('The session handler ['.$handler.'] was not found! you can use handles by "'. implode('","', array_keys($session)).'"');
+        if(!isset($session['storage']) || !in_array($handler, array_keys($session['storage']))) {
+            throw new SystemException('Invalid handler "'.$handler.'" of storage in session config file');
         }
-
 
         switch($handler)
         {
@@ -65,10 +56,9 @@ class Session implements SessionInterface, \IteratorAggregate, \Countable
                 $this->storage = new NativeSessionStorage($session['options'], new NativeFileSessionHandler($session['storage'][$handler]['save_path']));
                 break;
 
-            case 'pdo':
+            case 'database':
                 $dsn = "mysql:host={$session['storage'][$handler]['db_host']};port={$session['storage'][$handler]['db_port']};dbname={$session['storage'][$handler]['db_name']}";
-                $this->storage = new NativeSessionStorage($session['options'], new PdoSessionHandler($dsn, $session['storage'][$handler]));
-
+                $this->storage = new NativeSessionStorage($session['options'], $d = new PdoSessionHandler($dsn, $session['storage'][$handler]));
                 break;
 
             case 'memcache':
