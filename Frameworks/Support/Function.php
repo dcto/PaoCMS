@@ -6,7 +6,7 @@ use Illuminate\Container\Container;
  *
  * @param  string  $make
  * @param  array   $parameters
- * @return \PAO\Frameworks|Illuminate\Container\Container
+ * @return \PAO\Application|Illuminate\Container\Container
  */
 function app($make = null, $parameters = [])
 {
@@ -33,7 +33,7 @@ function make($make = null, $parameters = [])
  *
  * @param null $make
  * @param array $parameters
- * @return Container|\PAO\Frameworks
+ * @return Container|\PAO\Application
  */
 function take($make = null, $parameters = [])
 {

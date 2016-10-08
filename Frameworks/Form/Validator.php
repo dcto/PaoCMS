@@ -1,6 +1,6 @@
 <?php
 
-namespace PAO;
+namespace PAO\Form;
 
 use PAO\Exception\SystemException;
 
