@@ -2,7 +2,6 @@
 
 namespace PAO;
 
-use PAO\Http\Response;
 use PAO\Exception\PAOException;
 use PAO\Exception\SystemException;
 use PAO\Services\SystemServiceProvider;
@@ -12,26 +11,17 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Events\EventServiceProvider;
 
 
-/**
- * [Nexus 框架核心驱动集成类]
- *
- * Class Frameworks
- *
- * @package PAO
- * @version 20151123
- *
- */
-defined('APP') || die('You must define APP name in your current script.');
+defined('PAO') || die('Invalid Construct System');
 
 version_compare(PHP_VERSION,'5.5.0','ge') || die('The php version least must 5.5.0 ');
 
-
 /**
- * 核心框架
- * Class Frameworks
+ * 框架核心驱动集成 Class Application
+ *
  * @package PAO
+ * @version 20151123
  */
-class Frameworks extends Container
+class Application extends Container
 {
     /**
      * 自动加载器
@@ -104,9 +94,9 @@ class Frameworks extends Container
         Facade::setFacadeApplication($this);
 
         /**
-         * 注册外观别名
+         * 注册自动加载
          */
-        $this->registerFacadesAlias();
+        $this->registerAutoLoadAlias();
 
         /**
          * 基本服务注册
@@ -138,20 +128,6 @@ class Frameworks extends Container
     }
 
     /**
-     * [event 事件操作注册器]
-     *
-     * @param $abstract
-     * @param array $parameters
-     * @return mixed
-     */
-    public function event($abstract, array $parameters = [])
-    {
-        $abstract = 'App\\Events\\'.$abstract;
-
-        return $this->make($abstract, $parameters);
-    }
-
-    /**
      * [config 容器配置读取方法]
      *
      * @param $config [配置文件项]
@@ -169,21 +145,32 @@ class Frameworks extends Container
      */
     private function Navigate()
     {
-        $response = $this->make('router')->dispatch();
+        /**
+         * dispatch
+         */
+        $response = $this->make('router')->dispatch($this->make('request') , $this->make('response'));
 
         //重置Response
-        if(!$response instanceof Response)
+        if(!$response instanceof \PAO\Http\Response)
         {
-            throw new SystemException('The Response Must be Instance of PAO\Response');
+            throw new SystemException('The Output Must be Instance of PAO\Response');
         }
-
         /**
          * 响应请求
-         * @var $response \Symfony\Component\HttpFoundation\Response
+         * @var $response \PAO\Http\Response
          */
         $response->send();
     }
 
+    /**
+     * Autoload
+     *
+     * @return \Composer\Autoload\ClassLoader
+     */
+    public function loader()
+    {
+        return $this->loader;
+    }
 
     /**
      * [register 服务提供者注册器]
@@ -218,6 +205,7 @@ class Frameworks extends Container
     private function registerContainerAliases()
     {
         $this->aliases = array(
+            'app' => 'PAO\Application',
             'router' => 'PAO\Routing\Router',
             'config' => 'PAO\Configure\Repository',
             'request' => 'PAO\Http\Request',
@@ -226,28 +214,28 @@ class Frameworks extends Container
             'session' => 'PAO\Http\Session',
             'crypt' => 'PAO\Crypt\Crypt',
             'captcha' => 'PAO\Captcha\Captcha',
-            'validator' => 'PAO\Validator',
-            'lang' => 'PAO\Translator',
+            'validator' => 'PAO\Form\Validator',
+            'lang' => 'PAO\Language\Lang',
             'view' => 'PAO\View',
             'curl' => 'PAO\Http\Curl',
             'file' => 'PAO\FileSystem\Files',
             'cache' => 'PAO\Cache\Cache',
-            'log' => 'PAO\Logger',
+            'log' => 'PAO\Logger\Logger',
             'db' => 'PAO\Database'
         );
     }
 
     /**
-     * [registerFacadesAlias 注册门面别名]
+     * [registerAutoLoadAlias 注册自动加载]
      */
-    private function registerFacadesAlias()
+    private function registerAutoLoadAlias()
     {
         $classMap = array(
             'Arr' => __DIR__.'/Support/Arr.php',
             'Str' => __DIR__.'/Support/Str.php'
         );
         foreach($this->aliases as $alias => $class) {
-            $alias = ucfirst($alias);
+            $alias = $alias == 'db' ? strtoupper($alias) : ucfirst($alias);
             $classMap[$alias] = __DIR__.'/Support/Facades/'.$alias.'.php';
         }
         $this->loader->addClassMap($classMap);

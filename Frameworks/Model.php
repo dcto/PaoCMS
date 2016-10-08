@@ -115,7 +115,7 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model
          */
         static::creating(function($event)
         {
-            //exit('creating');
+
         });
 
         /**
@@ -123,7 +123,7 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model
          */
         static::created(function($event)
         {
-           //exit('created');
+
         });
 
         /**
@@ -131,7 +131,7 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model
          */
         static::updating(function($event)
         {
-            //exit('updating');
+
         });
 
         /**
@@ -139,7 +139,7 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model
          */
         static::updated(function($event)
         {
-            //exit('updated');
+
         });
 
         /**
@@ -147,7 +147,7 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model
          */
         static::saving(function($event)
         {
-            //exit('saving');
+
         });
 
         /**
@@ -156,8 +156,6 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model
         static::saved(function ($event)
         {
 
-            //exit('saved');
-
         });
 
         /**
@@ -165,7 +163,7 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model
          */
         static::deleting(function($event)
         {
-            //exit('deleting');
+
         });
 
         /**
@@ -173,7 +171,7 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model
          */
         static::deleted(function($event)
         {
-            //exit('deleted');
+
         });
 
     }

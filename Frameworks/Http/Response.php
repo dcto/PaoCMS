@@ -5,13 +5,14 @@ namespace PAO\Http;
 
 use Illuminate\Container\Container;
 use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Support\Traits\Macroable;
 use Symfony\Component\HttpFoundation;
 
+/**
+ * Class Response
+ * @package PAO\Http
+ */
 class Response
 {
-    use Macroable;
-
     protected $message =  [
         //Informational 1xx
         100 => 'Continue',
@@ -84,7 +85,7 @@ class Response
     /**
      * 全局响应
      *
-     * @var $response;
+     * @var $response HttpFoundation\Response;
      */
     private $response;
 
@@ -110,6 +111,7 @@ class Response
      * @param int    $status [状态值]
      * @param array  $headers [header]
      * @author 11.
+     * @return $this|HttpFoundation\Response
      */
     public function make($content = '', $status = 200 , array $headers = [])
     {
@@ -152,7 +154,7 @@ class Response
      * @param int   $status [状态值]
      * @param array $headers [header]
      * @param int   $options [其他设置]
-     * @return HttpFoundation\JsonResponse
+     * @return $this|HttpFoundation\JsonResponse
      * @author 11.
      */
     public function json($data = [], $status = 200, array $headers = [], $options = 0)
@@ -201,7 +203,7 @@ class Response
      * @param \Closure $callback [回调]
      * @param int      $status [状态值]
      * @param array    $headers [header]
-     * @return HttpFoundation\StreamedResponse
+     * @return $this|HttpFoundation\StreamedResponse
      * @author 11.
      */
     public function stream($callback, $status = 200, array $headers = [])
@@ -219,7 +221,7 @@ class Response
      * @param null                $name [文件名]
      * @param array               $headers header
      * @param string              $disposition
-     * @return HttpFoundation\BinaryFileResponse
+     * @return $this|HttpFoundation\BinaryFileResponse
      * @author 11.
      */
     public function download($file, $name = null, array $headers = [], $disposition = 'attachment')
@@ -238,7 +240,7 @@ class Response
      * @param       $url [地址]
      * @param int   $status [状态值]
      * @param array $headers [header]
-     * @return HttpFoundation\RedirectResponse
+     * @return $this|HttpFoundation\RedirectResponse
      * @author 11.
      */
     public function redirect($url, $status = 302, $headers = [])
@@ -249,11 +251,23 @@ class Response
     }
 
     /**
+     * Response send
+     *
+     * @return mixed
+     */
+    public function send()
+    {
+        return $this->response->send();
+    }
+
+
+    /**
      * [__call]
      *
      * @param $method
      * @param $parameters
      * @author 11.
+     * @return HttpFoundation\Response
      */
     public function __call($method, $parameters)
     {

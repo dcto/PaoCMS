@@ -9,25 +9,16 @@
 namespace PAO\Routing;
 
 use Arr;
+use PAO\Http\Request;
 use PAO\Http\Response;
 use PAO\Exception\SystemException;
 use PAO\Exception\NotFoundHttpException;
-use Illuminate\Container\Container;
-
 
 /**
  * Router class will load requested Controller / Closure based on URL.
  */
 class Router
 {
-    /**
-     * The IoC container instance.
-     *
-     * @var \Illuminate\Container\Container
-     */
-    private $container;
-
-
     /*
      * @var $group
      */
@@ -36,14 +27,14 @@ class Router
     /**
      * Matched Route, the current found Route, if any.
      *
-     * @var Route object $matched Route
+     * @var $router Route
      */
     private $router;
 
     /**
      * Array of routes
      *
-     * @var $routes Route[] $routes
+     * @var $routes array
      */
     private $routes = array();
 
@@ -71,27 +62,11 @@ class Router
     );
 
     /**
-     * @var array router property
-     */
-    private $property = array();
-
-    /**
      * Array of Route Groups
      *
      * @var array $groupStack
      */
     private $groupStack = array();
-
-    /**
-     * Router constructor.
-     *
-     * @codeCoverageIgnore
-     */
-    public function __construct(Container $container)
-    {
-        $this->container = $container ?: Container::getInstance();
-    }
-
 
 
     /**
@@ -282,12 +257,10 @@ class Router
 
     /**
      * dispatch to the router
-     * @return bool
+     * @return mixed
      */
-    public function dispatch()
+    public function dispatch(Request $request, Response $response)
     {
-        $request = $this->container->make('request');
-
         // Get the Method and Path.
         $url = trim(urldecode($request->path()));
         $method = $request->method();
@@ -303,20 +276,32 @@ class Router
                 if($router->group) {
                     if (!$group = Arr::get($this->group, $router->group)) {
                         throw new NotFoundHttpException('Does not define ' . $router->group . ' of router group');
-
                     }
+
+                    /**
+                     * construct callback
+                     */
                     if ($callback = Arr::get($group, 'call')) {
                         if (is_array($callback)) {
-                            $callback = $this->ThroughRoute(array_shift($callback), array_shift($callback));
+                            $callback = $this->Fire(array_shift($callback), array_shift($callback));
                         } else {
-                            $callback = $this->ThroughRoute($callback);
+                            $callback = $this->Fire($callback);
                         }
                         if ($callback instanceof Response) {
                             return $callback;
                         }
                     }
                 }
-                return $this->ThroughRoute($router->getCallable(), $router->parameters);
+                /**
+                 * construct instance
+                 */
+                $instance = $this->Fire($router->getCallable(), $router->parameters);
+
+                if(is_string($instance)){
+                    return $response->make($instance);
+                }else{
+                    return $instance;
+                }
             }
         }
         // No valid Route found; send an Error 404 NotFoundHttpException Response.
@@ -355,7 +340,7 @@ class Router
      * @param array $parameter
      * @return mixed
      */
-    protected function ThroughRoute($callback, $parameters = [])
+    protected function Fire($callback, $parameters = [])
     {
         if($callback instanceof Response){
             return $callback;
@@ -365,7 +350,7 @@ class Router
         }
 
         if(strpos($callback, '@')){
-            return $this->container->call($callback, $parameters);
+            return app()->call($callback, $parameters);
         }
         throw new NotFoundHttpException("Invalid Route Target [$callback] in {$this->router->route} Of Your Route");
     }

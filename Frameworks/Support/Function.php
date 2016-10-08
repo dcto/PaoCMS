@@ -6,7 +6,7 @@ use Illuminate\Container\Container;
  *
  * @param  string  $make
  * @param  array   $parameters
- * @return Container
+ * @return \PAO\Application|Illuminate\Container\Container
  */
 function app($make = null, $parameters = [])
 {
@@ -29,15 +29,15 @@ function make($make = null, $parameters = [])
 }
 
 /**
- * 服务加载器
+ * take alias name for app
  *
- * @param $make
+ * @param null $make
  * @param array $parameters
- * @return Container
+ * @return Container|\PAO\Application
  */
-function event($make, $parameters = [])
+function take($make = null, $parameters = [])
 {
-    return app()->event($make, $parameters);
+    return app($make, $parameters);
 }
 
 /**
@@ -85,7 +85,7 @@ function request()
  */
 function response($content = '', $status = 200, $header = array())
 {
-    return app('response')->make($content, $status, $header);
+    return make('response')->make($content, $status, $header);
 }
 
 
@@ -98,7 +98,7 @@ function response($content = '', $status = 200, $header = array())
  */
 function redirect($url, $status = 302, $headers = [])
 {
-    return app('response')->redirect($url, $status, $headers);
+    return make('response')->redirect($url, $status, $headers);
 }
 
 /**
@@ -108,11 +108,11 @@ function redirect($url, $status = 302, $headers = [])
 function session($k = false, $v = false)
 {
     if($k && $v) {
-        return app('session')->set($k, $v);
+        return make('session')->set($k, $v);
     }else if($k) {
-        return app('session')->get($k);
+        return make('session')->get($k);
     }else{
-        return app('session');
+        return make('session');
     }
 }
 
@@ -123,12 +123,22 @@ function session($k = false, $v = false)
 function cookie($k = false, $v = false)
 {
     if($k && $v) {
-        return app('cookie')->set($k, $v);
+        return make('cookie')->set($k, $v);
     }else if($k) {
-        return app('cookie')->get($k);
+        return make('cookie')->get($k);
     }else{
-        return app('cookie');
+        return make('cookie');
     }
+}
+
+/**
+ * \DB::table function
+ * @param $table
+ * @return \Illuminate\Database\Eloquent\Builder
+ */
+function DB($table)
+{
+    return \DB::table($table);
 }
 
 /**
@@ -141,7 +151,7 @@ function cookie($k = false, $v = false)
  */
 function view($view, array $data = [], $status = 200, array $headers = [])
 {
-    return app('response')->view($view, $data, $status, $headers);
+    return make('response')->view($view, $data, $status, $headers);
 }
 
 /**
@@ -153,7 +163,18 @@ function view($view, array $data = [], $status = 200, array $headers = [])
  */
 function json($data = [], $status = 200, array $headers = [])
 {
-    return app('response')->json($data, $status, $headers);
+    return make('response')->json($data, $status, $headers);
+}
+
+/**
+ * input method
+ * @param null $key
+ * @param null $default
+ * @return string
+ */
+function input($key = null, $default = null)
+{
+    return make('request')->input($key, $default);
 }
 
 /**
@@ -163,7 +184,7 @@ function json($data = [], $status = 200, array $headers = [])
  */
 function redis($server = 'default')
 {
-    return app('cache')->redis($server);
+    return make('cache')->redis($server);
 }
 
 /**

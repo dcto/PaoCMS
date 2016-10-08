@@ -4,8 +4,6 @@ namespace App\Controller;
 
 
 
-use PAO\Support\Facades\Cache;
-
 class Index extends Controller
 {
 
@@ -14,33 +12,28 @@ class Index extends Controller
         return $this->container->make('captcha')->make();
     }
 
+
     public function checkLogin()
     {
         return view('未登录');
     }
 
+    public function autoload($class)
+    {
+        echo $class;die;
+    }
+
 
     public function index( \PAO\Http\Request $request)
     {
-        echo $this->controller;
-        echo $this->action;
-
-        die;
-        \Captcha::make();
-
-
-       return \Captcha::make();
-
-        $redis = Cache::Redis();
-
-        echo lang('title');
-
 echo '<pre>';
 
         echo '<hr />';
         //print_r($this->container->make('request')->all());
       echo $s = \Crypt::encrypt('我是中国人~@#$%%&*（*)————|。、吧c~~~~<>?）');
-        echo '<br />';
+        echo '<hr />';
+        echo \Crypt::decrypt($s).'<br />';
+        print_r(get_included_files());
      // return Response::make('test');
 
         //print_r($this->make('request')->header);

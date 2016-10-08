@@ -4,23 +4,20 @@ namespace PAO;
 
 use PAO\Exception\DBException;
 use Illuminate\Events\Dispatcher;
+use Illuminate\Container\Container;
 use Illuminate\Pagination\PaginationServiceProvider;
 use Illuminate\Database\Capsule\Manager as DatabaseManager;
 
 class Database extends DatabaseManager
 {
 
-    public function __construct()
+    public function __construct(Container $container = null)
     {
-        /**
-         * 设置容器
-         */
-        $this->setupContainer(app());
 
         /**
-         * 创建数据库实例
+         * 初始化父方类
          */
-        $this->setupManager();
+        parent::__construct();
 
         /**
          * 设置配置
@@ -40,11 +37,6 @@ class Database extends DatabaseManager
          * 注册数据库监听
          */
         $this->setEventDispatcher(new Dispatcher(app()));
-
-        /**
-         * 设置默认数据库为default
-         */
-        $this->setupDefaultConfiguration();
 
         /**
          * 设置全局可用

@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static Response redirect(string $url, int $status = 302, array $headers = [])
  * @method static Response stream(Closure $callback, int $status = 200, array $headers = [])
  * @method static Response download(string $file, string $name = null, array $headers = [], string $disposition = 'attachment')
+ * @method static Response send(string $file, string $name = null, array $headers = [], string $disposition = 'attachment')
  */
 class Response extends Facade
 {

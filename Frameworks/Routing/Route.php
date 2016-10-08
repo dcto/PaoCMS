@@ -127,6 +127,12 @@ class Route
         }
     }
 
+    /**
+     * @param $property
+     * @param $arguments
+     * @return $this
+     * @throws NotFoundHttpException
+     */
     public function __call($property, $arguments)
     {
         if (!property_exists($this, $property)) {
@@ -148,7 +154,7 @@ class Route
      */
     public function getCallable()
     {
-        return rtrim($this->namespace,'\\') .'\\' .ltrim($this->callable, '\\');
+        return rtrim($this->namespace,'\\').'\\'.ltrim($this->callable, '\\');
     }
 
     /**

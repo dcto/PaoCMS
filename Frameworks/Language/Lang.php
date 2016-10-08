@@ -2,22 +2,16 @@
 
 namespace PAO;
 
-use Illuminate\Container\Container;
+
 use PAO\Exception\SystemException;
 
-class Translator
+class Lang
 {
-	/**
-	 * 容器
-	 * @var [type]
-	 */
-	protected $container;
-
 	/**
 	 * 当前设定语言
 	 * @var [type]
 	 */
-	protected $language;
+	protected $lang;
 
 	/**
 	 * 语言配置器
@@ -32,11 +26,9 @@ class Translator
 	 */
 	public function __construct( $items = [] )
 	{
-		$this->container = Container::getInstance();
-
         $this->items = $items;
 
-		$this->language = $this->container->config('app.language');
+		$this->lang = config('app.language');
 
         $this->parseLanguage();
 	}
@@ -92,7 +84,7 @@ class Translator
      */
     public function getLang()
     {
-        return $this->language;
+        return $this->lang;
     }
 
     /**
@@ -102,7 +94,7 @@ class Translator
      */
     public function setLang($language)
     {
-        $this->language = $language;
+        $this->lang = $language;
         $this->parseLanguage($language);
     }
 
@@ -128,7 +120,7 @@ class Translator
     private function parseLanguage($lang = null)
     {
 
-        $lang = $this->language = $lang?:$this->language;
+        $lang = $this->lang = $lang?:$this->lang;
 
         $AppLanguage = APP.DIRECTORY_SEPARATOR.'Lang'.DIRECTORY_SEPARATOR.$lang.'.ini';
 

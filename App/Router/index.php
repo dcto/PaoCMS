@@ -1,3 +1,2 @@
 <?php
-Router::get('/', ['tag'=>'index','call'=>'App\Controller\Index@index']);
-
+Router::get('/', ['call'=>'App\Controller\Index@Index']);

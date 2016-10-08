@@ -2,8 +2,6 @@
 
 namespace PAO\Http;
 
-use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
 use Illuminate\Container\Container;
 use PAO\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation;
@@ -78,7 +76,7 @@ class Request extends HttpFoundation\Request
     public function is()
     {
         foreach (func_get_args() as $pattern) {
-            if (Str::is($pattern, urldecode($this->path()))) {
+            if (\Str::is($pattern, urldecode($this->path()))) {
                 return true;
             }
         }
@@ -156,7 +154,7 @@ class Request extends HttpFoundation\Request
     public function not($key = null)
     {
         //return array_diff_key($this->all(), array_fill_keys($key, null));
-        return Arr::except($this->all(), $key);
+        return \Arr::except($this->all(), $key);
     }
 
     /**
@@ -192,7 +190,7 @@ class Request extends HttpFoundation\Request
     {
         $input = $this->getInputSource()->all() + $this->query->all();
 
-        return Arr::get($input, $key, $default);
+        return \Arr::get($input, $key, $default);
     }
 
     /**
@@ -258,7 +256,7 @@ class Request extends HttpFoundation\Request
      */
     public function file($key = null, $default = null)
     {
-        return Arr::get($this->files(), $key, $default);
+        return \Arr::get($this->files(), $key, $default);
     }
 
 
@@ -338,7 +336,7 @@ class Request extends HttpFoundation\Request
      */
     public function isJson()
     {
-        return Str::contains($this->header('CONTENT_TYPE'), '/json');
+        return \Str::contains($this->header('CONTENT_TYPE'), '/json');
     }
 
     /**
@@ -359,7 +357,7 @@ class Request extends HttpFoundation\Request
             return $this->json;
         }
 
-        return Arr::get($this->json->all(), $key, $default);
+        return \Arr::get($this->json->all(), $key, $default);
     }
 
     /**
@@ -459,7 +457,7 @@ class Request extends HttpFoundation\Request
      */
     public function segment($index, $default = null)
     {
-        return Arr::get($this->segments(), $index - 1, $default);
+        return \Arr::get($this->segments(), $index - 1, $default);
     }
 
     /**
