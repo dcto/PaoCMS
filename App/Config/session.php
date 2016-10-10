@@ -4,7 +4,7 @@ defined('PAO') || die('The PaoCMS Load Error');
 /**
  * session 存储方式
  */
-$session['handler'] = 'database';
+$session['handler'] = 'files';
 
 /**
  * 以文件形试保存
