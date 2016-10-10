@@ -38,16 +38,15 @@ class SystemServiceProvider extends ServiceProvider
         /**
          * 加载App function
          */
-        if(is_readable($function = APP.'/Helper/function.php')){
+        if(is_readable($function = APP.'/Helper/helper.php')){
             require($function);
         }
-
-        $functions = (array) config('function');
-
-        $functions = array_unique($functions);
-        foreach ($functions as $function){
-            if(is_readable($function = APP.'/Helper/'.$function)){
-                require_once ($function);
+        if($functions = config('helper')){
+            $functions = array_unique($functions);
+            foreach ($functions as $function){
+                if(is_readable($function = APP.'/Helper/'.$function)){
+                    require($function);
+                }
             }
         }
     }

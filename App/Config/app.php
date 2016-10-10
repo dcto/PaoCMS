@@ -7,7 +7,6 @@ $app['token']        = 'pao_'; //网站标识
 $app['timezone']     = 'PRC'; //系统时区
 $app['charset']      = 'utf-8'; //系统编码
 $app['language']     = 'zh-CN'; //默认语言包
-$app['session']      = 'redis'; //Session存储方式
 
 $app['dir']['pao']   = PAO;//系统根目录
 $app['dir']['web']   = PAO.'/web'; //公共资源目录
