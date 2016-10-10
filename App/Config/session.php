@@ -32,13 +32,12 @@ $session['storage']['memcached'] = array();
  */
 $session['storage']['mongodb'] = array();
 
-
 /**
  * 保存到据据库名称参见database配置文件
  */
 $session['storage']['database']['db_host'] = 'localhost';
 $session['storage']['database']['db_port'] = '3306';
-$session['storage']['database']['db_name'] = 'paocms';
+$session['storage']['database']['db_name'] = 'pao';
 $session['storage']['database']['db_username'] = 'root';
 $session['storage']['database']['db_password'] = 'root';
 $session['storage']['database']['db_table'] = 'pao_session';
@@ -48,6 +47,7 @@ $session['storage']['database']['db_time_col'] = 'time';
 $session['storage']['database']['db_lifetime_col'] = 'life_time';
 $session['storage']['database']['db_connection_options'] = array();
 $session['storage']['database']['lock_mode'] = 2;
+
 
 /**
  * session 选项
