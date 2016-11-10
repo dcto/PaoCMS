@@ -122,9 +122,9 @@ class Lang
 
         $lang = $this->lang = $lang?:$this->lang;
 
-        $AppLanguage = APP.DIRECTORY_SEPARATOR.'Lang'.DIRECTORY_SEPARATOR.$lang.'.ini';
+        $AppLanguage = DIR.DIRECTORY_SEPARATOR.'Lang'.DIRECTORY_SEPARATOR.$lang.'.ini';
 
-        $SubLanguage = APP.DIRECTORY_SEPARATOR.'Lang'.DIRECTORY_SEPARATOR.NAME.DIRECTORY_SEPARATOR.$lang.'.ini';
+        $SubLanguage = DIR.DIRECTORY_SEPARATOR.'Lang'.DIRECTORY_SEPARATOR.APP.DIRECTORY_SEPARATOR.$lang.'.ini';
 
         if(is_readable($AppLanguage)){
             $this->items = (array) parse_ini_file($AppLanguage, true);

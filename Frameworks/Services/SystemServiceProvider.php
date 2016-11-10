@@ -28,7 +28,7 @@ class SystemServiceProvider extends ServiceProvider
         /**
          * 注册路由
          */
-        $router = APP . '/Router/'.NAME.'.php';
+        $router = DIR . '/Router/'.APP.'.php';
         if(is_readable($router)){
             require($router);
         }else{
@@ -38,13 +38,13 @@ class SystemServiceProvider extends ServiceProvider
         /**
          * 加载App function
          */
-        if(is_readable($function = APP.'/Helper/helper.php')){
+        if(is_readable($function = DIR.'/Helper/helper.php')){
             require($function);
         }
         if($functions = config('helper')){
             $functions = array_unique($functions);
             foreach ($functions as $function){
-                if(is_readable($function = APP.'/Helper/'.$function)){
+                if(is_readable($function = DIR.'/Helper/'.$function)){
                     require($function);
                 }
             }

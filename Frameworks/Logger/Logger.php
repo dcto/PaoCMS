@@ -45,7 +45,7 @@ class Logger implements Log{
     public function __construct()
     {
         $this->logger = new MonologLogger('PAO');
-        $this->logfile = config('app.dir.log').'/'.trim(ucfirst(NAME),'/').'/'.date('Ymd').'.log';
+        $this->logfile = rtrim(PAO,'/').'/'.trim(config('app.dir.log'),'/').'/'.trim(ucfirst(APP),'/').'/'.date('Ymd').'.log';
         $this->logger->pushHandler(new StreamHandler($this->logfile));
     }
 
