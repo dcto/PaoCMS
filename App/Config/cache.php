@@ -4,11 +4,11 @@ defined('PAO') || die('The PaoCMS Load Error');
 
 $cache['file']['dir'] = '/Runtime/Cache';
 
-$cache['redis']['default']['host'] = '127.0.0.1 ';
+$cache['redis']['default']['host'] = '127.0.0.1';
 $cache['redis']['default']['port'] = '6379';
 $cache['redis']['default']['timeout'] = 5;
 $cache['redis']['default']['database'] = 0;
-$cache['redis']['default']['persistent'] = true;
+$cache['redis']['default']['persistent'] = 0;
 $cache['redis']['default']['options'][Redis::OPT_PREFIX] = 'pao:';
 
 

@@ -78,6 +78,11 @@ class Application extends Container
         $this->registerContainerAliases();
 
         /**
+         * 注册自动加载
+         */
+        $this->registerAutoLoadAlias();
+
+        /**
          * 配置系统环境
          */
         $this->registerSystemEnvironment();
@@ -92,11 +97,6 @@ class Application extends Container
          * @var $this \Illuminate\Contracts\Foundation\Application
          */
         Facade::setFacadeApplication($this);
-
-        /**
-         * 注册自动加载
-         */
-        $this->registerAutoLoadAlias();
 
         /**
          * 基本服务注册
@@ -207,7 +207,7 @@ class Application extends Container
         $this->aliases = array(
             'app' => 'PAO\Application',
             'router' => 'PAO\Routing\Router',
-            'config' => 'PAO\Configure\Repository',
+            'config' => 'PAO\Config\Config',
             'request' => 'PAO\Http\Request',
             'response' => 'PAO\Http\Response',
             'cookie' => 'PAO\Http\Cookie',
@@ -235,6 +235,7 @@ class Application extends Container
             'Str' => __DIR__.'/Support/Str.php',
             'Schema' => __DIR__.'/Support/Facades/Schema.php'
         );
+
         foreach($this->aliases as $alias => $class) {
             $alias = $alias == 'db' ? strtoupper($alias) : ucfirst($alias);
             $classMap[$alias] = __DIR__.'/Support/Facades/'.$alias.'.php';

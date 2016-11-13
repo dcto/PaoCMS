@@ -1,12 +1,12 @@
 <?php
 
-namespace PAO\Configure;
+namespace PAO\Config;
 
 use ArrayAccess;
 use Illuminate\Support\Arr;
 use Illuminate\Contracts\Config\Repository as ConfigContract;
 
-class Repository implements ArrayAccess, ConfigContract
+class Config implements ArrayAccess, ConfigContract
 {
     /**
      * All of the configuration items.
