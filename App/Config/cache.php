@@ -2,9 +2,9 @@
 defined('PAO') || die('The PaoCMS Load Error');
 
 
-$cache['file']['dir'] = RUNTIME.'/Cache';
+$cache['file']['dir'] = '/Runtime/Cache';
 
-$cache['redis']['default']['host'] = '127.0.0.1';
+$cache['redis']['default']['host'] = '127.0.0.1 ';
 $cache['redis']['default']['port'] = '6379';
 $cache['redis']['default']['timeout'] = 5;
 $cache['redis']['default']['database'] = 0;

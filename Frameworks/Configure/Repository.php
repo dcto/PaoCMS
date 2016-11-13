@@ -4,9 +4,7 @@ namespace PAO\Configure;
 
 use ArrayAccess;
 use Illuminate\Support\Arr;
-use Illuminate\Container\Container;
 use Illuminate\Contracts\Config\Repository as ConfigContract;
-use PAO\Exception\SystemException;
 
 class Repository implements ArrayAccess, ConfigContract
 {

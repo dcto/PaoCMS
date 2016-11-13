@@ -16,4 +16,6 @@ $app['timezone']     = 'PRC'; //系统时区
 $app['language']     = 'zh-CN'; //默认语言包
 
 
-$app['dir']['log']   = './Runtime/Logs';
+$app['dir']['log']   = '/RunTime/Logs';
+
+$app['dir']['cache']   = '/RunTime/Cache';

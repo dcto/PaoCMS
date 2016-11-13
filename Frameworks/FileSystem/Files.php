@@ -41,28 +41,20 @@ class Files extends Filesystem
         return $this->put($path, $content, $lock);
     }
 
-    /**
-     * 追加文件内容
-     * @param $path
-     * @param $content
-     * @return int
-     */
-    public function put($path, $content)
-    {
-        return $this->append($path, $content);
-    }
-
 
     /**
      * 递归创建文件目录
+     *
      * @param $path
+     * @param int $mode
+     * @param bool $recursive
+     * @param bool $force
      * @return bool
      */
-    public function mkDir($path)
+    public function mkDir($path, $mode = 0755, $recursive = true, $force = false)
     {
-        return $this->makeDirectory($path, 0755, true, false);
+        return $this->makeDirectory($path, $mode, $recursive, $force);
     }
-
 
     /**
      * 判断是否是目录

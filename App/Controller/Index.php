@@ -4,6 +4,8 @@ namespace App\Controller;
 
 
 
+use PAO\Cache\Cache;
+
 class Index extends Controller
 {
 
@@ -27,6 +29,11 @@ class Index extends Controller
     public function index( \PAO\Http\Request $request)
     {
 echo '<pre>';
+
+        $s = \Cache::apc()->
+
+        var_dump(\Cache::apc()->get('ab'));
+        die;
 
 
         \DB::table('user')->update(array('dd','cc'));

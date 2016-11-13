@@ -1,10 +1,7 @@
 <?php
 
-namespace PAO\Cache;
+namespace PAO\Cache\Driver;
 
-
-
-use Illuminate\Container\Container;
 use PAO\Exception\SystemException;
 
 /**
@@ -13,19 +10,16 @@ use PAO\Exception\SystemException;
  *
  * @package PAO\Cache
  */
-class FileSystem
+class FileSystemDriver implements DriverInterface
 {
+
+    use RetrievesMultipleKeys;
 
     /**
      * 版本
      * @var string
      */
     private $ver = '$Rev$';
-
-    /**
-     * @var string
-     */
-    private $name = 'PaoCMS FileSystem Cache';
 
     /**
      * 缓存文件
@@ -154,6 +148,7 @@ class FileSystem
         'key'=>[24,'H*']
     ];
 
+
     /**
      * 缓存构造
      *
@@ -162,13 +157,12 @@ class FileSystem
     public function __construct($file = null)
     {
 
-        $this->file = sprintf('%s', hash('md5', $file, false)).'.php';
+        $this->file = sprintf('%s', hash('crc32',$file)).'.php';
 
         $this->size_list = array(512=>10, 3<<10=>10, 8<<10=>10, 20<<10=>4, 30<<10=>2, 50<<10=>2, 80<<10=>2, 96<<10=>2, 128<<10=>2, 224<<10=>2, 256<<10=>2, 512<<10=>1, 1024<<10=>1);
 
         $this->load();
     }
-
 
     /**
      * [initialize 系统初始化]
@@ -179,7 +173,7 @@ class FileSystem
     private function load()
     {
 
-        $this->file = Container::getInstance()->config('app.dir.cache').'/'.$this->file;
+        $this->file = PAO.'/'.trim(config('app.dir.cache'),'/').'/'.$this->file;
 
         if(!file_exists($this->file))
         {
@@ -394,6 +388,16 @@ class FileSystem
     }
 
     /**
+     * [dir 获取当前缓存目录名]
+     *
+     * @return string
+     */
+    public function dir()
+    {
+        return pathinfo($this->file, PATHINFO_DIRNAME);
+    }
+
+    /**
      * [get 获取缓存]
      *
      * @param      $key [缓存键名]
@@ -401,12 +405,12 @@ class FileSystem
      * @return bool|mixed|null|string
      * @author 11.
      */
-    public function get($key, $value = null)
+    public function get($key, &$value = null)
     {
         if(!$this->has($key, $offset))
         {
-            if($value)
-            {
+            if($value){
+
                 $this->set($key, $value);
                 return $value;
             }
@@ -435,12 +439,13 @@ class FileSystem
     /**
      * [set 设置缓存]
      *
-     * @param $key
-     * @param $value
+     * @param string $key
+     * @param mixed $value
+     * @param int $time
      * @return bool
      * @author 11.
      */
-    public function set($key, $value)
+    public function set($key, $value, $time = 0)
     {
         if(!$this->lock(true)) throw new SystemException('Can\'t lock the file!');
 
@@ -474,6 +479,7 @@ class FileSystem
                 if(!($data_offset = $this->allocate($schema_id)))
                 {
                     $this->unlock();
+                    $this->set_schema($schema_id, 'miss', $this->get_schema($schema_id, 'miss')+1);
                     return false;
                 }
 
@@ -489,10 +495,11 @@ class FileSystem
             if(!($data_offset = $this->allocate($schema_id)))
             {
                 $this->unlock();
+                $this->set_schema($schema_id, 'miss', $this->get_schema($schema_id, 'miss')+1);
                 return false;
             }
 
-            $key = md5(trim($key));
+            $key = crc32((trim($key)));
 
             $hd_sequel = $this->allocate_idx(array(
                 'next'=>0,
@@ -516,7 +523,7 @@ class FileSystem
         if($data_offset > $this->max_size) throw new SystemException('allocate data size:'. $data_offset);
 
         $this->push($data_offset, $value);
-        $this->set_schema($schema_id, 'miss', $this->get_schema($schema_id, 'miss')+1);
+        $this->set_schema($schema_id, 'hits', $this->get_schema($schema_id, 'hits')+1);
         $this->lru_push($schema_id, $hd_sequel);
         $this->unlock();
 
@@ -537,7 +544,7 @@ class FileSystem
         {
             if($info = $this->get_node($pos))
             {
-                $key = md5(trim($key));
+                $key = crc32(trim($key));
                 //删除data区域
                 if($info['prev'])
                 {
@@ -567,10 +574,56 @@ class FileSystem
      */
     public function has($key, &$pos = 0)
     {
-        $key = md5(trim($key));
+        $key = crc32(trim($key));
         return $this->get_pos_by_key($this->get_node_root($key), $key, $pos);
     }
 
+
+    public function save($key, $value)
+    {
+        $this->set($key, $value);
+    }
+
+    /**
+     * [increment 递增]
+     *
+     * @param string $key
+     * @param int $value
+     * @return bool
+     */
+    public function increment($key, $value = 1)
+    {
+       return $this->set($key, intval($this->get($key)) + $value);
+    }
+
+
+    /**
+     * [decrement 递减]
+     *
+     * @param string $key
+     * @param int $value
+     * @return bool|int
+     */
+    public function decrement($key, $value = 1)
+    {
+        return $this->increment($key, $value * -1);
+    }
+
+    /**
+     * [flush 清空所有缓存]
+     *
+     * @return mixed
+     */
+    public function flush()
+    {
+       return make('file')->deleteDirectory($this->dir(), true);
+    }
+
+
+    public function prefix()
+    {
+        // TODO: Implement prefix() method.
+    }
 
     /**
      * [status 获取缓存状态]
@@ -594,7 +647,7 @@ class FileSystem
             $miss += $schema['miss'];
             $hits += $schema['hits'];
         }
-        return array('miss'=>$miss, 'hits'=>$hits);
+        return array('hits'=>$hits, 'miss'=>$miss);
     }
 
     /**
@@ -846,7 +899,7 @@ class FileSystem
                     throw new SystemException('Can\'t allocate data space');
                 }
             }else{
-                $this->set_current_pos($ds_offset, $size);
+                $this->set_current_pos($ds_offset);
                 return $ds_offset;
             }
         }
