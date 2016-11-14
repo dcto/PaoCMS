@@ -178,6 +178,22 @@ function input($key = null, $default = null)
 }
 
 /**
+ * @param bool $key
+ * @param bool $value
+ * @param int $time
+ * @return \PAO\Cache\Driver\DriverInterface
+ */
+function cache($key = false, $value = false, $time = 86400)
+{
+    if($key && $value){
+        return make('cache')->set($key, $value, $time);
+    }else if($key){
+        return make('cache')->get($key);
+    }
+    return make('caches');
+}
+
+/**
  * redis
  * @param string $server
  * @return \Redis

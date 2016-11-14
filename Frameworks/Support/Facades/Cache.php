@@ -5,17 +5,17 @@ use Illuminate\Support\Facades\Facade;
 /**
  * Class Cache
  *
- * @method static \PAO\Cache\Cache has(string $key)
- * @method static \PAO\Cache\Cache get(string $key)
- * @method static \PAO\Cache\Cache set(string $key, mixed $value, int $time = 86400)
- * @method static \PAO\Cache\Cache gets(array $key)
- * @method static \PAO\Cache\Cache sets(array $key, mixed $value, int $time = 86400)
- * @method static \PAO\Cache\Cache increment(string $key, int $value = 1, int $time = 86400)
- * @method static \PAO\Cache\Cache decrement(string $key, int $value = 1)
- * @method static \PAO\Cache\Cache save(string $key, mixed $value)
- * @method static \PAO\Cache\Cache del(string $key)
- * @method static \PAO\Cache\Cache flush()
- * @method static \PAO\Cache\Cache prefix($prefix = false)
+ * @method static \PAO\Cache\Driver\DriverInterface has(string $key)
+ * @method static \PAO\Cache\Driver\DriverInterface get(string $key)
+ * @method static \PAO\Cache\Driver\DriverInterface set(string $key, mixed $value, int $time = 86400)
+ * @method static \PAO\Cache\Driver\DriverInterface gets(array $key)
+ * @method static \PAO\Cache\Driver\DriverInterface sets(array $values, $time = 86400)
+ * @method static \PAO\Cache\Driver\DriverInterface increment(string $key, int $value = 1, int $time = 86400)
+ * @method static \PAO\Cache\Driver\DriverInterface decrement(string $key, int $value = 1)
+ * @method static \PAO\Cache\Driver\DriverInterface save(string $key, mixed $value)
+ * @method static \PAO\Cache\Driver\DriverInterface del(string $key)
+ * @method static \PAO\Cache\Driver\DriverInterface flush()
+ * @method static \PAO\Cache\Driver\DriverInterface prefix($prefix = false)
  * @method static \PAO\Cache\Driver\ApcDriver apc(string $file = 'default')
  * @method static \PAO\Cache\Driver\FileDriver file(string $file = 'default')
  * @method static \PAO\Cache\Driver\RedisDriver|\Redis redis(string $server = 'default');
