@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static Session setId(string $id)
  * @method static Session clear()
  * @method static Session count()
- * @method static Session getBag()
+ * @method static Session getBag($name)
  * @method static Session getName()
  * @method static Session setName(string $name)
  * @method static Session getFlashBag()

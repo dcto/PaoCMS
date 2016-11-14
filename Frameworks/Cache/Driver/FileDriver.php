@@ -3,14 +3,14 @@
 namespace PAO\Cache\Driver;
 
 use PAO\Exception\SystemException;
-use PAO\FileSystem\Files;
+use PAO\FileSystem\FileSystem;
 
 class FileDriver implements DriverInterface
 {
     use RetrievesMultipleKeys;
 
     /**
-     * @var Files
+     * @var FileSystem
      */
     private $fileSystem;
 
@@ -23,7 +23,7 @@ class FileDriver implements DriverInterface
 
     public function __construct($prefix = null)
     {
-        $this->fileSystem = new Files();
+        $this->fileSystem = new FileSystem();
 
         $this->prefix($prefix);
     }

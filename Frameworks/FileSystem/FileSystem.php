@@ -2,9 +2,8 @@
 
 namespace PAO\FileSystem;
 
-use Illuminate\Filesystem\Filesystem;
 
-class Files extends Filesystem
+class FileSystem extends \Illuminate\Filesystem\Filesystem
 {
 
 
