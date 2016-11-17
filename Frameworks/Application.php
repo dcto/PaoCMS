@@ -2,14 +2,13 @@
 
 namespace PAO;
 
-use PAO\Exception\PAOException;
-use PAO\Exception\SystemException;
-use PAO\Services\SystemServiceProvider;
 use Illuminate\Container\Container;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Events\EventServiceProvider;
-
+use PAO\Exception\PAOException;
+use PAO\Exception\SystemException;
+use PAO\Services\SystemServiceProvider;
 
 defined('PAO') || die('Invalid Construct System');
 
@@ -24,33 +23,22 @@ version_compare(PHP_VERSION,'5.5.0','ge') || die('The php version least must 5.5
 class Application extends Container
 {
     /**
-     * 自动加载器
-     * @var \Composer\Autoload\ClassLoader $loader
+     * 系统配置
+     * @var array
      */
-    private $loader;
+    public $config = array();
 
     /**
      * 已注入的模块
      * @var array
      */
-    private $is_bindings = [];
-
+    private $is_bindings = array();
 
     /**
      * 已注册的服务
      * @var array
      */
-    private $is_providers = [];
-
-
-    /**
-     * Frameworks constructor.
-     * @param $loader
-     */
-    public function __construct($loader)
-    {
-        $this->loader = $loader;
-    }
+    private $is_providers = array();
 
     /**
      * [Issue 核心应用构造方法]
@@ -81,6 +69,11 @@ class Application extends Container
          * 注册自动加载
          */
         $this->registerAutoLoadAlias();
+
+        /**
+         * 解析配置文件
+         */
+        $this->registerSystemConfiguration();
 
         /**
          * 配置系统环境
@@ -163,13 +156,12 @@ class Application extends Container
     }
 
     /**
-     * Autoload
-     *
+     * get loader
      * @return \Composer\Autoload\ClassLoader
      */
     public function loader()
     {
-        return $this->loader;
+        return require(dirname(__DIR__).'/vendor/autoload.php');
     }
 
     /**
@@ -212,9 +204,9 @@ class Application extends Container
             'response' => 'PAO\Http\Response',
             'cookie' => 'PAO\Http\Cookie',
             'session' => 'PAO\Http\Session\Session',
-            'crypt' => 'PAO\Crypt\Crypt',
             'captcha' => 'PAO\Captcha\Captcha',
             'validator' => 'PAO\Form\Validator',
+            'crypt' => 'PAO\Crypt\Crypt',
             'lang' => 'PAO\Language\Lang',
             'view' => 'PAO\View',
             'curl' => 'PAO\Http\Curl',
@@ -240,7 +232,8 @@ class Application extends Container
             $alias = $alias == 'db' ? strtoupper($alias) : ucfirst($alias);
             $classMap[$alias] = __DIR__.'/Support/Facades/'.$alias.'.php';
         }
-        $this->loader->addClassMap($classMap);
+
+        $this->loader()->addClassMap($classMap);
     }
 
 
@@ -286,6 +279,15 @@ class Application extends Container
         $this->register(new EventServiceProvider($this));
     }
 
+    /**
+     * [registerSystemConfiguration 解析配置文件]
+     *
+     * @return mixed
+     */
+    private function registerSystemConfiguration()
+    {
+        return $this->make('config')->parseConfig($this->config);
+    }
 
     /**
      * [registerSystemEnvironment 初始化配置系统环境]

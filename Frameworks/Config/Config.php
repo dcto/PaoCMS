@@ -3,27 +3,30 @@
 namespace PAO\Config;
 
 use ArrayAccess;
-use Illuminate\Support\Arr;
-use Illuminate\Contracts\Config\Repository as ConfigContract;
+use PAO\Application;
+use Illuminate\Contracts\Config\Repository;
+use PAO\Exception\SystemException;
 
-class Config implements ArrayAccess, ConfigContract
+class Config implements ArrayAccess, Repository
 {
     /**
-     * All of the configuration items.
-     *
-     * @var array
+     * @var Application
      */
-    protected $items = [];
+    private $app;
 
     /**
-     * Create a new configuration repository.
-     *
-     * @param  array  $items
-     * @return void
+     * @var string
      */
-    public function __construct(array $items = [])
+    private $config;
+
+    /**
+     * Config constructor.
+     * @param Application $app
+     */
+    public function __construct(Application $app)
     {
-        $this->items = $items;
+        $this->app = $app;
+        $this->config =  DIR.'/Config/config.ini';
     }
 
     /**
@@ -34,7 +37,7 @@ class Config implements ArrayAccess, ConfigContract
      */
     public function has($key)
     {
-        return Arr::has($this->items, $key);
+        return \Arr::has($this->app->config, $key);
     }
 
     /**
@@ -46,11 +49,12 @@ class Config implements ArrayAccess, ConfigContract
      */
     public function get($key, $default = null)
     {
+        /*
         if(!$this->has($key))
         {
             $this->load($key);
-        }
-        return Arr::get($this->items, $key, $default);
+        }*/
+        return \Arr::get($this->app->config, $key, $default);
     }
 
     /**
@@ -64,10 +68,11 @@ class Config implements ArrayAccess, ConfigContract
     {
         if (is_array($key)) {
             foreach ($key as $innerKey => $innerValue) {
-                Arr::set($this->items, $innerKey, $innerValue);
+
+                \Arr::set($this->app->config, $innerKey, $innerValue);
             }
         } else {
-            Arr::set($this->items, $key, $value);
+            \Arr::set($this->app->config, $key, $value);
         }
     }
 
@@ -110,7 +115,7 @@ class Config implements ArrayAccess, ConfigContract
      */
     public function all()
     {
-        return $this->items;
+        return $this->app->config;
     }
 
     /**
@@ -160,12 +165,40 @@ class Config implements ArrayAccess, ConfigContract
 
 
     /**
+     * [parseConfig 解析配置文件]
+     * @return array
+     * @throws SystemException
+     */
+    public function parseConfig()
+    {
+
+        if(!is_readable($this->config)){
+            throw new SystemException('unable load config file from '.$this->config);
+        }
+
+        /**
+         * load system config
+         */
+        $config = \Arr::dot(parse_ini_file($this->config, true));
+
+        /**
+         * load environment config
+         */
+        if(is_readable($config_env = dirname($this->config).'/config.'.ENV.'.ini')){
+            $config = array_replace_recursive($config,\Arr::dot(parse_ini_file($config_env, true)));
+        }
+
+        return $this->set($config);
+    }
+
+    /**
      * [load load config file]
      *
      * @param $name
      * @return array
      * @author 11.
      */
+    /*
     private function load($key)
     {
         $key = trim($key,'.');
@@ -183,4 +216,5 @@ class Config implements ArrayAccess, ConfigContract
             return array();
         }
     }
+    */
 }

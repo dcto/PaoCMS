@@ -30,11 +30,9 @@ class Index extends Controller
     {
 echo '<pre>';
 
-        $s = \Cache::apc()->
-
-        var_dump(\Cache::apc()->get('ab'));
-        die;
-
+        print_r(get_included_files());
+die;
+       echo \Session::generateSessionId();
 
         \DB::table('user')->update(array('dd','cc'));
 
