@@ -2,19 +2,22 @@
 
 namespace PAO;
 
-
-use Illuminate\Support\Str;
-use Illuminate\Container\Container;
 use PAO\Exception\NotFoundHttpException;
 
 
 class View
 {
+
     /**
-     * 容器
-     * @var Container
+     * @var Application
      */
-    protected $container;
+    private $app;
+
+    /**
+     * 模板路径
+     * @var
+     */
+    protected $dir;
 
     /**
      * 模板公共变量
@@ -22,17 +25,11 @@ class View
      */
     public $variables = [];
 
-    /**
-     * 模板路径
-     * @var
-     */
-    protected $templates;
 
-
-    public function __construct()
+    public function __construct(Application $app)
     {
-        $this->container = Container::getInstance();
-        $this->templates = $this->container->config('template.dir')?:APP.DIRECTORY_SEPARATOR.'View';
+        $this->app = $app;
+        $this->templates = config('dir.view')?:APP.'/View';
     }
 
 
@@ -55,16 +52,16 @@ class View
         $twig  = new \Twig_Environment($loader, array(
 
             //用来保存编译后模板的绝对路径，缺省值为false，也就是关闭缓存。
-            'cache' => $this->container->config('template.cache')?:false,
+            'cache' => config('template.cache')?:false,
 
             //生成的模板会有一个__toString()方法，可以用来显示生成的Node（缺省为false）
-            'debug' => $this->container->config('app.debug')?:false,
+            'debug' => config('app.debug')?:false,
 
             //当用Twig开发时，是有必要在每次模板变更之后都重新编译的。如果不提供一个auto_reload参数，他会从debug选项中取值
-            'auto_reload' => $this->container->config('app.debug')?:false,
+            'auto_reload' => config('app.debug')?:false,
 
             //模板的字符集，缺省为utf-8。
-            'charset' => $this->container->config('app.charset'),
+            'charset' => config('app.charset'),
 
             //如果设置为false，Twig会忽略无效的变量（无效指的是不存在的变量或者属性/方法），并将其替换为null。如果这个选项设置为true，那么遇到这种情况的时候，Twig会抛出异常。
             'strict_variables' =>false,
@@ -93,7 +90,7 @@ class View
         */
         /**
          * 注册扩展方法
-         * @var Twig_Environment
+         * @var \Twig_Environment
          *
          * $twig = new Twig_Environment($loader,array('debug'=>true));
          * $twig->addExtension(new Twig_Extension_Debug());
@@ -102,11 +99,10 @@ class View
          * 注册全局变量
          */
         $twig->addGlobal('PAO', PAO);
-        $twig->addGlobal('APP', basename(APP));
-        $twig->addGlobal('app', $this->container->config('app'));
-        $twig->addGlobal('request', $this->container->make('request'));
+        $twig->addGlobal('APP', APP);
+        $twig->addGlobal('request', $this->app->make('request'));
         $twig->addGlobal('timezone', date_default_timezone_get());
-        $twig->addGlobal('lang', $this->container->make('lang')->all());
+        $twig->addGlobal('lang', $this->app->make('lang')->all());
 
 
         /**
@@ -131,7 +127,7 @@ class View
          * @var [type]
          */
         $make = new \Twig_SimpleFunction('make', function($alias, $parameters = []){
-            return $this->container->make($alias, $parameters);
+            return $this->app->make($alias, $parameters);
         });
         $twig->addFunction($make);
 
@@ -139,7 +135,7 @@ class View
          * 注册config方法
          * @var [type]
          */
-        $config = new \Twig_SimpleFunction('config', array($this->container->make('config'), 'get'));
+        $config = new \Twig_SimpleFunction('config', array($this->app->make('config'), 'get'));
         $twig->addFunction($config);
 
         /**
@@ -147,8 +143,8 @@ class View
          * @var [type]
          */
         $asset = new \Twig_SimpleFunction('asset', function($path = null){
-            $url = trim($this->container->make('request')->root(),'/').'/';
-           if(Str::startsWith($path, '/')){
+            $url = trim($this->app->make('request')->root(),'/').'/';
+           if(\Str::startsWith($path, '/')){
                return $url.str_replace('//','/', trim($path, '/'));
            }else{
                return $url.str_replace('//', '/', trim(strtolower(NAME).'/'.$path, '/'));
@@ -161,7 +157,7 @@ class View
          * @example [route(alias, ['a','b'])]
          * @var [type]
          */
-        $router = new \Twig_SimpleFunction('route', array($this->container->make('router'), 'router'));
+        $router = new \Twig_SimpleFunction('route', array($this->app->make('router'), 'router'));
         $twig->addFunction($router);
 
         /**
@@ -173,7 +169,7 @@ class View
          * @example url();
          * @return string
          */
-        $url = new \Twig_SimpleFunction('url',  array($this->container->make('request'), 'url'));
+        $url = new \Twig_SimpleFunction('url',  array($this->app->make('request'), 'url'));
         $twig->addFunction('url', $url);
 
         /**
@@ -181,7 +177,7 @@ class View
          * @param null $cast [排除或抽取批定URL参数]
          */
         $uri = new \Twig_SimpleFunction('uri', function($cast = null){
-            return $this->container->make('request')->uri($cast);
+            return $this->app->make('request')->uri($cast);
 
         });
         $twig->addFunction('uri', $uri);
@@ -190,7 +186,7 @@ class View
          * 注册语言包调用方法
          * @var [type]
          */
-        $twig->addFunction('lang', new \Twig_SimpleFunction('lang', array($this->container->make('lang'), 'get')));
+        $twig->addFunction('lang', new \Twig_SimpleFunction('lang', array($this->app->make('lang'), 'get')));
 
 
         /**
@@ -198,7 +194,7 @@ class View
          * @var [type]
          */
         $dump = function($variable){
-               echo "<pre>".var_dump($variable)."</pre>";
+               echo '<pre>'.var_dump($variable).'</pre>';
         };
         $twig->addFunction(new \Twig_SimpleFunction('dump', $dump,  array('pre_escape' => 'html', 'is_safe' => array('html'))));
 
@@ -279,7 +275,7 @@ class View
      */
     public function render($template, $variables)
     {
-        $template = $template . $this->container->config('template.append');
+        $template = $template . $this->app->config('template.append');
 
         $variables = array_merge($this->variables, $variables);
         try {
@@ -299,6 +295,6 @@ class View
      */
     public function show($template, $variables)
     {
-        return $this->container->make('response')->make($this->render($template, $variables));
+        return $this->app->make('response')->make($this->render($template, $variables));
     }
 }
