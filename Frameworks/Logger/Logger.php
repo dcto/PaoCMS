@@ -44,8 +44,8 @@ class Logger implements Log{
 
     public function __construct()
     {
-        $this->logger = new MonologLogger('PAO');
-        $this->logfile = rtrim(PAO,'/').'/'.trim(config('app.dir.log'),'/').'/'.trim(ucfirst(APP),'/').'/'.date('Ymd').'.log';
+        $this->logger = new MonologLogger(config('app.token'));
+        $this->logfile = PAO.'/'.trim(config('dir.logs'),'/').'/'.trim(ucfirst(APP),'/').'/'.date('Ymd').'.log';
         $this->logger->pushHandler(new StreamHandler($this->logfile));
     }
 
@@ -151,7 +151,7 @@ class Logger implements Log{
 
     public function file($path, $level = 'debug')
     {
-        $path = rtrim(config('app.dir.log'),'/').'/'.rtrim(ltrim($path,'/'),'.log').'.log';
+        $path = PAO.trim(config('dir.log'),'/').'/'.rtrim(ltrim($path,'/'),'.log').'.log';
         $this->useFiles($path, $level);
         return $this;
     }
@@ -178,7 +178,7 @@ class Logger implements Log{
      */
     public function useDailyFiles($path, $days = 0, $level = 'debug')
     {
-        $this->logfile = $this->container->config('app.dir.log').'/'.rtrim($path,'/').date('Y/m/d');
+        $this->logfile = config('dir.logs').'/'.rtrim($path,'/').date('Y/m/d');
         $this->logger->pushHandler(new StreamHandler($this->logfile));
     }
 
@@ -267,6 +267,8 @@ class Logger implements Log{
      */
     private function pushToLogger($level, $message, array $context = [])
     {
-        $this->logger->{$level}($this->formatMessage($message), $context);
+        if(config('app.log')){
+            $this->logger->{$level}($this->formatMessage($message), $context);
+        }
     }
 }
