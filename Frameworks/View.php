@@ -14,12 +14,6 @@ class View
     private $app;
 
     /**
-     * 模板路径
-     * @var
-     */
-    protected $dir;
-
-    /**
      * 模板公共变量
      * @var array
      */
@@ -29,7 +23,6 @@ class View
     public function __construct(Application $app)
     {
         $this->app = $app;
-        $this->templates = config('dir.view')?:APP.'/View';
     }
 
 
@@ -43,7 +36,7 @@ class View
      */
     public function twig()
     {
-        $loader = new \Twig_Loader_Filesystem($this->templates);
+        $loader = new \Twig_Loader_Filesystem(config('dir.view')?:APP.'/View');
         /*
          * 添加模板路径
         $loader->addPath($templateDir3);
