@@ -1,20 +1,18 @@
 <?php
-
-use Illuminate\Container\Container;
 /**
  * Get the available container instance.
  *
  * @param  string  $make
  * @param  array   $parameters
- * @return \PAO\Application|Illuminate\Container\Container
+ * @return \PAO\Application
  */
 function app($make = null, $parameters = [])
 {
     if (is_null($make)) {
-        return Container::getInstance();
+        return \PAO\Application::getInstance();
     }
 
-    return Container::getInstance()->make($make, $parameters);
+    return \PAO\Application::getInstance()->make($make, $parameters);
 }
 
 /**
@@ -33,7 +31,7 @@ function make($make = null, $parameters = [])
  *
  * @param null $make
  * @param array $parameters
- * @return Container|\PAO\Application
+ * @return \PAO\Application
  */
 function take($make = null, $parameters = [])
 {
