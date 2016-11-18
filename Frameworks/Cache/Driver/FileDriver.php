@@ -19,6 +19,11 @@ class FileDriver implements DriverInterface
      */
     private $prefix = 'pao.';
 
+    /**
+     * @var
+     */
+    private $cache;
+
 
 
     public function __construct($prefix = null)
@@ -26,6 +31,8 @@ class FileDriver implements DriverInterface
         $this->fileSystem = new FileSystem();
 
         $this->prefix($prefix);
+
+        $this->cache = path(config('dir.cache'),$this->prefix());
     }
 
     /**
@@ -34,7 +41,7 @@ class FileDriver implements DriverInterface
      */
     public function cache($key = '')
     {
-        return PAO.'/'.trim(config('cache.file.dir'), '/').'/'.$this->prefix().hash('crc32b',$key);
+        return $this->cache.hash('crc32b',$key);
     }
 
     /**
