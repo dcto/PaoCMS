@@ -38,7 +38,6 @@ class PAOException
      */
     public function Exception($e)
     {
-
         if(config('app.log')){
             if(isset($this->levels[$e->getCode()])){
                 make('log')->{$this->levels[$e->getCode()]}($e->getMessage(),$this->debugBacktrace($e));
@@ -47,9 +46,9 @@ class PAOException
             }
 
             if($e instanceof QueryException) {
-                $sql = str_replace(array('%', '?'), array('%%', '%s'), $e->getSql());
-                $error = vsprintf($sql, $e->getBindings());
-                make('log')->file('/Query/'.date('Ymd').'_error')->error($error);
+                $query = str_replace(array('%', '?'), array('%%', '%s'), $e->getSql());
+                $error = vsprintf($query, $e->getBindings());
+                make('log')->file('/database/'.date('Ymd'))->error($error);
             }
         }
         $httpCode = $e->getCode()>200 ? $e->getCode() : 500;

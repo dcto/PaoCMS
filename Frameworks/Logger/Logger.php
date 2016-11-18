@@ -45,7 +45,7 @@ class Logger implements Log{
     public function __construct()
     {
         $this->logger = new MonologLogger(config('app.token'));
-        $this->logfile = PAO.'/'.trim(config('dir.logs'),'/').'/'.trim(ucfirst(APP),'/').'/'.date('Ymd').'.log';
+        $this->logfile = path(config('dir.logs'), APP, date('Ymd').'.log');
         $this->logger->pushHandler(new StreamHandler($this->logfile));
     }
 
@@ -149,10 +149,16 @@ class Logger implements Log{
         $this->pushToLogger($level, $message, $context);
     }
 
-    public function file($path, $level = 'debug')
+    /**
+     * Log a message to file
+     *
+     * @param $path
+     * @param string $level
+     * @return $this
+     */
+    public function file($path, $level = 'info')
     {
-        $path = PAO.trim(config('dir.log'),'/').'/'.rtrim(ltrim($path,'/'),'.log').'.log';
-        $this->useFiles($path, $level);
+        $this->useFiles(path(config('dir.logs'), $path), $level);
         return $this;
     }
 

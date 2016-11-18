@@ -66,6 +66,20 @@ function config()
 }
 
 /**
+ * get path
+ *
+ * @return string
+ */
+function path()
+{
+    $path = dirname(dirname(__DIR__));
+    array_map(function($arg)use(&$path){
+      $path .= '/'. trim($arg, '/');
+    }, func_get_args());
+    return $path;
+}
+
+/**
  * request object
  * @return \PAO\Http\Request
  */

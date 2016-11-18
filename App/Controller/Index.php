@@ -25,9 +25,9 @@ class Index extends Controller
     public function index( \PAO\Http\Request $request)
     {
 echo '<pre>';
-        \Log::alert('adfdfd');
-var_dump( app()->config('app.debug','lsl'));
-die;
+
+
+
        echo \Session::generateSessionId();
 
         \DB::table('user')->update(array('dd','cc'));
