@@ -23,12 +23,6 @@ version_compare(PHP_VERSION,'5.5.0','ge') || die('The php version least must 5.5
 class Application extends Container
 {
     /**
-     * 系统配置
-     * @var array
-     */
-    public $config = array();
-
-    /**
      * 已注入的模块
      * @var array
      */

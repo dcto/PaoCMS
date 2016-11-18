@@ -17,7 +17,12 @@ class Config implements ArrayAccess, Repository
     /**
      * @var string
      */
-    private $config;
+    private $file;
+
+    /**
+     * @var array
+     */
+    private $config = array();
 
     /**
      * Config constructor.
@@ -26,7 +31,7 @@ class Config implements ArrayAccess, Repository
     public function __construct(Application $app)
     {
         $this->app = $app;
-        $this->config =  DIR.'/Config/config.ini';
+        $this->file =  DIR.'/Config/config.ini';
     }
 
     /**
@@ -37,7 +42,7 @@ class Config implements ArrayAccess, Repository
      */
     public function has($key)
     {
-        return \Arr::has($this->app->config, $key);
+        return \Arr::has($this->config, $key);
     }
 
     /**
@@ -54,7 +59,7 @@ class Config implements ArrayAccess, Repository
         {
             $this->load($key);
         }*/
-        return \Arr::get($this->app->config, $key, $default);
+        return \Arr::get($this->config, $key, $default);
     }
 
     /**
@@ -69,10 +74,10 @@ class Config implements ArrayAccess, Repository
         if (is_array($key)) {
             foreach ($key as $innerKey => $innerValue) {
 
-                \Arr::set($this->app->config, $innerKey, $innerValue);
+                \Arr::set($this->config, $innerKey, $innerValue);
             }
         } else {
-            \Arr::set($this->app->config, $key, $value);
+            \Arr::set($this->config, $key, $value);
         }
     }
 
@@ -115,7 +120,7 @@ class Config implements ArrayAccess, Repository
      */
     public function all()
     {
-        return $this->app->config;
+        return $this->config;
     }
 
     /**
@@ -172,19 +177,19 @@ class Config implements ArrayAccess, Repository
     public function parseConfig()
     {
 
-        if(!is_readable($this->config)){
-            throw new SystemException('unable load config file from '.$this->config);
+        if(!is_readable($this->file)){
+            throw new SystemException('unable load config file from '.$this->file);
         }
 
         /**
          * load system config
          */
-        $config = \Arr::dot(parse_ini_file($this->config, true));
+        $config = \Arr::dot(parse_ini_file($this->file, true));
 
         /**
          * load environment config
          */
-        if(is_readable($config_env = dirname($this->config).'/config.'.ENV.'.ini')){
+        if(is_readable($config_env = dirname($this->file).'/config.'.ENV.'.ini')){
             $config = array_replace_recursive($config,\Arr::dot(parse_ini_file($config_env, true)));
         }
 

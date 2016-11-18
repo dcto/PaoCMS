@@ -2,10 +2,6 @@
 
 namespace App\Controller;
 
-
-
-use PAO\Cache\Cache;
-
 class Index extends Controller
 {
 
@@ -29,8 +25,8 @@ class Index extends Controller
     public function index( \PAO\Http\Request $request)
     {
 echo '<pre>';
-
-        print_r(\Config::all());
+        \Log::alert('adfdfd');
+var_dump( app()->config('app.debug','lsl'));
 die;
        echo \Session::generateSessionId();
 
