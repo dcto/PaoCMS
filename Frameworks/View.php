@@ -52,7 +52,7 @@ class View
         $twig  = new \Twig_Environment($loader, array(
 
             //用来保存编译后模板的绝对路径，缺省值为false，也就是关闭缓存。
-            'cache' => config('template.cache')? PAO.'/'.config('dir.cache').'/View' : false,
+            'cache' => config('template.cache')? config('dir.cache').'/View' : false,
 
             //生成的模板会有一个__toString()方法，可以用来显示生成的Node（缺省为false）
             'debug' => config('app.debug')?:false,

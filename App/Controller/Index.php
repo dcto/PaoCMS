@@ -30,7 +30,7 @@ class Index extends Controller
     {
 echo '<pre>';
 
-        print_r(get_included_files());
+        print_r(\Config::all());
 die;
        echo \Session::generateSessionId();
 
