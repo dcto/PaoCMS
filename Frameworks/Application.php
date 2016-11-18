@@ -125,11 +125,11 @@ class Application extends Container
      *
      * @param $config [配置文件项]
      * @return mixed
-     * @example $this->config('app.debug');
+     * @example $this->config('app.debug', 'default');
      */
-    public function config($config)
+    public function config()
     {
-        return $this->make('config')->get($config);
+        return call_user_func_array(array($this->make('config'), 'get'), func_get_args());
     }
 
     /**
