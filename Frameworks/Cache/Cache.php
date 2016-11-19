@@ -4,7 +4,7 @@ namespace PAO\Cache;
 
 use PAO\Cache\Driver\ApcDriver;
 use PAO\Cache\Driver\DriverInterface;
-use PAO\Cache\Driver\FileDriver;
+use PAO\Cache\Driver\FilesDriver;
 use PAO\Cache\Driver\RedisDriver;
 use PAO\Cache\Driver\RetrievesMultipleKeys;
 use PAO\Exception\SystemException;
@@ -42,12 +42,12 @@ class Cache
      * [File 文件缓存]
      *
      * @param null $prefix
-     * @return FileDriver
+     * @return FilesDriver
      * @author 11.
      */
-    public function file($prefix = null)
+    public function files($prefix = null)
     {
-        return new FileDriver($prefix);
+        return new FilesDriver($prefix);
     }
 
     /**

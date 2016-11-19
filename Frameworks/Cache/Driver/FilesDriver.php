@@ -5,7 +5,7 @@ namespace PAO\Cache\Driver;
 use PAO\Exception\SystemException;
 use PAO\FileSystem\FileSystem;
 
-class FileDriver implements DriverInterface
+class FilesDriver implements DriverInterface
 {
     use RetrievesMultipleKeys;
 
@@ -28,7 +28,7 @@ class FileDriver implements DriverInterface
 
     public function __construct($prefix = null)
     {
-        $this->fileSystem = new FileSystem();
+        $this->fileSystem = app('file');
 
         $this->prefix($prefix?:config('cache.files.prefix'));
 
