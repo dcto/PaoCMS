@@ -17,7 +17,7 @@ class FileDriver implements DriverInterface
     /**
      * @var string
      */
-    private $prefix = 'pao.';
+    private $prefix;
 
     /**
      * @var
@@ -30,7 +30,7 @@ class FileDriver implements DriverInterface
     {
         $this->fileSystem = new FileSystem();
 
-        $this->prefix($prefix);
+        $this->prefix($prefix?:config('cache.files.prefix'));
 
         $this->cache = path(config('dir.cache'),$this->prefix());
     }
