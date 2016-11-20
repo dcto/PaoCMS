@@ -46,9 +46,9 @@ class PAOException
             }
 
             if($e instanceof QueryException) {
-                $query = str_replace(array('%', '?'), array('%%', '%s'), $e->getSql());
-                $error = vsprintf($query, $e->getBindings());
-                make('log')->file('/database/'.date('Ymd'))->error($error);
+                //$query = str_replace(array('%', '?'), array('%%', '%s'), $e->getSql());
+                //$error = vsprintf($query, $e->getBindings());
+                make('log')->file('/database/'.date('Ymd'))->error($e->getMessage(), $this->debugBacktrace($e));
             }
         }
         $httpCode = $e->getCode()>200 ? $e->getCode() : 500;
