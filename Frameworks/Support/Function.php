@@ -115,7 +115,7 @@ function redirect($url, $status = 302, $headers = [])
 
 /**
  * session object
- * @return \PAO\Http\Session
+ * @return \PAO\Http\Session\Session
  */
 function session($k = false, $v = false)
 {

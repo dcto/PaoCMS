@@ -2,38 +2,18 @@
 
 namespace PAO\Http;
 
-use Illuminate\Container\Container;
 use PAO\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
+
 class Request extends HttpFoundation\Request
 {
-
-    /**
-     * 容器
-     * @var static
-     */
-    private $container;
-
-
-    /**
-     * 临时存储文件
-     * @var
-     */
-    private $gainFiles;
-
-
     /**
      * 重构Request方法
      */
     public function __construct(array $query = array(), array $request = array(), array $attributes = array(), array $cookies = array(), array $files = array(), array $server = array(), $content = null)
     {
-        /**
-         * 获取容器
-         */
-        $this->container = Container::getInstance();
-
         /**
          * 命令行模式获取参数
          */
@@ -100,13 +80,13 @@ class Request extends HttpFoundation\Request
         $baseUrl = trim($this->baseUrl(), '/').'/';
         $tag = array_shift($args);
         if($tag[0] == '@'){
-            $router = $this->container->make('router');
+            $router = make('router');
             if(!$route = $router->router(ltrim($tag, '@'))) throw new NotFoundHttpException("The $tag route does not found");
             if(!strpos($route->route(),':')) return $baseUrl.trim($route->route(), '/');
             $url = preg_replace("/\([^)]+\)/", '%s', $route->route);
             return $baseUrl.trim(vsprintf($url, $args));
         }else if($tag[0]=='$'){
-            $router = $this->container->make('router')->route();
+            $router = make('router')->route();
             $url = str_replace(array('$controller','$action'), explode('@', $router->callable()), $tag);
             return $baseUrl.trim($url, '/');
         }else{
@@ -266,49 +246,6 @@ class Request extends HttpFoundation\Request
      */
     public function files()
     {
-        $files = $this->files->all();
-        return $this->gainFiles
-            ? $this->gainFiles
-            : $this->gainFiles = $this->gainFiles($files);
-    }
-
-
-    /**
-     * 判断文件是否上传
-     *
-     * @param  string  $key
-     * @return bool
-     */
-    public function hasFile($key)
-    {
-        if (! is_array($files = $this->file($key))) {
-            $files = [$files];
-        }
-
-        foreach ($files as $file) {
-            if ($file instanceof \SplFileInfo && $file->getPath() != '') {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * @param array $files
-     * @return array
-     */
-    private function gainFiles(array $files)
-    {
-        return array_map(function ($file) {
-            if (is_null($file) || (is_array($file) && empty(array_filter($file)))) {
-                return $file;
-            }
-
-            return is_array($file)
-                ? $this->gainFiles($file)
-                : Upload::initialize($file);
-        }, $files);
     }
 
     /**
@@ -325,6 +262,24 @@ class Request extends HttpFoundation\Request
             return $this->cookies->get($key);
         } else {
             return $this->cookies->all();
+        }
+    }
+
+    /**
+     * [获取session方法]
+     *
+     * @param bool $k
+     * @param bool $v
+     * @return \PAO\Http\Session\Session
+     */
+    public function session($k = false, $v = false)
+    {
+        if($k && $v) {
+            return make('session')->set($k, $v);
+        }else if($k) {
+            return make('session')->get($k);
+        }else{
+            return make('session');
         }
     }
 
