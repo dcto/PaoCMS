@@ -25,12 +25,13 @@ class Index extends Controller
     public function index( \PAO\Http\Request $request)
     {
 echo '<pre>';
+\Session::start();
+//\Session::set('a', config('app'));
+        print_r(\Session::all());
+die;
 
 
-
-       echo \Session::generateSessionId();
-
-        \DB::table('user')->update(array('dd','cc'));
+//        \DB::table('user')->update(array('dd','cc'));
 
         print_r(\DB::getQueryLog());
 

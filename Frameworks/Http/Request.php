@@ -463,7 +463,7 @@ class Request extends HttpFoundation\Request
     /**
      * [getInputSource 获取请求方法]
      *
-     * @return mixed|\Symfony\Component\HttpFoundation\ParameterBag
+     * @return mixed|ParameterBag
      * @author 11.
      */
     protected function getInputSource()

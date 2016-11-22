@@ -201,7 +201,7 @@ class Application extends Container
             'captcha' => 'PAO\Captcha\Captcha',
             'validator' => 'PAO\Form\Validator',
             'crypt' => 'PAO\Crypt\Crypt',
-            'lang' => 'PAO\Language\Lang',
+            'lang' => 'PAO\I18n\Lang',
             'view' => 'PAO\View',
             'curl' => 'PAO\Http\Curl',
             'file' => 'PAO\FileSystem\FileSystem',
