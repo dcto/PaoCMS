@@ -5,7 +5,7 @@ namespace PAO\Crypt;
 /**
 * DES加密解密类库
 * @author  11
-* @version  1.1
+* @version  1.2
 */
 class Crypt
 {
@@ -35,7 +35,8 @@ class Crypt
 	 */
 	public function __construct($key = null, $bit = 128, $iv = "")
 	{
-		$this->key = $bit == 256 ? hash('SHA256', $key, true) : hash('MD5', $key, true);
+	    $key = $key?:config('app.token');
+		$this->key = $bit == 256 ? hash('sha256', $key, true) : hash('crc32b', $key, true);
         $this->bit = $bit;
 		$this->iv = $iv != "" ? hash('MD5', $iv, true) : str_repeat(chr(0), 16);
 	}
@@ -47,21 +48,21 @@ class Crypt
      */
 	public function key($key = null)
     {
-        if(!$key) return $this->key;
-        $this->key = $key;
-        return true;
+        return $key ? $this->key = $key : $this->key;
     }
 
-	/**
-	 * [encrypt 加密字符串]
-	 * @param  [string] $string [明文]
-	 * @return [string]         [密文]
-	 */
-	public function encrypt($str)
-	{
+    /**
+     * [en 加密字符串]
+     *
+     * @param $str      [明文]
+     * @param bool $key [密钥]
+     * @return string
+     */
+	public function en($str, $key = false)
+    {
 		//Open
 		$module = mcrypt_module_open(MCRYPT_RIJNDAEL_128, '', MCRYPT_MODE_CBC, '');
-		mcrypt_generic_init($module, $this->key, $this->iv);
+		mcrypt_generic_init($module, $this->key(), $this->iv);
 
 		//Padding
 		$block = mcrypt_get_block_size(MCRYPT_RIJNDAEL_128, MCRYPT_MODE_CBC); //Get Block Size
@@ -79,16 +80,18 @@ class Crypt
 		return bin2hex($encrypted);
 	}
 
-	/**
-	 * [decrypt 解密字符串]
-	 * @param  [string] $str [密文]
-	 * @return [string]      [明文]
-	 */
-	public function decrypt($str)
+    /**
+     * [de 解密字符串]
+     *
+     * @param $str          [密文]
+     * @param bool $key     [密钥]
+     * @return string
+     */
+	public function de($str, $key = false)
 	{
 		//Open
 		$module = mcrypt_module_open(MCRYPT_RIJNDAEL_128, '', MCRYPT_MODE_CBC, '');
-		mcrypt_generic_init($module, $this->key, $this->iv);
+		mcrypt_generic_init($module, $this->key(), $this->iv);
 
 		//Decrypt
 		$str = mdecrypt_generic($module, hex2bin($str)); //Get original str
@@ -98,8 +101,8 @@ class Crypt
 		mcrypt_module_close($module);
 
 		//Depadding
-		$slast = ord(substr($str, -1)); //pad value and pad count
-		$str = substr($str, 0, strlen($str) - $slast);
+		$last = ord(substr($str, -1)); //pad value and pad count
+		$str = substr($str, 0, strlen($str) - $last);
 
 		//Return
 		return $str;
