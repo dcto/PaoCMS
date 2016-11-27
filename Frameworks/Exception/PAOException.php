@@ -148,54 +148,36 @@ class PAOException
     public function display($code, $message, $debugBacktrace = '')
     {
         ob_end_clean();
-        $content = <<<EOT
-<!DOCTYPE html">
+        echo <<<EOT
 <html>
 <head>
  <title>Pao Frameworks Debug</title>
- <meta charset="utf-8" />
  <meta name="robots" content="none" />
  <style type="text/css">
- <!--
- body {font: 12pt verdana; margin: 10px;}
- h3 {color: #f00; font-weight: normal}
+ body {font: 12pt verdana; margin: 10px auto;}
  div {background: #f5f5f5; border-radius: 5px; line-height: 200%; margin-bottom: 1em; padding: 1em;}
  table {background: #aaa;}
  .bg1 {background-color: #ffc;}
  .bg2 {background-color: #eee;}
- -->
  </style>
 </head>
 <body>
-<h3>Status Code: $code</h3>
-<div>{$message}</div>
+<div id="title">{$message}</div>
 EOT;
-            if (!empty($debugBacktrace)) {
-                $content .= '<div class="title">';
-                $content .= '<p><strong>PAO Debug Trace</strong></p>';
-                $content .= '<table cellpadding="5" cellspacing="1" width="100%" class="table"><tbody>';
-                if (is_array($debugBacktrace)) {
-                    $content .= '<tr class="bg2"><td>No.</td><td>File</td><td>Line</td><td>Code</td></tr>';
-                    foreach ($debugBacktrace as $k => $error) {
-                        $k++;
-                        $content .= '<tr class="bg1">';
-                        $content .= '<td>' . $k . '</td>';
-                        $content .= '<td>' . $error['file'] . '</td>';
-                        $content .= '<td>' . $error['line'] . '</td>';
-                        $content .= '<td>' . $error['function'] . '</td>';
-                        $content .= '</tr>';
-                    }
-                } else {
-                    $content .= '<tr><td><ul>' . $debugBacktrace . '</ul></td></tr>';
+        if (!empty($debugBacktrace)) {
+            echo '<div id="debug"><p><b>PAO Debug Trace (Status code: '.$code.')</b></p><table cellpadding="5" cellspacing="1" width="100%" class="table"><tbody>';
+            if (is_array($debugBacktrace)) {
+                echo '<tr class="bg2"><td>No.</td><td>File</td><td>Line</td><td>Code</td></tr>';
+                foreach ($debugBacktrace as $k => $error) {
+                    $k++;
+                    echo "<tr class=\"bg1\"><td>{$k}</td><td>{$error['file']}</td><td>{$error['line']}</td><td>{$error['function']}</td></tr>";
                 }
-                $content .= '</tbody></table></div>';
+            }else{
+                echo '<tr><td><ul>' . $debugBacktrace . '</ul></td></tr>';
             }
+            echo '</tbody></table></div>';
+        }
 
-        $content .= <<<EOT
-</div>
-</body>
-</html>
-EOT;
-        return $content;
+        echo '</body></html>';
     }
 }
