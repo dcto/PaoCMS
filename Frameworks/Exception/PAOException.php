@@ -139,11 +139,9 @@ class PAOException
     }
 
     /**
-     * @static
-     * @access public
-     * @param string $type db,system
-     * @param string $errorMsg
-     * @param string $phpMsg
+     * @param $code
+     * @param $message
+     * @param string $debugBacktrace
      */
     public function display($code, $message, $debugBacktrace = '')
     {
@@ -177,7 +175,6 @@ EOT;
             }
             echo '</tbody></table></div>';
         }
-
         echo '</body></html>';
     }
 }
