@@ -2,7 +2,7 @@
 
 namespace PAO\Http;
 
-use PAO\Exception\NotFoundHttpException;
+use PAO\Exception\NotFoundException;
 use Symfony\Component\HttpFoundation;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
@@ -81,7 +81,7 @@ class Request extends HttpFoundation\Request
         $tag = array_shift($args);
         if($tag[0] == '@'){
             $router = make('router');
-            if(!$route = $router->router(ltrim($tag, '@'))) throw new NotFoundHttpException("The $tag route does not found");
+            if(!$route = $router->router(ltrim($tag, '@'))) throw new NotFoundException("The $tag route does not found");
             if(!strpos($route->route(),':')) return $baseUrl.trim($route->route(), '/');
             $url = preg_replace("/\([^)]+\)/", '%s', $route->route);
             return $baseUrl.trim(vsprintf($url, $args));

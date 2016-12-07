@@ -194,6 +194,7 @@ class Config implements ArrayAccess, Repository
         }
 
         return $this->set($config);
+
     }
 
     /**

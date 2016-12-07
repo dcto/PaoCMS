@@ -2,9 +2,9 @@
 
 namespace PAO\Exception;
 
-class SystemException extends \ErrorException
+class SystemException extends E
 {
-    protected $code = 500;
+    protected $status = 500;
 
     protected $message = 'The PaoCMS System Was Error';
 }

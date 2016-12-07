@@ -2,9 +2,9 @@
 
 namespace PAO\Exception;
 
-class NotFoundHttpException extends \Exception
+class NotFoundException extends E
 {
-    protected $code = 500;
+    protected $status = 500;
 
     protected $message = 'HTTP Error!';
 }

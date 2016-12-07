@@ -28,6 +28,30 @@ class PAOException
     );
 
     /**
+     * return core exception handler
+     */
+    public function register()
+    {
+        //致命错误处理
+        register_shutdown_function([__CLASS__, 'appShutdown']);
+
+        //异常错误处理
+        set_error_handler([__CLASS__, 'appError']);
+
+        //常规异常处理
+        set_exception_handler([__CLASS__, 'appException']);
+    }
+
+    /**
+     * unregister exception handler
+     */
+    public function unregister()
+    {
+        restore_error_handler();
+        restore_exception_handler();
+    }
+
+    /**
      * [Exception]
      *
      * @param Exception $e
@@ -38,23 +62,14 @@ class PAOException
      */
     public function Exception($e)
     {
-        if(config('app.log')){
-            if(isset($this->levels[$e->getCode()])){
-                make('log')->{$this->levels[$e->getCode()]}($e->getMessage(),$this->debugBacktrace($e));
-            }else{
-                make('log')->alert($e->getMessage(),$this->debugBacktrace($e));
-            }
-
-            if($e instanceof QueryException) {
-                //$query = str_replace(array('%', '?'), array('%%', '%s'), $e->getSql());
-                //$error = vsprintf($query, $e->getBindings());
-                make('log')->file('/database/'.date('Ymd'))->error($e->getMessage(), $this->debugBacktrace($e));
-            }
+        if (!$e instanceof \Exception) {
+            $e = new ThrowableError($e);
         }
+        $this->logger($e);
         $httpCode = $e->getCode()>200 ? $e->getCode() : 500;
         http_response_code($httpCode);
         if(config('app.debug')) {
-            die($this->display($httpCode,$e->getMessage(),$this->debugBacktrace($e)));
+            die($this->render($httpCode,$e->getMessage(),$this->debugBacktrace($e)));
         }
         die($e->getMessage());
     }
@@ -70,10 +85,10 @@ class PAOException
      *
      * @throws \ErrorException
      */
-    public function handleError($level, $message, $file = '', $line = 0, $context = array())
+    public function Error($level, $message, $file = '', $line = 0, $context = array())
     {
         if (error_reporting() & $level) {
-            throw new \ErrorException($message, $level, $level, $file, $line);
+            throw new ErrorException($level, $message, $file, $line, (array) $context);
         }
     }
 
@@ -82,7 +97,7 @@ class PAOException
      *
      * @return void
      */
-    public function handleShutdown()
+    public function Shutdown()
     {
         $e = error_get_last();
         if (is_array($e)) {
@@ -95,7 +110,7 @@ class PAOException
      * @param $e
      * @return string
      */
-    public function debugBacktrace($e)
+    public function debugBacktrace(Exception $e)
     {
         $trace = $e->getTrace();
         krsort($trace);
@@ -138,12 +153,36 @@ class PAOException
         return $traces;
     }
 
+
+    /**
+     * catch exception to log
+     *
+     * @param Exception $e
+     */
+    private function logException(Exception $e)
+    {
+        if(config('app.log')){
+            if(isset($this->levels[$e->getCode()])){
+                make('log')->{$this->levels[$e->getCode()]}($e->getMessage(),$this->debugBacktrace($e));
+            }else{
+                make('log')->alert($e->getMessage(),$this->debugBacktrace($e));
+            }
+
+            if($e instanceof QueryException) {
+                //$query = str_replace(array('%', '?'), array('%%', '%s'), $e->getSql());
+                //$error = vsprintf($query, $e->getBindings());
+                make('log')->file('/database/'.date('Ymd'))->error($e->getMessage(), $this->debugBacktrace($e));
+            }
+        }
+    }
+
+
     /**
      * @param $code
      * @param $message
      * @param string $debugBacktrace
      */
-    public function display($code, $message, $debugBacktrace = '')
+    private function render($code, $message, $debugBacktrace = '')
     {
         ob_end_clean();
         echo <<<EOT

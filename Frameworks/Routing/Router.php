@@ -12,7 +12,7 @@ use Arr;
 use PAO\Http\Request;
 use PAO\Http\Response;
 use PAO\Exception\SystemException;
-use PAO\Exception\NotFoundHttpException;
+use PAO\Exception\NotFoundException;
 
 /**
  * Router class will load requested Controller / Closure based on URL.
@@ -191,10 +191,10 @@ class Router
                      }
                  }
              }
-            throw new NotFoundHttpException('Can not found the ['.$tag. '] router.');
+            throw new NotFoundException('Can not found the ['.$tag. '] router.');
         }
         if(!$this->router){
-            throw new NotFoundHttpException('Current route can not available.');
+            throw new NotFoundException('Current route can not available.');
         }
         return $this->router;
     }
@@ -275,7 +275,7 @@ class Router
 
                 if($router->group) {
                     if (!$group = Arr::get($this->group, $router->group)) {
-                        throw new NotFoundHttpException('Does not define ' . $router->group . ' of router group');
+                        throw new NotFoundException('Does not define ' . $router->group . ' of router group');
                     }
 
                     /**
@@ -304,8 +304,8 @@ class Router
                 }
             }
         }
-        // No valid Route found; send an Error 404 NotFoundHttpException Response.
-        throw new NotFoundHttpException("Can not match route of path '$url' from current url: ". $request->url());
+        // No valid Route found; send an Error 404 NotFoundException Response.
+        throw new NotFoundException("Can not match route of path '$url' from current url: ". $request->url());
     }
 
     /**
@@ -352,7 +352,7 @@ class Router
         if(strpos($callback, '@')){
             return app()->call($callback, $parameters);
         }
-        throw new NotFoundHttpException("Invalid Route Target [$callback] in {$this->router->route} Of Your Route");
+        throw new NotFoundException("Invalid Route Target [$callback] in {$this->router->route} Of Your Route");
     }
 
     /**

@@ -3,8 +3,6 @@
 namespace PAO\I18n;
 
 
-use PAO\Exception\SystemException;
-
 class Lang
 {
 	/**
@@ -108,15 +106,11 @@ class Lang
     private function replacements($lang, array $replace)
     {
         if(substr_count($lang,'%s') > sizeof($replace)){
-            throw new SystemException($lang.' The language arguments count ['.implode(',', $replace).'] not match.');
+            throw new \InvalidArgumentException($lang.' The language arguments count ['.implode(',', $replace).'] not match.');
         }
         return vsprintf($lang, $replace);
     }
 
-    /**
-     * @param $language
-     * @throws SystemException
-     */
     private function parseLanguage($lang = null)
     {
 

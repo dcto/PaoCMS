@@ -24,23 +24,27 @@ class Index extends Controller
 
     public function index( \PAO\Http\Request $request)
     {
-echo '<pre>';
-\Session::start();
-//\Session::set('a', config('app'));
-        print_r(\Session::all());
-die;
+        require 'ddd.sf';
 
+        die;
+        //make('session')->set(1,'a');
+//make('session')->set('f.g','h');
 
-//        \DB::table('user')->update(array('dd','cc'));
+//\Session::flush();
+//        session_start();
+//$_SESSION['a'] = 'abc';
+//        print_r(\Session::all());
+//        echo \Session::id();
+        echo '<hr />';
+//        echo (session_id()).'<br />';
 
-        print_r(\DB::getQueryLog());
+        print_r($_SESSION);
+        echo '<hr />';
 
         echo '<hr />';
-        //print_r($this->container->make('request')->all());
-      echo $s = \Crypt::encrypt('我是中国人~@#$%%&*（*)————|。、吧c~~~~<>?）');
-        echo '<hr />';
-        echo \Crypt::decrypt($s).'<br />';
-        print_r(get_included_files());
+//        print_r(get_included_files());
+
+        die;
      // return Response::make('test');
 
         //print_r($this->make('request')->header);

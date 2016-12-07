@@ -2,7 +2,7 @@
 namespace PAO\Routing;
 
 use Arr;
-use PAO\Exception\NotFoundHttpException;
+use PAO\Exception\NotFoundException;
 
 
 /**
@@ -131,12 +131,12 @@ class Route
      * @param $property
      * @param $arguments
      * @return $this
-     * @throws NotFoundHttpException
+     * @throws NotFoundException
      */
     public function __call($property, $arguments)
     {
         if (!property_exists($this, $property)) {
-            throw new  NotFoundHttpException('The route property no available of to the ' . $property . ' action');
+            throw new  NotFoundException('The route property no available of to the ' . $property . ' action');
         }
 
         if ($arguments) {

@@ -2,7 +2,7 @@
 
 namespace PAO;
 
-use PAO\Exception\NotFoundHttpException;
+use PAO\Exception\NotFoundException;
 
 
 class View
@@ -273,8 +273,8 @@ class View
         $variables = array_merge($this->variables, $variables);
         try {
             return $this->twig()->render($template, $variables);
-        }catch (NotFoundHttpException $e){
-            throw new NotFoundHttpException($e->getMessage());
+        }catch (NotFoundException $e){
+            throw new NotFoundException($e->getMessage());
         }
 
     }

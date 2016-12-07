@@ -6,7 +6,7 @@ use Illuminate\Container\Container;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Events\EventServiceProvider;
-use PAO\Exception\PAOException;
+use PAO\Exception\Exception;
 use PAO\Exception\SystemException;
 use PAO\Services\SystemServiceProvider;
 
@@ -60,6 +60,11 @@ class Application extends Container
         $this->registerContainerAliases();
 
         /**
+         * 异常模块注入
+         */
+        $this->registerExceptionHandling();
+
+        /**
          * 注册自动加载
          */
         $this->registerAutoLoadAlias();
@@ -73,11 +78,6 @@ class Application extends Container
          * 配置系统环境
          */
         $this->registerSystemEnvironment();
-
-        /**
-         * 异常模块注入
-         */
-        $this->registerExceptionHandling();
 
         /**
          * 初始外观模式
@@ -237,20 +237,8 @@ class Application extends Container
      */
     private function registerExceptionHandling()
     {
-
-        //实例化异常类
-        $PAOException = new PAOException();
-
-        //设置抛出异常
-        set_exception_handler(function ($e)use($PAOException) {
-            $PAOException->Exception($e);
-        });
-
-        //异常错误处理
-        set_error_handler(array($PAOException, 'handleError'));
-
-        //致命错误处理
-        register_shutdown_function(array($PAOException,'handleShutdown'));
+        $PAOException = new Exception();
+        $PAOException->register();
     }
 
     /**
@@ -290,17 +278,6 @@ class Application extends Container
      */
     private function registerSystemEnvironment()
     {
-        /**
-         * 设置错误报告
-         */
-        if($this->config('app.debug')) {
-            error_reporting(E_ALL);
-            ini_set('display_errors', 'On');
-        }else{
-            error_reporting(0);
-            ini_set('display_errors', 'Off');
-        }
-
         /**
          * 设置系统时区
          */
