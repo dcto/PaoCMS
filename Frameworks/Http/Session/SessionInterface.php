@@ -14,5 +14,5 @@ interface SessionInterface extends BaseSessionInterface
      *
      * @return \SessionHandlerInterface
      */
-    public function getHandler();
+    public function handler();
 }

@@ -24,21 +24,17 @@ class Index extends Controller
 
     public function index( \PAO\Http\Request $request)
     {
-        require 'ddd.sf';
+//       echo hexdec('我是中国人顷@#@$@$@');die;
+//        make('session')->set(1,'a');
+make('session')->set('f','我是中国人顷');
 
-        die;
-        //make('session')->set(1,'a');
-//make('session')->set('f.g','h');
 
-//\Session::flush();
-//        session_start();
-//$_SESSION['a'] = 'abc';
-//        print_r(\Session::all());
+        print_r(\Session::all());
 //        echo \Session::id();
         echo '<hr />';
 //        echo (session_id()).'<br />';
 
-        print_r($_SESSION);
+//        print_r($_SESSION);
         echo '<hr />';
 
         echo '<hr />';

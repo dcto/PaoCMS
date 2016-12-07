@@ -3,7 +3,7 @@
 namespace PAO\Http\Session\Handler;
 
 
-class FilesSessionHandler extends \SessionHandler implements \SessionHandlerInterface
+class FilesSessionHandler extends \SessionHandler
 {
 
 

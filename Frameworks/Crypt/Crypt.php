@@ -92,7 +92,7 @@ class Crypt
 		//Open
 		$module = mcrypt_module_open(MCRYPT_RIJNDAEL_128, '', MCRYPT_MODE_CBC, '');
 		mcrypt_generic_init($module, $this->key(), $this->iv);
-
+//var_dump(ctype_xdigit($str));die;
 		//Decrypt
 		$str = mdecrypt_generic($module, hex2bin($str)); //Get original str
 
