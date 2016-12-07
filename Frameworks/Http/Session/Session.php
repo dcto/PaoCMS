@@ -72,7 +72,7 @@ class Session implements \IteratorAggregate, \Countable
            return $this->handler;
         }
 
-        if(!in_array($handler, $handlers = array('files', 'array', 'redis', 'sqlite', 'memcache', 'memcached', 'database'))){
+        if(!in_array($handler, $handlers = array('files', 'redis', 'memcache', 'memcached', 'sqlite'))){
             throw new \InvalidArgumentException('Invalid '.$handler.' session handler, only supports by '. implode(',', $handlers));
         }
         app()->alias(__NAMESPACE__.'\\Handler\\'.ucfirst($handler).'SessionHandler','session.'.$handler);
