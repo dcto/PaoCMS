@@ -64,7 +64,7 @@ class E extends \ErrorException
         E_USER_NOTICE => 'User Notice',
         E_USER_WARNING => 'User Warning',
         E_WARNING => 'Warning',
-        4016 => 'Customer`s Error',
+        4016 => 'PAO Error',
     );
 
     /**
