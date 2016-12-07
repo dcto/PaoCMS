@@ -2,22 +2,9 @@
 
 namespace PAO\Http;
 
-use Illuminate\Container\Container;
+use Symfony\Component\HttpFoundation;
 
 class Cookie{
-
-    /**
-     * 容器
-     * @var static
-     */
-    protected $container;
-
-
-
-    public function __construct()
-    {
-        $this->container = Container::getInstance();
-    }
 
     /**
      * [set 设置cookie]
@@ -33,9 +20,11 @@ class Cookie{
      */
     public function set($name, $value = null, $expire = 0, $path = '/', $domain = null, $secure = false, $httpOnly = true)
     {
-        $cookie = new \Symfony\Component\HttpFoundation\Cookie($name, $value, $expire, $path, $domain, $secure, $httpOnly);
+        $expire = $expire?:time()+$expire;
 
-        $response = new \Symfony\Component\HttpFoundation\Response;
+        $cookie = new HttpFoundation\Cookie($name, $value, $expire, $path, $domain, $secure, $httpOnly);
+
+        $response = new HttpFoundation\Response();
 
         $response->headers->setCookie($cookie);
 
@@ -62,7 +51,7 @@ class Cookie{
      */
     public function get($name)
     {
-        return $this->container->make('request')->cookies->get($name);
+        return make('request')->cookies->get($name);
     }
 
     /**
@@ -73,7 +62,7 @@ class Cookie{
      */
     public function all()
     {
-        return $this->container->make('request')->cookies->all();
+        return make('request')->cookies->all();
     }
 
 
@@ -85,7 +74,7 @@ class Cookie{
      */
     public function del($name)
     {
-        $response = new \Symfony\Component\HttpFoundation\Response;
+        $response = new HttpFoundation\Response;
         $response->headers->clearCookie($name);
         $response->sendHeaders();
     }

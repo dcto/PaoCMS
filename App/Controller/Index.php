@@ -26,10 +26,9 @@ class Index extends Controller
     {
 //       echo hexdec('我是中国人顷@#@$@$@');die;
 //        make('session')->set(1,'a');
-make('session')->set('f','我是中国人顷');
+make('cookie')->set('fd','test');
+print_r(make('cookie')->get('f'));
 
-
-        print_r(\Session::all());
 //        echo \Session::id();
         echo '<hr />';
 //        echo (session_id()).'<br />';
