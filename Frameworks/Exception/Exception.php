@@ -164,7 +164,10 @@ class Exception
                     'BACKTRACE'  =>     $e->getTraceAsString()
                 );
                 array_walk($_ERROR, function (&$v, $k) { $v = $k.': '.$v;});
-                $logs = path(config('dir.logs')).'/'.APP.'/'.date('Ymd').'.log';
+                if(!is_dir($logs = path(config('dir.logs')).'/exception/')){
+                    mkdir($logs, 0777, true);
+                }
+                $logs = $logs.APP.'_'.date('Ymd').'.log';
                 file_put_contents($logs, implode(PHP_EOL, $_ERROR).PHP_EOL.str_repeat('=',100).PHP_EOL.PHP_EOL, FILE_APPEND);
             }catch (\Exception $e){
                 return $this->display($e);
