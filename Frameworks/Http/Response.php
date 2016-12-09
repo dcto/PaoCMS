@@ -2,17 +2,32 @@
 
 namespace PAO\Http;
 
-
-use Illuminate\Container\Container;
 use Illuminate\Contracts\Support\Arrayable;
-use Symfony\Component\HttpFoundation;
-
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\StreamedResponse;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\Response as BaseResponse;
 /**
  * Class Response
  * @package PAO\Http
  */
 class Response
 {
+
+
+    /**
+     * 全局响应
+     *
+     * @var $response BaseResponse;
+     */
+    protected $response;
+
+    /**
+     * 状态信息
+     *
+     * @var array
+     */
     protected $message =  [
         //Informational 1xx
         100 => 'Continue',
@@ -83,14 +98,6 @@ class Response
 
 
     /**
-     * 全局响应
-     *
-     * @var $response HttpFoundation\Response;
-     */
-    private $response;
-
-
-    /**
      * [error Response]
      * @param $status [错误状态]
      * @param null $message [错误信息]
@@ -99,7 +106,7 @@ class Response
     public function error($status, $message = null)
     {
         $message = $message?:$this->message[$status];
-        $this->response = new HttpFoundation\Response($message, $status);
+        $this->response = new BaseResponse($message, $status);
         return $this;
     }
 
@@ -111,11 +118,11 @@ class Response
      * @param int    $status [状态值]
      * @param array  $headers [header]
      * @author 11.
-     * @return $this|HttpFoundation\Response
+     * @return $this|BaseResponse
      */
     public function make($content = '', $status = 200 , array $headers = [])
     {
-        $this->response = new HttpFoundation\Response($content, $status, $headers);
+        $this->response = new BaseResponse($content, $status, $headers);
         return $this;
     }
 
@@ -144,7 +151,7 @@ class Response
      */
     public function view($view, $data = [], $status = 200, array $headers = [])
     {
-       return $this->make(Container::getInstance()->make('view')->render($view, $data), $status, $headers);
+       return $this->make(make('view')->render($view, $data), $status, $headers);
     }
 
     /**
@@ -154,7 +161,7 @@ class Response
      * @param int   $status [状态值]
      * @param array $headers [header]
      * @param int   $options [其他设置]
-     * @return $this|HttpFoundation\JsonResponse
+     * @return $this|JsonResponse
      * @author 11.
      */
     public function json($data = [], $status = 200, array $headers = [], $options = 0)
@@ -162,7 +169,7 @@ class Response
         if ($data instanceof Arrayable && ! $data instanceof \JsonSerializable) {
             $data = $data->toArray();
         }
-        $this->response = new HttpFoundation\JsonResponse($data, $status, $headers);
+        $this->response = new JsonResponse($data, $status, $headers);
 
         return $this;
     }
@@ -175,7 +182,7 @@ class Response
      * @param int   $status [状态值]
      * @param array $headers [header]
      * @param int   $options [其他设置]
-     * @return HttpFoundation\JsonResponse
+     * @return JsonResponse
      * @author 11.
      */
     public function jsonp($callback, $data = [], $status = 200, array $headers = [], $options = 0)
@@ -189,7 +196,7 @@ class Response
      * @param       $url [地址]
      * @param int   $status [状态值]
      * @param array $headers [header]
-     * @return HttpFoundation\RedirectResponse
+     * @return RedirectResponse
      * @author 11.
      */
     public function url($url, $status = 302, array $headers = [])
@@ -203,12 +210,12 @@ class Response
      * @param \Closure $callback [回调]
      * @param int      $status [状态值]
      * @param array    $headers [header]
-     * @return $this|HttpFoundation\StreamedResponse
+     * @return $this|StreamedResponse
      * @author 11.
      */
     public function stream($callback, $status = 200, array $headers = [])
     {
-        $this->response = new HttpFoundation\StreamedResponse($callback, $status, $headers);
+        $this->response = new StreamedResponse($callback, $status, $headers);
 
         return $this;
     }
@@ -221,12 +228,12 @@ class Response
      * @param null                $name [文件名]
      * @param array               $headers header
      * @param string              $disposition
-     * @return $this|HttpFoundation\BinaryFileResponse
+     * @return $this|BinaryFileResponse
      * @author 11.
      */
     public function download($file, $name = null, array $headers = [], $disposition = 'attachment')
     {
-        $this->response = new HttpFoundation\BinaryFileResponse($file, 200, $headers, true, $disposition);
+        $this->response = new BinaryFileResponse($file, 200, $headers, true, $disposition);
         if (! is_null($name)) {
              $this->response->setContentDisposition($disposition, $name, str_replace('%', '', \Illuminate\Support\Str::ascii($name)));
         }
@@ -240,12 +247,12 @@ class Response
      * @param       $url [地址]
      * @param int   $status [状态值]
      * @param array $headers [header]
-     * @return $this|HttpFoundation\RedirectResponse
+     * @return $this|RedirectResponse
      * @author 11.
      */
     public function redirect($url, $status = 302, $headers = [])
     {
-        $this->response = new HttpFoundation\RedirectResponse($url, $status, $headers);
+        $this->response = new RedirectResponse($url, $status, $headers);
 
         return $this;
     }
@@ -267,7 +274,7 @@ class Response
      * @param $method
      * @param $parameters
      * @author 11.
-     * @return HttpFoundation\Response
+     * @return BaseResponse
      */
     public function __call($method, $parameters)
     {
@@ -301,15 +308,14 @@ class Response
     /**
      * get response instance
      *
-     * @return HttpFoundation\Response
+     * @return BaseResponse
      */
     private function response()
     {
-        if(!$this->response instanceof HttpFoundation\Response)
+        if(!$this->response instanceof BaseResponse)
         {
-            $this->response = new HttpFoundation\Response;
+            $this->response = new BaseResponse();
         }
-
         return $this->response;
     }
 }
