@@ -32,7 +32,7 @@ class Logger extends KLogger{
      * @param string $level
      * @return $this
      */
-    public function file($path)
+    public function dir($path)
     {
         if(!is_dir($dir = path(config('dir.logs'), $path))){
             mkdir($dir, 0777, true);
