@@ -15,7 +15,7 @@ class Lang
 	 * 语言配置器
 	 * @var [type]
 	 */
-	protected $items;
+	protected $item;
 
 
 	/**
@@ -24,7 +24,7 @@ class Lang
 	 */
 	public function __construct( $items = [] )
 	{
-        $this->items = $items;
+        $this->item = $items;
 
 		$this->lang = config('app.language');
 
@@ -40,7 +40,7 @@ class Lang
 	{
         $args = func_get_args();
         $key = array_shift($args);
-        $lang = \Arr::get($this->items, $key);
+        $lang = \Arr::get($this->item, $key);
         if(is_string($lang)){
             return $args ? $this->replacements($lang, $args) : $lang;
         }
@@ -58,10 +58,10 @@ class Lang
     {
         if (is_array($key)) {
             foreach ($key as $innerKey => $innerValue) {
-                \Arr::set($this->items, $innerKey, $innerValue);
+                \Arr::set($this->item, $innerKey, $innerValue);
             }
         } else {
-            \Arr::set($this->items, $key, $value);
+            \Arr::set($this->item, $key, $value);
         }
     }
 
@@ -72,7 +72,7 @@ class Lang
      */
     public function all()
     {
-        return $this->items;
+        return $this->item;
     }
 
     /**
@@ -93,7 +93,7 @@ class Lang
     public function setLang($language)
     {
         $this->lang = $language;
-        $this->parseLanguage($language);
+        $this->parseLanguage();
     }
 
     /**
@@ -111,20 +111,22 @@ class Lang
         return vsprintf($lang, $replace);
     }
 
-    private function parseLanguage($lang = null)
+    /**
+     * Parse Language
+     *
+     * @return bool
+     */
+    private function parseLanguage()
     {
+        $dir = path(config('dir.lang'));
 
-        $lang = $this->lang = $lang?:$this->lang;
+        $appLang = rtrim($dir,'/').'/'.$this->lang.'.ini';
+        $subLang = rtrim($dir,'/').'/'.APP.'/'.$this->lang.'.ini';
+        $language = \Arr::dot(parse_ini_file($appLang, true));
 
-        $AppLanguage = DIR.DIRECTORY_SEPARATOR.'Lang'.DIRECTORY_SEPARATOR.$lang.'.ini';
-
-        $SubLanguage = DIR.DIRECTORY_SEPARATOR.'Lang'.DIRECTORY_SEPARATOR.APP.DIRECTORY_SEPARATOR.$lang.'.ini';
-
-        if(is_readable($AppLanguage)){
-            $this->items = (array) parse_ini_file($AppLanguage, true);
+        if(is_readable($subLang)){
+            $language = array_replace_recursive($language,\Arr::dot(parse_ini_file($subLang, true)));
         }
-        if(is_readable($SubLanguage)) {
-            $this->items = array_replace_recursive($this->items, (array) parse_ini_file($SubLanguage, true));
-        }
+        return $this->set($language);
     }
 }
