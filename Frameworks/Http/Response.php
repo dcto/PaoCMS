@@ -257,7 +257,7 @@ class Response
      */
     public function send()
     {
-        return $this->response->send();
+        return $this->response()->send();
     }
 
 
@@ -271,12 +271,7 @@ class Response
      */
     public function __call($method, $parameters)
     {
-        if(!$this->response instanceof HttpFoundation\Response)
-        {
-            $this->response = new HttpFoundation\Response;
-        }
-
-        return call_user_func_array(array($this->response, $method), $parameters);
+        return call_user_func_array(array($this->response(), $method), $parameters);
     }
 
     /**
@@ -287,7 +282,8 @@ class Response
      */
     public function __set($name, $value)
     {
-        $this->response->$name = $value;
+
+        $this->response()->$name = $value;
     }
 
     /**
@@ -298,7 +294,22 @@ class Response
      */
     public function __get($name)
     {
-        return $this->response->$name;
+        return $this->response()->$name;
     }
 
+
+    /**
+     * get response instance
+     *
+     * @return HttpFoundation\Response
+     */
+    private function response()
+    {
+        if(!$this->response instanceof HttpFoundation\Response)
+        {
+            $this->response = new HttpFoundation\Response;
+        }
+
+        return $this->response;
+    }
 }
