@@ -7,52 +7,6 @@ use Symfony\Component\HttpFoundation;
 class Cookie{
 
     /**
-     * The default path (if specified).
-     *
-     * @var string
-     */
-    protected $path = '/';
-
-    /**
-     * The default domain (if specified).
-     *
-     * @var string
-     */
-    protected $domain = null;
-
-    /**
-     * The default secure setting (defaults to false).
-     *
-     * @var bool
-     */
-    protected $secure = false;
-
-    /**
-     * http only
-     *
-     * @var bool
-     */
-    protected $http_only = true;
-
-    /**
-     * encrypt cookie value
-     *
-     * @var bool
-     */
-    protected $encrypt = false;
-
-
-    /**
-     * Cookie constructor.
-     */
-    public function __construct()
-    {
-        $this->path = config('cookie.path', '/');
-        $this->domain = config('cookie.domain', null);
-        $this->secure = config('cookie.secure', null);
-    }
-
-    /**
      * [set 设置cookie]
      *
      * @param            $name
@@ -64,12 +18,16 @@ class Cookie{
      * @param bool|true  $httpOnly
      * @author 11.
      */
-    public function set($name, $value = null, $expire = 0, $path = '/', $domain = null, $secure = false, $httpOnly = true)
+    public function set($name, $value, $expire = null, $path = null, $domain = null, $secure = null, $httpOnly = null)
     {
-        $expire = $expire?time()+$expire:$expire;
+        $path   = is_null($path) ? config('cookie.path', '/') : $path;
+        $expire = is_null($expire) ? config('cookie.expire', 0) : $expire;
+        $domain = is_null($domain) ? config('cookie.domain', null) : $domain;
+        $secure = is_null($secure) ? config('cookie.secure', false) : $secure;
+        $httpOnly = is_null($httpOnly) ? config('cookie.httpOnly', true) : $httpOnly;
 
         make('response')->headers->setCookie(
-            new HttpFoundation\Cookie($name, $value, $expire, $path, $domain, $secure, $httpOnly)
+            new HttpFoundation\Cookie($name, $value, time() + $expire, $path, $domain, $secure, $httpOnly)
         );
 
         make('response')->sendHeaders();
