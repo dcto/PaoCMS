@@ -3,31 +3,36 @@
 namespace PAO\I18n;
 
 
+use PAO\Exception\NotFoundException;
+
 class Lang
 {
 	/**
 	 * 当前设定语言
 	 * @var [type]
 	 */
-	protected $lang;
+	protected $lang = null;
 
 	/**
 	 * 语言配置器
-	 * @var [type]
+	 * @var array
 	 */
-	protected $item;
+	protected $item = array();
 
 
 	/**
 	 * 初始化语言对象
 	 * @param [type] $items [预加载语言]
 	 */
-	public function __construct( $items = [] )
+	public function __construct()
 	{
-        $this->item = $items;
-
-		$this->lang = config('app.language');
-
+		if($this->lang = make('request')->get('lang')){
+            $this->setLang($this->lang);
+        }else{
+            if(!$this->lang = make('cookie')->get('PAO_LANG')){
+                $this->setLang(config('app.language','en-US'));
+            }
+        }
         $this->parseLanguage();
 	}
 
@@ -88,12 +93,18 @@ class Lang
     /**
      * set current language
      *
-     * @param $language string
+     * @param $lang string
      */
-    public function setLang($language)
+    public function setLang($lang = null)
     {
-        $this->lang = $language;
-        $this->parseLanguage();
+        if($lang){
+            if(config('language.' .$lang)){
+                make('cookie')->set('PAO_LANG', $lang, 31536000);
+            }else{
+                throw new NotFoundException( 'Unable to load '. $lang .' language for this page');
+            }
+        }
+        $this->lang = $lang;
     }
 
     /**
