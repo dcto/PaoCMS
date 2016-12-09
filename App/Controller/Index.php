@@ -24,6 +24,7 @@ class Index extends Controller
 
     public function index( \PAO\Http\Request $request)
     {
+        \Log::file('test')->info('abcsfdsfds');
 //       echo hexdec('我是中国人顷@#@$@$@');die;
 //        make('session')->set(1,'a');
 print_r(make('lang')->all());die;
