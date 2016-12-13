@@ -30,7 +30,9 @@ class Lang
             $this->setLang($this->lang);
         }else{
             if(!$this->lang = make('cookie')->get('PAO_LANG')){
-                $this->setLang(config('app.i18n','en-US'));
+                $this->setLang(config('app.language', function(){
+                    throw new \InvalidArgumentException('Non set default app language in the config.ini');
+                }));
             }
         }
         $this->parseLanguage();
@@ -98,10 +100,10 @@ class Lang
     public function setLang($lang = null)
     {
         if($lang){
-            if(config('language.' .$lang)){
+            if(config('i18n.' .$lang)){
                 make('cookie')->set('PAO_LANG', $lang, 31536000);
             }else{
-                throw new NotFoundException( 'Unable to load '. $lang .' language for this page');
+                throw new NotFoundException( 'Invalid '. $lang .' language for this app');
             }
         }
         $this->lang = $lang;
