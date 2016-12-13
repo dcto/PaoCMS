@@ -95,8 +95,6 @@ class View
         $twig->addGlobal('APP', APP);
         $twig->addGlobal('request', $this->app->make('request'));
         $twig->addGlobal('timezone', date_default_timezone_get());
-        $twig->addGlobal('lang', $this->app->make('lang')->all());
-
 
         /**
          * 注册全局可用php函数
@@ -268,7 +266,7 @@ class View
      */
     public function render($template, $variables)
     {
-        $template = $template . $this->app->config('template.append');
+        $template = sprintf($template .'%s'. trim($this->app->config('template.append'),'.'), '.');
 
         $variables = array_merge($this->variables, $variables);
         try {
