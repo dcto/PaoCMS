@@ -30,7 +30,7 @@ class Lang
             $this->setLang($this->lang);
         }else{
             if(!$this->lang = make('cookie')->get('PAO_LANG')){
-                $this->setLang(config('app.language','en-US'));
+                $this->setLang(config('app.i18n','en-US'));
             }
         }
         $this->parseLanguage();
