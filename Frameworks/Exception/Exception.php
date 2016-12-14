@@ -152,18 +152,18 @@ class Exception
         if(config('app.log')){
             try{
                 $_ERROR = array(
-                    'TIME'       =>     date('Y-m-d H:i:s'),
-                    'CODE'       =>     E::codes($e->getCode()),
-                    'FILE'       =>     $e->getFile(),
-                    'LINE'       =>     $e->getLine(),
-                    'MESSAGE'    =>     E::error($e->getCode()).' '.$e->getMessage(),
-                    'METHOD'     =>     $_SERVER['REQUEST_METHOD'],
-                    'REMOTE'     =>     $_SERVER["REMOTE_ADDR"],
-                    'REQUEST'    =>     'http://'.$_SERVER['SERVER_NAME'].':'.$_SERVER["SERVER_PORT"].$_SERVER["REQUEST_URI"],
-                    'COOKIE'    =>     $_SERVER['HTTP_COOKIE'],
-                    'BACKTRACE'  =>     $e->getTraceAsString()
+                    '[TIME]'       =>     date('Y-m-d H:i:s'),
+                    '[CODE]'       =>     E::codes($e->getCode()),
+                    '[FILE]'       =>     $e->getFile(),
+                    '[LINE]'       =>     $e->getLine(),
+                    '[MESSAGE]'    =>     E::error($e->getCode()).' '.$e->getMessage(),
+                    '[METHOD]'     =>     $_SERVER['REQUEST_METHOD'],
+                    '[REMOTE]'     =>     $_SERVER["REMOTE_ADDR"],
+                    '[REQUEST]'    =>     'http://'.$_SERVER['SERVER_NAME'].':'.$_SERVER["SERVER_PORT"].$_SERVER["REQUEST_URI"],
+                    '[COOKIE]'    =>     $_SERVER['HTTP_COOKIE'],
+                    '[BACKTRACE]'  =>     PHP_EOL.$e->getTraceAsString()
                 );
-                array_walk($_ERROR, function (&$v, $k) { $v = $k.': '.$v;});
+                array_walk($_ERROR, function (&$v, $k) { $v = $k.' '.$v;});
                 if(!is_dir($logs = path(config('dir.logs')).'/exception/')){
                     mkdir($logs, 0777, true);
                 }
