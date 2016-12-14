@@ -2,13 +2,12 @@
 
 namespace PAO;
 
-use PAO\Exception\DBException;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Container\Container;
 use Illuminate\Pagination\PaginationServiceProvider;
-use Illuminate\Database\Capsule\Manager as DatabaseManager;
+use Illuminate\Database\Capsule\Manager as Capsule;
 
-class Database extends DatabaseManager
+class Database extends Capsule
 {
 
     public function __construct(Container $container = null)
@@ -29,7 +28,7 @@ class Database extends DatabaseManager
          */
         foreach($database as $db => $config)
         {
-            if(!is_array($config)) throw new DBException ('The database configures was error!');
+            if(!is_array($config)) throw new \InvalidArgumentException('The database configures was error!');
             $this->addConnection($config, $db);
         }
 
