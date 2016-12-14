@@ -4,8 +4,8 @@ namespace PAO\Config;
 
 use ArrayAccess;
 use PAO\Application;
-use Illuminate\Contracts\Config\Repository;
 use PAO\Exception\SystemException;
+use Illuminate\Contracts\Config\Repository;
 
 class Config implements ArrayAccess, Repository
 {
@@ -194,33 +194,5 @@ class Config implements ArrayAccess, Repository
         }
 
         return $this->set($config);
-
     }
-
-    /**
-     * [load load config file]
-     *
-     * @param $name
-     * @return array
-     * @author 11.
-     */
-    /*
-    private function load($key)
-    {
-        $key = trim($key,'.');
-        $name = trim(strstr($key,'.') ? strstr($key, '.', true) : $key);
-        $PaoConfig = PAO.DIRECTORY_SEPARATOR.'.'.$name;
-        $AppConfig = DIR.DIRECTORY_SEPARATOR.'Config'.DIRECTORY_SEPARATOR.$name.'.php';
-
-        if(is_readable($AppConfig)) require($AppConfig);
-        if(is_readable($PaoConfig)) require($PaoConfig);
-
-        if(isset($$name)){
-            $this->set($name, $$name);
-            return $$name;
-        }else{
-            return array();
-        }
-    }
-    */
 }
