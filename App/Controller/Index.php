@@ -75,7 +75,7 @@ EOF;
         //print_r($d);
         print_r(\Request::header());die;
 
-        print_r(Request::path());
+        print_r(\Request::path());
         echo '<br />';
 
             echo '<pre>';
@@ -92,7 +92,7 @@ EOF;
 
         Session::set('11','2l2l22222222222');
 
-            print_r(Session::get('11'));
+            print_r(\Session::get('11'));
             echo '<br />';
         $this->container->make('cookie')->set('as',date('Y-m-d H:i:s'));
 
