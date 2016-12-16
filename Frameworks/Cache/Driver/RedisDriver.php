@@ -2,15 +2,12 @@
 
 namespace PAO\Cache\Driver;
 
-
-use PAO\Exception\SystemException;
-
 /**
  * Class RedisDriver
  * @package PAO\Cache\Driver
  * @see \Redis
  */
-class RedisDriver implements DriverInterface
+class RedisDriver extends Driver
 {
 
     /**
@@ -40,7 +37,7 @@ class RedisDriver implements DriverInterface
             $config = config('cache.redis.'. $server);
 
             if(!$config){
-                throw new SystemException('Unable load ['.$server.'] redis server configure.');
+                throw new \ErrorException('Unable load ['.$server.'] redis server configure.');
             }
 
             $this->servers[$server] = new \Redis();

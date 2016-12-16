@@ -3,8 +3,9 @@
 namespace PAO\Cache;
 
 use PAO\Cache\Driver\ApcDriver;
-use PAO\Cache\Driver\DriverInterface;
+use PAO\Cache\Driver\Driver;
 use PAO\Cache\Driver\FilesDriver;
+use PAO\Cache\Driver\NullDriver;
 use PAO\Cache\Driver\RedisDriver;
 use PAO\Cache\Driver\RetrievesMultipleKeys;
 use PAO\Exception\SystemException;
@@ -17,7 +18,12 @@ class Cache
      * 驱动器
      * @var array
      */
-    private $driver;
+    private $driver = array(
+            'null'  => null,
+            'apc'   => null,
+            'files' => null,
+            'redis' => null
+    );
 
 
     public function __construct($driver = null)
@@ -25,6 +31,16 @@ class Cache
         if($driver){
             $this->setDefaultDriver($driver);
         }
+    }
+
+    /**
+     * [空缓存 当关闭缓存时使用]
+     *
+     * @return NullDriver
+     */
+    public function null()
+    {
+        return new NullDriver();
     }
 
     /**
@@ -63,22 +79,18 @@ class Cache
     }
 
 
-
     /**
      * Get a cache store instance by name.
      *
      * @param  string|null  $name
-     * @return DriverInterface
+     * @return Driver
      */
     public function driver($driver = null)
     {
         $driver = $driver ? $this->setDefaultDriver($driver) : $this->getDefaultDriver();
-
-        if(!\Arr::get($this->driver, $driver)){
-            if(!method_exists($this, $driver)){
-                throw new SystemException('Invalid cache driver '.$driver.', check your cache config.');
-            }
-            $this->driver[$driver] = $this->$driver();
+        $driver = $driver ?: 'null';
+        if(!$this->driver[$driver] instanceof Driver){
+           $this->driver[$driver] = $this->$driver();
         }
         return $this->driver[$driver];
     }
@@ -102,9 +114,7 @@ class Cache
      */
     public function setDefaultDriver($driver)
     {
-        if(!$driver){
-            throw new SystemException('Invalid cache driver type.');
-        }else if(!in_array($driver, get_class_methods($this))){
+       if(!isset($this->driver[$driver])){
             throw new SystemException('Invalid '.$driver.' cache driver.');
         }
        return \Config::set('app.cache', $driver);
@@ -122,6 +132,5 @@ class Cache
     public function __call($method, array $parameters = [])
     {
         return call_user_func_array([$this->driver(), $method], $parameters);
-
     }
 }

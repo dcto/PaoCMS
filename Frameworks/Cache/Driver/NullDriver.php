@@ -2,7 +2,7 @@
 
 namespace PAO\Cache\Driver;
 
-class NullDriver implements DriverInterface
+class NullDriver extends Driver
 {
     use RetrievesMultipleKeys;
 
@@ -79,8 +79,5 @@ class NullDriver implements DriverInterface
      *
      * @return string
      */
-    public function prefix()
-    {
-        return '';
-    }
+    public function prefix(){}
 }

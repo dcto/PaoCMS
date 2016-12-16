@@ -5,7 +5,7 @@ namespace PAO\Cache\Driver;
 use PAO\Exception\SystemException;
 use PAO\FileSystem\FileSystem;
 
-class FilesDriver implements DriverInterface
+class FilesDriver  extends Driver
 {
     use RetrievesMultipleKeys;
 

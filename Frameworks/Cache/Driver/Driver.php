@@ -2,7 +2,7 @@
 
 namespace PAO\Cache\Driver;
 
-interface DriverInterface
+abstract class Driver
 {
     /**
      * Check an item from the cache by key.
@@ -10,7 +10,7 @@ interface DriverInterface
      * @param  string|array $key
      * @return mixed
      */
-    public function has($key);
+    public function has($key){}
 
     /**
      * Retrieve an item from the cache by key.
@@ -18,7 +18,7 @@ interface DriverInterface
      * @param  string|array $key
      * @return mixed
      */
-    public function get($key);
+    public function get($key){}
 
     /**
      * Store an item in the cache for a given number of minutes.
@@ -28,7 +28,7 @@ interface DriverInterface
      * @param  int $time
      * @return void
      */
-    public function set($key, $value, $time = 86400);
+    public function set($key, $value, $time = 86400){}
 
     /**
      * Retrieve multiple items from the cache by key.
@@ -38,7 +38,7 @@ interface DriverInterface
      * @param  array $keys
      * @return array
      */
-    public function gets(array $keys);
+    public function gets(array $keys){}
 
     /**
      * Store multiple items in the cache for a given number of minutes.
@@ -47,7 +47,7 @@ interface DriverInterface
      * @param  int  $time
      * @return void
      */
-    public function sets(array $values, $time = 86400);
+    public function sets(array $values, $time = 86400){}
 
     /**
      * Increment the value of an item in the cache.
@@ -56,7 +56,7 @@ interface DriverInterface
      * @param  mixed $value
      * @return int|bool
      */
-    public function increment($key, $value = 1);
+    public function increment($key, $value = 1){}
 
     /**
      * Decrement the value of an item in the cache.
@@ -65,7 +65,7 @@ interface DriverInterface
      * @param  mixed $value
      * @return int|bool
      */
-    public function decrement($key, $value = 1);
+    public function decrement($key, $value = 1){}
 
     /**
      * 持久化保存
@@ -74,7 +74,7 @@ interface DriverInterface
      * @param  mixed   $value
      * @return void
      */
-    public function save($key, $value);
+    public function save($key, $value){}
 
     /**
      * Remove an item from the cache.
@@ -82,19 +82,28 @@ interface DriverInterface
      * @param  string $key
      * @return bool
      */
-    public function del($key);
+    public function del($key){}
 
     /**
      * Remove all items from the cache.
      *
      * @return void
      */
-    public function flush();
+    public function flush(){}
 
     /**
      * Get the cache key prefix.
      *
      * @return string
      */
-    public function prefix();
+    public function prefix(){}
+
+    /**
+     * @param $name
+     * @param $arguments
+     */
+    public function __call($name, $arguments)
+    {
+        throw new \ErrorException('Invalid cache method Cache::'.$name);
+    }
 }

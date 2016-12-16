@@ -2,7 +2,7 @@
 
 namespace PAO\Cache\Driver;
 
-class ApcDriver implements DriverInterface
+class ApcDriver extends Driver
 {
     use RetrievesMultipleKeys;
 

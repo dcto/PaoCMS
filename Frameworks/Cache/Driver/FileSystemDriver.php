@@ -10,7 +10,7 @@ use PAO\Exception\SystemException;
  *
  * @package PAO\Cache
  */
-class FileSystemDriver implements DriverInterface
+class FileSystemDriver extends Driver
 {
 
     use RetrievesMultipleKeys;

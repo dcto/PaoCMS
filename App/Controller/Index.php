@@ -24,7 +24,10 @@ class Index extends Controller
 
     public function index( \PAO\Http\Request $request)
     {
-echo $ADS;
+
+\Cache::files()->set('a','c');
+        echo \Cache::get('a');
+
 //       echo hexdec('我是中国人顷@#@$@$@');die;
 //        make('session')->set(1,'a');
 
