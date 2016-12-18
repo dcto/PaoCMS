@@ -101,8 +101,8 @@ class Application extends Container
             $this->is_bindings[$abstract] = true;
         }
         */
-        if(!$s = $this->resolved($abstract)){
-            $this->singleton($abstract, $abstract);
+        if(!$this->resolved($abstract)){
+            $this->singleton($abstract);
         }
 
         return parent::make($abstract, $parameters);
