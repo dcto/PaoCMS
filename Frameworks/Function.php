@@ -193,7 +193,7 @@ function input($key = null, $default = null)
  * @param bool $key
  * @param bool $value
  * @param int $time
- * @return \PAO\Cache\Driver\DriverInterface
+ * @return \PAO\Cache\Driver\Driver
  */
 function cache($key = false, $value = false, $time = 86400)
 {

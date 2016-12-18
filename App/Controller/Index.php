@@ -25,9 +25,8 @@ class Index extends Controller
     public function index( \PAO\Http\Request $request)
     {
 
-\Cache::files()->set('a','c');
-        echo \Cache::get('a');
 
+print_r(get_included_files());die;
 //       echo hexdec('我是中国人顷@#@$@$@');die;
 //        make('session')->set(1,'a');
 

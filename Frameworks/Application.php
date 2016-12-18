@@ -2,13 +2,12 @@
 
 namespace PAO;
 
+use PAO\Exception\Exception;
 use Illuminate\Container\Container;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Events\EventServiceProvider;
-use PAO\Exception\Exception;
-use PAO\Exception\SystemException;
-use PAO\Services\SystemServiceProvider;
+use PAO\Services\FoundationServiceProvider;
 
 defined('PAO') || die('Invalid Construct System');
 
@@ -135,7 +134,7 @@ class Application extends Container
         //重置Response
         if(!$response instanceof \PAO\Http\Response)
         {
-            throw new SystemException('The Output Must be Instance of PAO\Response');
+            throw new \ErrorException('The Output Must be Instance of PAO\Response');
         }
         /**
          * 响应请求
@@ -243,16 +242,16 @@ class Application extends Container
     private function registerBaseServiceProviders()
     {
         /**
-         * 系统服务
-         * @var $this \Illuminate\Contracts\Foundation\Application
-         */
-        $this->register(new SystemServiceProvider($this));
-
-        /**
          * 事件服务
          * @var $this \Illuminate\Contracts\Foundation\Application
          */
         $this->register(new EventServiceProvider($this));
+
+        /**
+         * 基础服务
+         * @var $this \Illuminate\Contracts\Foundation\Application
+         */
+        $this->register(new FoundationServiceProvider($this));
     }
 
     /**

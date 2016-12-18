@@ -16,6 +16,6 @@
       "App\\": "App/",
       "PAO\\": "Frameworks/"
     },
-    "files": ["Frameworks/Support/Function.php"]
+    "files": ["Frameworks/Function.php"]
   }
 }
