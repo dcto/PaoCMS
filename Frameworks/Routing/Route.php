@@ -120,8 +120,9 @@ class Route
 
         $this->namespace = Arr::get($property, 'namespace')?:Arr::get(Arr::get($property, 'group'),'namespace');
 
-        list($this->controller, $this->action) = explode('@', trim(strrchr($this->callable,'\\')?:$this->callable, '\\'));
-
+        if(is_string($this->callable)){
+            list($this->controller, $this->action) = explode('@', trim(strrchr($this->callable,'\\')?:$this->callable, '\\'));
+        }
         if (in_array('GET', $this->methods) && !in_array('HEAD', $this->methods)) {
             $this->methods[] = 'HEAD';
         }
@@ -154,7 +155,11 @@ class Route
      */
     public function getCallable()
     {
-        return rtrim($this->namespace,'\\').'\\'.ltrim($this->callable, '\\');
+        if(is_string($this->callable)) {
+            return rtrim($this->namespace, '\\') . '\\' . ltrim($this->callable, '\\');
+        }else{
+            return $this->callable;
+        }
     }
 
     /**
