@@ -22,17 +22,6 @@ version_compare(PHP_VERSION,'5.5.0','ge') || die('The php version least must 5.5
  */
 class Application extends Container
 {
-    /**
-     * 已注入的模块
-     * @var array
-     */
-    private $is_bindings = array();
-
-    /**
-     * 已注册的服务
-     * @var array
-     */
-    private $is_providers = array();
 
     /**
      * [Issue 核心应用构造方法]
@@ -106,9 +95,15 @@ class Application extends Container
      */
     public function make($abstract, array $parameters = [])
     {
+        $abstract = $this->getAlias($this->normalize($abstract));
+        /*
         if (!isset($this->is_bindings[$abstract]) && $this->isAlias($abstract)) {
             $this->singleton($abstract, $this->getAlias($abstract));
             $this->is_bindings[$abstract] = true;
+        }
+        */
+        if(!$s = $this->resolved($abstract)){
+            $this->singleton($abstract, $abstract);
         }
 
         return parent::make($abstract, $parameters);
@@ -163,18 +158,16 @@ class Application extends Container
      *
      * @param $provider
      */
-    public function register($provider, $options = [])
+    public function register($provider)
     {
         if(!$provider instanceof ServiceProvider)
         {
             $provider = new $provider($this);
         }
 
-        if(isset($this->is_providers[$providerName = get_class($provider)]))
-        {
+        if($this->resolved($providerName = get_class($provider))){
             return;
         }
-        $this->is_providers[$providerName] = true;
 
         $provider->register();
         /**
@@ -190,24 +183,25 @@ class Application extends Container
      */
     private function registerContainerAliases()
     {
+
         $this->aliases = array(
-            'app' => 'PAO\Application',
-            'router' => 'PAO\Routing\Router',
-            'config' => 'PAO\Config\Config',
-            'request' => 'PAO\Http\Request',
-            'response' => 'PAO\Http\Response',
-            'cookie' => 'PAO\Http\Cookie',
-            'session' => 'PAO\Http\Session\Session',
-            'captcha' => 'PAO\Captcha\Captcha',
+            'app'       => 'PAO\Application',
+            'router'    => 'PAO\Routing\Router',
+            'config'    => 'PAO\Config\Config',
+            'request'   => 'PAO\Http\Request',
+            'response'  => 'PAO\Http\Response',
+            'cookie'    => 'PAO\Http\Cookie',
+            'session'   => 'PAO\Http\Session\Session',
+            'captcha'   => 'PAO\Captcha\Captcha',
             'validator' => 'PAO\Form\Validator',
-            'crypt' => 'PAO\Crypt\Crypt',
-            'lang' => 'PAO\I18n\Lang',
-            'view' => 'PAO\View',
-            'curl' => 'PAO\Http\Curl',
-            'file' => 'PAO\FileSystem\FileSystem',
-            'cache' => 'PAO\Cache\Cache',
-            'log' => 'PAO\Logger\Logger',
-            'db' => 'PAO\Database'
+            'crypt'     => 'PAO\Crypt\Crypt',
+            'lang'      => 'PAO\I18n\Lang',
+            'view'      => 'PAO\View',
+            'curl'      => 'PAO\Http\Curl',
+            'file'      => 'PAO\FileSystem\FileSystem',
+            'cache'     => 'PAO\Cache\Cache',
+            'log'       => 'PAO\Logger\Logger',
+            'db'        => 'PAO\Database'
         );
     }
 
