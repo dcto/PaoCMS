@@ -24,7 +24,7 @@ class Index extends Controller
 
     public function index( \PAO\Http\Request $request)
     {
-
+dump(config());
 //       echo hexdec('我是中国人顷@#@$@$@');die;
 //        make('session')->set(1,'a');
 

@@ -52,13 +52,8 @@ class Config implements ArrayAccess, Repository
      * @param  mixed   $default
      * @return mixed
      */
-    public function get($key, $default = null)
+    public function get($key = null, $default = null)
     {
-        /*
-        if(!$this->has($key))
-        {
-            $this->load($key);
-        }*/
         return \Arr::get($this->config, $key, $default);
     }
 
