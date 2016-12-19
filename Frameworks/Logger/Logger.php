@@ -21,11 +21,11 @@ class Logger extends KLogger{
             $logDirectory = $logDirectory?:path(config('dir.logs'),APP),
             LogLevel::DEBUG,
             array(
+                'prefix'=>'pao_',
                 'dateFormat'=>'Y-m-d H:i:s.u',
             )
         );
     }
-
 
     /**
      * Log a message to file
@@ -34,9 +34,14 @@ class Logger extends KLogger{
      * @param string $level
      * @return $this
      */
-    public function dir($path)
+    public function dir()
     {
-        if(!is_dir($dir = path(config('dir.logs'), $path))){
+        $path = implode(DIRECTORY_SEPARATOR, func_get_args());
+        $dir = pathinfo($path, PATHINFO_DIRNAME);
+        if(pathinfo($path, PATHINFO_EXTENSION)){
+            $this->options['filename'] = basename($path);
+        }
+        if(!is_dir($dir = path(config('dir.logs'), $dir))){
             mkdir($dir, 0777, true);
         }
         $this->setLogFilePath($dir);
