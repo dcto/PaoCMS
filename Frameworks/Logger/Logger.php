@@ -20,7 +20,9 @@ class Logger extends KLogger{
         parent::__construct(
             $logDirectory = $logDirectory?:path(config('dir.logs'),APP),
             LogLevel::DEBUG,
-            array()
+            array(
+                'dateFormat'=>'Y-m-d H:i:s.u',
+            )
         );
     }
 
