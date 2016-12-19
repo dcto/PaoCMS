@@ -25,8 +25,6 @@ class Index extends Controller
     public function index( \PAO\Http\Request $request)
     {
 
-\Log::dir('system')->alert('abcdef');die;
-print_r(app());die;
 //       echo hexdec('我是中国人顷@#@$@$@');die;
 //        make('session')->set(1,'a');
 

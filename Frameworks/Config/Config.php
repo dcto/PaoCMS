@@ -168,14 +168,16 @@ class Config implements ArrayAccess, Repository
         $this->set($key, null);
     }
 
-
     /**
      * [parseConfig 解析配置文件]
-     * @return array
+     * @return bool
      * @throws SystemException
      */
     public function parseConfig()
     {
+        if(!defined('ENV') && is_file($config = PAO.'/RunTime/Cache/config.cache.php')){
+            return $this->config = require($config);
+        }
 
         if(!is_readable($this->file)){
             throw new SystemException('unable load config file from '.$this->file);
@@ -189,10 +191,14 @@ class Config implements ArrayAccess, Repository
         /**
          * load environment config
          */
-        if(is_readable($config_env = dirname($this->file).'/config.'.ENV.'.ini')){
+        if(defined('ENV') && is_file($config_env = dirname($this->file).'/config.'.ENV.'.ini')){
             $config = array_replace_recursive($config,\Arr::dot(parse_ini_file($config_env, true)));
         }
 
-        return $this->set($config);
+        $this->set($config);
+
+        file_put_contents(path(config('dir.cache'), 'config.cache.php'), '<?php return '.str_replace(array(PHP_EOL,' '),'',var_export($this->all(), true)).';');
+
+        return true;
     }
 }
