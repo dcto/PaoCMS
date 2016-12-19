@@ -72,7 +72,7 @@ function config()
  */
 function path()
 {
-    $path = dirname(dirname(__DIR__));
+    $path = dirname(__DIR__);
     array_map(function($arg)use(&$path){
       $path .= '/'. trim($arg, '/');
     }, func_get_args());
