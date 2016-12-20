@@ -254,7 +254,7 @@ class Captcha {
      */
     private function getFont($font = null)
     {
-        $FontDir = __DIR__.DIRECTORY_SEPARATOR;
+        $FontDir = __DIR__.DIRECTORY_SEPARATOR.'Fonts'.DIRECTORY_SEPARATOR;
         if($font && is_readable($FontDir.$font))
         {
             return $FontDir.$font;
