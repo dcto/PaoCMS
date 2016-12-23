@@ -2,10 +2,9 @@
 
 namespace PAO\Http;
 
-use Illuminate\Support\Facades\Input;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-class Upload extends UploadedFile
+class Files extends UploadedFile
 {
 
     /**

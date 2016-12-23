@@ -2,8 +2,6 @@
 
 namespace PAO\Services;
 
-use Illuminate\Support\ServiceProvider;
-
 class FoundationServiceProvider extends ServiceProvider
 {
     /**

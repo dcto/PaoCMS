@@ -241,11 +241,12 @@ class Request extends HttpFoundation\Request
 
 
     /**
-     * [files 获取多文件]
+     * [files 获取上传文件]
      * @return mixed
      */
     public function files()
     {
+        return $this->getFiles($this->files->all());
     }
 
     /**
@@ -268,18 +269,15 @@ class Request extends HttpFoundation\Request
     /**
      * [获取session方法]
      *
-     * @param bool $k
-     * @param bool $v
-     * @return \PAO\Http\Session\Session
+     * @param null $key
+     * @return mixed
      */
-    public function session($k = false, $v = false)
+    public function session($key = null)
     {
-        if($k && $v) {
-            return make('session')->set($k, $v);
-        }else if($k) {
-            return make('session')->get($k);
-        }else{
-            return make('session');
+        if ($key) {
+            return make('session')->get($key);
+        } else {
+            return make('session')->all();
         }
     }
 
@@ -440,6 +438,24 @@ class Request extends HttpFoundation\Request
         return $this->isSecure();
     }
 
+    /**
+     * [get initialize files]
+     *
+     * @param array $files
+     * @return array
+     */
+    protected function getFiles(array $files)
+    {
+        return array_map(function ($file) {
+            if (is_null($file) || (is_array($file) && empty(array_filter($file)))) {
+                return $file;
+            }
+
+            return is_array($file)
+                ? $this->getFiles($file)
+                : Files::initialize($file);
+        }, $files);
+    }
 
     /**
      * [retrieve]
