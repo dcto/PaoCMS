@@ -131,6 +131,10 @@ class Lang
      */
     private function parseLanguage()
     {
+        if(!defined('ENV') && is_file($lang = PAO.'/RunTime/Cache/Language/'.$this->lang.'.cache.php')){
+            $this->item = require($lang);
+        }
+
         $dir = path(config('dir.lang'));
 
         $appLang = rtrim($dir,'/').'/'.$this->lang.'.ini';
@@ -140,6 +144,15 @@ class Lang
         if(is_readable($subLang)){
             $language = array_replace_recursive($language,\Arr::dot(parse_ini_file($subLang, true)));
         }
-        return $this->set($language);
+
+        $this->set($language);
+
+        $cacheDir = path(config('dir.cache'), '/Language/').'/';
+
+        if(!is_dir($cacheDir)){
+            make('file')->mkDir($cacheDir);
+        }
+        file_put_contents($cacheDir.$this->lang.'.cache.php', '<?php return '.str_replace(array(PHP_EOL,' '),'',var_export($this->all(), true)).';');
+        return true;
     }
 }
