@@ -170,7 +170,7 @@ class Exception
                 $logs = $logs.APP.'_'.date('Ymd').'.txt';
                 file_put_contents($logs, implode(PHP_EOL, $_ERROR).PHP_EOL.str_repeat('=',100).PHP_EOL.PHP_EOL, FILE_APPEND);
             }catch (\Exception $e){
-                return $this->display($e);
+                 $this->display($e);
             }
         }
         return $this;
@@ -184,8 +184,8 @@ class Exception
      */
     final private function display(\Exception $e)
     {
-        http_response_code(500);
-        config('app.debug') || die('Server Error');
+        http_response_code($e instanceof E ? $e->getStatus() : 500);
+        config('app.debug') || die('PAO Server Error.');
 
         $debugBacktrace = $this->debugBacktrace($e);
         echo '<html><head><title>Pao Frameworks Debug</title><meta name="robots" content="none" /><style type="text/css">body {font: 12pt verdana; margin: 10px auto;}div {background: #f5f5f5; border-radius: 5px; line-height: 200%; margin-bottom: 1em; padding: 1em;}table {background: #aaa;}.bg1 {background-color: #ffc;}.bg2 {background-color: #eee;}</style></head><body><div id="title"><b>'.E::error($e->getCode()).'</b>: '.$e->getMessage().'</div>';
