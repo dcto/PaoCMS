@@ -2,92 +2,76 @@
 
 namespace PAO\Crypt;
 
-/**
- *
- * 本类按照RC4加密解密算法编写
- * @author 11
- * @version 20161222
- * @link http://en.wikipedia.org/wiki/RC4
- */
+
+use PAO\Crypt\Driver\Null;
+use PAO\Crypt\Driver\CryptInterface;
+
 class Crypt
 {
     /**
-     * 密钥
+     * Crypt private key
+     *
      * @var string
      */
     private $key;
 
     /**
+     * Crypt driver
+     *
+     * @var CryptInterface
+     */
+    private $driver = null;
+
+
+    /**
      * Crypt constructor.
+     * @param null $key
      */
-    public function __construct()
+    public function __construct($key = null)
     {
-        $this->key = config('app.token', 'pao_');
+        $this->key = $key ?: config('app.token', 'pao_');
     }
 
     /**
-     * 加密
-     * @param string $key 私匙
-     * @param string $data 需要加密的数据
-     * @param boolean $decrypted 是否解密
-     * @return 16进制字符串
+     * 加密方式加载
+     * @param $driver
+     * @return CryptInterface
      */
-    public function en($string, $key = false, $decrypted = false)
+    public function driver($driver = null)
     {
-        $keyLength = strlen($key = $key ?: $this->key);
-        $s = array();
-        for($i = 0; $i < 256; $i++) $s[$i] = $i;
-        $j = 0;
-        for ($i = 0; $i < 256; $i++)
-        {
-            $j = ($j + $s[$i] + ord($key[$i % $keyLength])) % 256;
-            $this->swap($s[$i], $s[$j]);
-        }
-
-        $stringLength = strlen($string);
-        $output = "";
-        for ($a = $j = $i = 0; $i < $stringLength; $i++)
-        {
-            $a = ($a + 1) % 256;
-            $j = ($j + $s[$a]) % 256;
-            $this->swap($s[$a], $s[$j]);
-            $k = $s[(($s[$a] + $s[$j]) % 256)];
-            $output .= chr(ord($string[$i]) ^ $k);
-        }
-
-        return ($decrypted) ? $output : bin2hex($output);
-    }
-    /**
-     * 解密
-     * @param string $a 私匙
-     * @param string $b 需要解密的数据
-     * @return string
-     */
-    public function de($string, $key = false)
-    {
-        $stringLength = strlen($string);
-        if($stringLength % 2){
-            return $string;
-        }else if (strspn($string , '0123456789abcdefABCDEF' ) != $stringLength){
-            return $string;
-        }
-        $key = $key?:$this->key;
-        if (function_exists("hex2bin")){
-            return $this->en(hex2bin($string), $key,  true);
-        }else{//由于hex2bin php5.4才支持采用pack方式处理
-            return $this->en(pack("H*", $string), $key, true);
+        if(!$driver){
+            return $this->null();
+        }else{
+            if(method_exists($this, $driver)){
+                return $this->$driver();
+            }else{
+                throw new \InvalidArgumentException('Unable load crypt driver');
+            }
         }
     }
 
     /**
-     * 临时缓冲
-     * @param $key
-     * @param $string
+     * the default crypt rc4
+     *
+     * @return Null
      */
-    private function swap(&$key, &$string)
+    public function null(){
+       if($this->driver instanceof Null) {
+           return $this->driver;
+       }
+        return $this->driver = new Null($this->key);
+    }
+
+    /**
+     * [__call]
+     *
+     * @param       $method
+     * @param array $parameters
+     * @return $this->driver()
+     * @author 11.
+     */
+    public function __call($method, array $parameters = [])
     {
-        $swap = $key;
-        $key = $string;
-        $string = $swap;
+        return call_user_func_array([$this->driver(), $method], $parameters);
     }
 }
