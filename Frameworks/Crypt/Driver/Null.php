@@ -9,7 +9,7 @@ namespace PAO\Crypt\Driver;
  * @version 20161222
  * @link http://en.wikipedia.org/wiki/RC4
  */
-class Null implements CryptInterface
+class Null extends CryptDriver
 {
     /**
      * 密钥

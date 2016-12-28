@@ -3,7 +3,7 @@
 namespace PAO\Crypt\Driver;
 
 
-interface CryptInterface
+abstract class CryptDriver
 {
 
     /**
@@ -12,7 +12,7 @@ interface CryptInterface
      * @param $string
      * @return string
      */
-    public function en($string);
+    public function en($string){}
 
 
     /**
@@ -21,6 +21,6 @@ interface CryptInterface
      * @param $string
      * @return string
      */
-    public function de($string);
+    public function de($string){}
 
 }

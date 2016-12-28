@@ -2,9 +2,9 @@
 
 namespace PAO\Crypt;
 
-
 use PAO\Crypt\Driver\Null;
-use PAO\Crypt\Driver\CryptInterface;
+use PAO\Crypt\Driver\CryptDriver;
+
 
 class Crypt
 {
@@ -18,7 +18,7 @@ class Crypt
     /**
      * Crypt driver
      *
-     * @var CryptInterface
+     * @var CryptDriver
      */
     private $driver = null;
 
@@ -35,7 +35,7 @@ class Crypt
     /**
      * 加密方式加载
      * @param $driver
-     * @return CryptInterface
+     * @return CryptDriver
      */
     public function driver($driver = null)
     {
@@ -53,7 +53,7 @@ class Crypt
     /**
      * the default crypt rc4
      *
-     * @return Null
+     * @return CryptDriver
      */
     public function null(){
        if($this->driver instanceof Null) {
