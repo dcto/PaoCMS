@@ -77,8 +77,9 @@ class E extends \ErrorException
      * @param int $line
      * @param Exception|null $previous
      */
-    public function __construct($message = '', $code = 0, $severity = 1, $file = __FILE__, $line = __LINE__, Exception $previous = null)
+    public function __construct($message = null, $code = 0, $severity = 1, $file = __FILE__, $line = __LINE__, Exception $previous = null)
     {
+        $message = $message?:$this->message;
         parent::__construct($message, $code, $severity, $file, $line, $previous);
     }
 

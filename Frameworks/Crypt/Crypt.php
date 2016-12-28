@@ -33,6 +33,18 @@ class Crypt
     }
 
     /**
+     * $key
+     *
+     * @param null $key
+     * @return null|string
+     */
+    public function key($key = null)
+    {
+        return $key ? $this->key = $key : $this->key;
+    }
+
+
+    /**
      * 加密方式加载
      * @param $driver
      * @return CryptDriver
