@@ -71,7 +71,7 @@ class Exception
         unset($this->memory);
         //将错误变成异常抛出 统一交给异常处理函数进行处理
         if(error_reporting() & $code) {
-            return $this->logException($e = new E($message, $code, $code, $file, $line))->display($e);
+            $this->logException($e = new E($message, $code, $code, $file, $line))->display($e);
         }
         return false;
     }
@@ -87,7 +87,7 @@ class Exception
         $e = error_get_last();
         //如果是致命错误进行处理
         if(E::isFatalError($e)){
-            return $this->logException($e = new E($e['message'], $e['type'], $e['type'], $e['file'], $e['line']))->display($e);
+            $this->logException($e = new E($e['message'], $e['type'], $e['type'], $e['file'], $e['line']))->display($e);
         }
         return true;
     }
