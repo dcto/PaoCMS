@@ -184,6 +184,7 @@ class Exception
      */
     final private function display(\Exception $e)
     {
+        ob_clean();
         http_response_code($e instanceof E ? $e->getStatus() : 500);
         config('app.debug') || die('PAO Server Error.');
 

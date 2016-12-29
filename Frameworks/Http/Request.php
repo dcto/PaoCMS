@@ -227,29 +227,6 @@ class Request extends HttpFoundation\Request
     }
 
     /**
-     * [file 获取上传文件]
-     *
-     * @param null $key
-     * @param null $default
-     * @return mixed
-     * @author 11.
-     */
-    public function file($key = null, $default = null)
-    {
-        return \Arr::get($this->files(), $key, $default);
-    }
-
-
-    /**
-     * [files 获取上传文件]
-     * @return mixed
-     */
-    public function files()
-    {
-        return $this->getFiles($this->files->all());
-    }
-
-    /**
      * [cookie 重构cookie方法适应Facades调用]
      *
      * @param $key
@@ -280,6 +257,31 @@ class Request extends HttpFoundation\Request
             return make('session')->all();
         }
     }
+
+
+    /**
+     * [file 获取上传文件]
+     *
+     * @param null $key
+     * @param null $default
+     * @return Files
+     * @author 11.
+     */
+    public function file($key = null, $default = null)
+    {
+        return \Arr::get($this->files(), $key, $default);
+    }
+
+
+    /**
+     * [files 获取上传文件]
+     * @return array
+     */
+    public function files()
+    {
+        return $this->getFiles($this->files->all());
+    }
+
 
     /**
      * [isJson 判断是否为json]
@@ -316,12 +318,14 @@ class Request extends HttpFoundation\Request
     /**
      * [method 获取当前请求方式]
      *
-     * @return string
-     * @author 11.
+     * @param null $type
+     * @return bool|string
      */
-    public function method()
+    public function method($type = null)
     {
-        return $this->getMethod();
+        $method = $this->getMethod();
+
+        return $type ? strtoupper($type) == $method : $method;
     }
 
 
