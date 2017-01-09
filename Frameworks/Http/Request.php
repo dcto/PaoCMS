@@ -443,9 +443,9 @@ class Request extends HttpFoundation\Request
     }
 
     /**
-     * [get initialize files]
+     * Convert the given array of Symfony UploadedFiles
      *
-     * @param array $files
+     * @param  array  $files
      * @return array
      */
     protected function getFiles(array $files)
@@ -457,7 +457,7 @@ class Request extends HttpFoundation\Request
 
             return is_array($file)
                 ? $this->getFiles($file)
-                : Files::initialize($file);
+                : Upload::createFromBase($file);
         }, $files);
     }
 

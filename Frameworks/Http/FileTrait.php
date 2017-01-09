@@ -2,28 +2,8 @@
 
 namespace PAO\Http;
 
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-
-class Files extends UploadedFile
+trait FileTrait
 {
-
-    /**
-     * Create a new file instance from a base instance.
-     *
-     * @param  \Symfony\Component\HttpFoundation\File\UploadedFile  $file
-     * @return static
-     */
-    public static function initialize(UploadedFile $file)
-    {
-        return $file instanceof static ? $file : new static(
-            $file->getPathname(),
-            $file->getClientOriginalName(),
-            $file->getClientMimeType(),
-            $file->getClientSize(),
-            $file->getError()
-        );
-    }
-
     /**
      * Get the fully qualified path to the file.
      *
@@ -33,13 +13,6 @@ class Files extends UploadedFile
     {
         return $this->getRealPath();
     }
-
-
-    public function size()
-    {
-        return $this->getSize();
-    }
-
 
     /**
      * Get the file's extension.
@@ -73,10 +46,9 @@ class Files extends UploadedFile
             $path = rtrim($path, '/').'/';
         }
 
-        return $path.$this->md5().'.'.$this->extension();
+        return $path.md5_file($this->getRealPath()).'.'.$this->guessExtension();
     }
-
-
+    
     /**
      * Get file md5 hash
      *
