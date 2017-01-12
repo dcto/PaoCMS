@@ -295,6 +295,9 @@ class Curl
             throw new \InvalidArgumentException('Invalid url '. $url. ' for curl request.');
         }
 
+        $headers  = array();
+        $response = false;
+
         $this->method($method);
         $this->options(CURLOPT_HTTPHEADER, array_values($this->headers));
         $this->options(CURLOPT_URL, $url);
@@ -308,8 +311,6 @@ class Curl
         });
 
         curl_setopt_array($this->curl(),$this->options);
-
-        $response = false;
 
         while(($response === false) && ( -- $this->retries > 0)){
             $response = curl_exec($this->curl());
