@@ -8,6 +8,12 @@ namespace PAO\Http\Curl;
  * @author Sean Huber <shuber@huberry.com>
  **/
 class Response {
+    /**
+     * An associative array containing the response's headers
+     *
+     * @var array
+     **/
+    public $headers = array();
 
     /**
      * The body of the response without the headers block
@@ -15,13 +21,6 @@ class Response {
      * @var string
      **/
     public $body = '';
-
-    /**
-     * An associative array containing the response's headers
-     *
-     * @var array
-     **/
-    public $headers = array();
 
     /**
      * Accepts the result of a curl request as a string
@@ -34,7 +33,7 @@ class Response {
      *
      * @param string $response
      **/
-    function __construct($response) {
+    function __construct($curl, $response) {
         # Headers regex
         $pattern = '#HTTP/\d\.\d.*?$.*?\r\n\r\n#ims';
 

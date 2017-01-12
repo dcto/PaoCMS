@@ -196,7 +196,7 @@ class Application extends Container
             'crypt'     => 'PAO\Crypt\Crypt',
             'lang'      => 'PAO\I18n\Lang',
             'view'      => 'PAO\View',
-            'curl'      => 'PAO\Http\Curl',
+            'curl'      => 'PAO\Http\Curl\Curl',
             'file'      => 'PAO\FileSystem\FileSystem',
             'cache'     => 'PAO\Cache\Cache',
             'log'       => 'PAO\Logger\Logger',

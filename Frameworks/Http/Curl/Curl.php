@@ -69,7 +69,7 @@ class Curl
     /**
      * @var string
      */
-    private $userAgent = 'PHP Curl/1.5 (+https://github.com/dcto/paocms)';
+    private $userAgent = 'PAO Curl/1.1 (+https://github.com/dcto/paocms)';
 
     /**
      * Constructor ensures the available curl extension is loaded.
@@ -80,6 +80,15 @@ class Curl
         if (!extension_loaded('curl')) {
             throw new \ErrorException('The cURL extensions is not loaded, make sure you have installed the cURL extension: https://php.net/manual/curl.setup.php');
         }
+        $this->options(CURLOPT_HEADER, true);
+        $this->options(CURLOPT_ENCODING, '');
+        $this->options(CURLOPT_RETURNTRANSFER, true);
+        $this->options(CURLOPT_TIMEOUT, $this->timeout);
+        $this->options(CURLOPT_IPRESOLVE, 1);
+        $this->options(CURLOPT_SSL_VERIFYPEER, FALSE);
+        $this->options(CURLOPT_CONNECTTIMEOUT, $this->timeout);
+        $this->options(CURLOPT_FAILONERROR, true);
+        $this->options(CURLOPT_USERAGENT, $this->userAgent);
     }
 
     /**
@@ -91,15 +100,6 @@ class Curl
     {
         if(!is_resource($this->curl)){
             $this->curl = curl_init();
-            $this->options(CURLOPT_HEADER, true);
-            $this->options(CURLOPT_ENCODING, '');
-            $this->options(CURLOPT_RETURNTRANSFER, true);
-            $this->options(CURLOPT_TIMEOUT, $this->timeout);
-            $this->options(CURLOPT_IPRESOLVE, 1);
-            $this->options(CURLOPT_SSL_VERIFYPEER, FALSE);
-            $this->options(CURLOPT_CONNECTTIMEOUT, $this->timeout);
-            $this->options(CURLOPT_FAILONERROR, true);
-            $this->options(CURLOPT_USERAGENT, $this->userAgent);
         }
         return $this->curl;
     }
@@ -277,7 +277,6 @@ class Curl
             throw new \InvalidArgumentException('Invalid url '. $url. ' for curl request.');
         }
 
-        $retry = 0;
         $this->method($method);
         $this->options(CURLOPT_HTTPHEADER, array_values($this->headers));
         $this->options(CURLOPT_URL, $url);
@@ -290,11 +289,8 @@ class Curl
         while(($response === false) && ( -- $this->retries > 0)){
             $response = curl_exec($this->curl());
         }
-        
-        if (!$response) {
-            throw new \Exception(curl_error($this->curl()), curl_errno($this->curl()));
-        }
-        $response = new Response($response);
+
+        $response = new Response($this->curl(), $response);
 
         $this->close();
 
