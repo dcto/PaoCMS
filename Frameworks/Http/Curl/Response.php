@@ -13,14 +13,14 @@ class Response {
      *
      * @var array
      **/
-    public $headers = array();
+    public $head = array();
 
     /**
      * The body of the response without the headers block
      *
      * @var string
      **/
-    public $body = '';
+    public $body;
 
     /**
      * Accepts the result of a curl request as a string
@@ -33,36 +33,12 @@ class Response {
      *
      * @param string $response
      **/
-    function __construct($curl, $response) {
-        # Headers regex
-        $pattern = '#HTTP/\d\.\d.*?$.*?\r\n\r\n#ims';
-
-        # Extract headers from response
-        preg_match_all($pattern, $response, $matches);
-        $headers_string = array_pop($matches[0]);
-        $headers = explode("\r\n", str_replace("\r\n\r\n", '', $headers_string));
-
-        # Inlude all received headers in the $headers_string
-        while (count($matches[0])) {
-            $headers_string = array_pop($matches[0]).$headers_string;
-        }
-
-        # Remove all headers from the response body
-        $this->body = str_replace($headers_string, '', $response);
-
-        # Extract the version and status from the first header
-        $version_and_status = array_shift($headers);
-        preg_match_all('#HTTP/(\d\.\d)\s((\d\d\d)\s((.*?)(?=HTTP)|.*))#', $version_and_status, $matches);
-        $this->headers['Http-Version'] = array_pop($matches[1]);
-        $this->headers['Status-Code'] = array_pop($matches[3]);
-        $this->headers['Status'] = array_pop($matches[2]);
-
-        # Convert headers into an associative array
-        foreach ($headers as $header) {
-            preg_match('#(.*?)\:\s(.*)#', $header, $matches);
-            $this->headers[$matches[1]] = $matches[2];
-        }
+    function __construct($head = array(), $body = '')
+    {
+        $this->head = $head;
+        $this->body = $body;
     }
+
 
     /**
      * Returns the response body

@@ -80,7 +80,7 @@ class Curl
         if (!extension_loaded('curl')) {
             throw new \ErrorException('The cURL extensions is not loaded, make sure you have installed the cURL extension: https://php.net/manual/curl.setup.php');
         }
-        $this->options(CURLOPT_HEADER, true);
+        $this->options(CURLOPT_HEADER, false);
         $this->options(CURLOPT_ENCODING, '');
         $this->options(CURLOPT_RETURNTRANSFER, true);
         $this->options(CURLOPT_TIMEOUT, $this->timeout);
@@ -258,6 +258,24 @@ class Curl
     }
 
     /**
+     * @param $handle
+     * @param $header
+     * @return int
+     */
+    protected function parseHeaders($handle, $header){
+        $details = explode(':', $header, 2);
+        if (count($details) == 2)
+        {
+            $key   = trim($details[0]);
+            $value = trim($details[1]);
+
+            $headers[$key] = $value;
+        }
+
+        return strlen($header);
+    }
+
+    /**
      * Makes an HTTP request of the specified $method to a $url with an optional array or string of $vars
      *
      * Returns a CurlResponse object if the request was successful, false otherwise
@@ -281,6 +299,13 @@ class Curl
         $this->options(CURLOPT_HTTPHEADER, array_values($this->headers));
         $this->options(CURLOPT_URL, $url);
         $this->options(CURLOPT_POSTFIELDS, $vars);
+        $this->options(CURLOPT_HEADERFUNCTION,   function($curl, $header) use(&$headers) {
+            $len    = strlen($header);
+            $header = explode(':', $header, 2);
+            if (count($header) < 2) return $len;
+            $headers[strtolower(trim($header[0]))] = trim($header[1]);
+            return $len;
+        });
 
         curl_setopt_array($this->curl(),$this->options);
 
@@ -290,7 +315,7 @@ class Curl
             $response = curl_exec($this->curl());
         }
 
-        $response = new Response($this->curl(), $response);
+        $response = new Response($headers, $response);
 
         $this->close();
 

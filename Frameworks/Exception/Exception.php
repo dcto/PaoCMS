@@ -160,7 +160,7 @@ class Exception
                     '[METHOD]'     =>     $_SERVER['REQUEST_METHOD'],
                     '[REMOTE]'     =>     $_SERVER["REMOTE_ADDR"],
                     '[REQUEST]'    =>     'http://'.$_SERVER['SERVER_NAME'].':'.$_SERVER["SERVER_PORT"].$_SERVER["REQUEST_URI"],
-                    '[COOKIE]'     =>     $_SERVER['HTTP_COOKIE'],
+                    '[COOKIE]'     =>     isset($_SERVER['HTTP_COOKIE']) ? $_SERVER['HTTP_COOKIE'] : null,
                     '[BACKTRACE]'  =>     PHP_EOL.$e->getTraceAsString()
                 );
                 array_walk($_ERROR, function (&$v, $k) { $v = $k.' '.$v;});
