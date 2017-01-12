@@ -319,8 +319,8 @@ class Curl
         if (!$response) {
             throw new \Exception(curl_error($this->curl()), curl_errno($this->curl()));
         }
-        
-        $response = new Response($this->curl(), $headers, $response);
+
+        $response = new Response($headers, $response);
 
         $this->close();
 

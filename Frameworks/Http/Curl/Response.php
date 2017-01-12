@@ -34,7 +34,7 @@ class Response
      *
      * @param string $response
      **/
-    public function __construct($curl, $head = array(), $body = '')
+    public function __construct($head = array(), $body = '')
     {
         $this->head = $head;
         $this->body = $body;
