@@ -7,7 +7,8 @@ namespace PAO\Http\Curl;
  * @package curl
  * @author Sean Huber <shuber@huberry.com>
  **/
-class Response {
+class Response
+{
     /**
      * An associative array containing the response's headers
      *
@@ -33,12 +34,11 @@ class Response {
      *
      * @param string $response
      **/
-    function __construct($head = array(), $body = '')
+    public function __construct($curl, $head = array(), $body = '')
     {
         $this->head = $head;
         $this->body = $body;
     }
-
 
     /**
      * Returns the response body
@@ -51,7 +51,7 @@ class Response {
      *
      * @return string
      **/
-    function __toString() {
+    public function __toString() {
         return $this->body;
     }
 

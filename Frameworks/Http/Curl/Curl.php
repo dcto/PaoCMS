@@ -302,7 +302,7 @@ class Curl
         $this->options(CURLOPT_HTTPHEADER, array_values($this->headers));
         $this->options(CURLOPT_URL, $url);
         $this->options(CURLOPT_POSTFIELDS, $vars);
-        $this->options(CURLOPT_HEADERFUNCTION,   function($curl, $header) use(&$headers) {
+        $this->options(CURLOPT_HEADERFUNCTION, function($curl, $header) use(&$headers) {
             $len    = strlen($header);
             $header = explode(':', $header, 2);
             if (count($header) < 2) return $len;
@@ -316,7 +316,11 @@ class Curl
             $response = curl_exec($this->curl());
         }
 
-        $response = new Response($headers, $response);
+        if (!$response) {
+            throw new \Exception(curl_error($this->curl()), curl_errno($this->curl()));
+        }
+        
+        $response = new Response($this->curl(), $headers, $response);
 
         $this->close();
 
