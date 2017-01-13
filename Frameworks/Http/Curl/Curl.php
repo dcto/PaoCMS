@@ -256,25 +256,7 @@ class Curl
         }
         return $this;
     }
-
-    /**
-     * @param $handle
-     * @param $header
-     * @return int
-     */
-    protected function parseHeaders($handle, $header){
-        $details = explode(':', $header, 2);
-        if (count($details) == 2)
-        {
-            $key   = trim($details[0]);
-            $value = trim($details[1]);
-
-            $headers[$key] = $value;
-        }
-
-        return strlen($header);
-    }
-
+    
     /**
      * Makes an HTTP request of the specified $method to a $url with an optional array or string of $vars
      *
