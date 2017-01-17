@@ -76,6 +76,16 @@ function path()
     array_map(function($arg)use(&$path){
       $path .= '/'. trim($arg, '/');
     }, func_get_args());
+
+    if(defined('Dev')){
+       if(!is_dir($dir = dirname ($path))){
+           if(!@mkdir($dir, 0777, true)){
+               $error = error_get_last();
+               throw new Exception($error['message']. ', Can not create directory: '.$dir, 1);
+           }
+
+       }
+    }
     return $path;
 }
 
