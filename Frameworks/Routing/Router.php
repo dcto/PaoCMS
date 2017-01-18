@@ -293,9 +293,13 @@ class Router
                     }
                 }
                 /**
-                 * construct instance
+                 * construct instance and include hooks
                  */
-                $instance = $this->Fire($router->getCallable(), $router->parameters);
+                if($hook = config('hooks.'.$url)) make($hook)->on();
+
+                    $instance = $this->Fire($router->getCallable(), $router->parameters);
+
+                if($hook) make($hook)->off();
 
                 if(is_string($instance)){
                     return $response->make($instance);

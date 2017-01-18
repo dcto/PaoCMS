@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Hook;
+namespace App\Hooks;
 
 abstract class Hooks
 {
