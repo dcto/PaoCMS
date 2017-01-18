@@ -36,7 +36,7 @@ class View
      */
     public function twig()
     {
-        $loader = new \Twig_Loader_Filesystem(config('dir.view')?:APP.'/View');
+        $loader = new \Twig_Loader_Filesystem(path(config('dir.view'))?:DIR.'/View');
         /*
          * 添加模板路径
         $loader->addPath($templateDir3);
@@ -45,7 +45,7 @@ class View
         $twig  = new \Twig_Environment($loader, array(
 
             //用来保存编译后模板的绝对路径，缺省值为false，也就是关闭缓存。
-            'cache' => config('template.cache')? config('dir.cache').'/View' : false,
+            'cache' => config('template.cache')? path(config('dir.cache'),'View') : false,
 
             //生成的模板会有一个__toString()方法，可以用来显示生成的Node（缺省为false）
             'debug' => config('app.debug')?:false,
@@ -138,7 +138,7 @@ class View
            if(\Str::startsWith($path, '/')){
                return $url.str_replace('//','/', trim($path, '/'));
            }else{
-               return $url.str_replace('//', '/', trim(strtolower(NAME).'/'.$path, '/'));
+               return $url.str_replace('//', '/', trim(strtolower(APP).'/'.$path, '/'));
            }
         });
         $twig->addFunction($asset);
