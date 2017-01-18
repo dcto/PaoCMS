@@ -77,7 +77,7 @@ function path()
       $path .= '/'. trim($arg, '/');
     }, func_get_args());
 
-    if(defined('Dev')){
+    if(defined('ENV')){
        if(!is_dir($dir = dirname ($path))){
            if(!@mkdir($dir, 0777, true)){
                $error = error_get_last();
