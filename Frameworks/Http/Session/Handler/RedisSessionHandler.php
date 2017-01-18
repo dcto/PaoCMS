@@ -22,7 +22,7 @@ class RedisSessionHandler extends \SessionHandler
         if (!extension_loaded('redis')) {
             throw new \RuntimeException('PHP does not have "redis" session module registered');
         }
-        $savePath = $savePath ?: sprintf('tcp://%s:%s?persistent=0&prefix=%s&database=%d&timeout=%s',
+        $savePath = $savePath ?: sprintf('tcp://%s:%s?persistent=0&prefix=%s&database=%d&timeout=%d',
             config('cache.redis.host', '127.0.0.1'),
             config('cache.redis.port', '6379'),
             config('session.prefix', 'PAO_SESSION'),
