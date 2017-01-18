@@ -131,7 +131,7 @@ class Lang
      */
     private function parseLanguage()
     {
-        if(!defined('ENV') && is_file($lang = PAO.'/RunTime/Cache/Language/'.$this->lang.'.cache.php')){
+        if(!getenv('ENV') && is_file($lang = PAO.'/RunTime/Cache/Language/'.$this->lang.'.cache.php')){
             $this->item = require($lang);
         }
 

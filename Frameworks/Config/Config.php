@@ -170,7 +170,9 @@ class Config implements ArrayAccess, Repository
      */
     public function parseConfig()
     {
-        if(!defined('ENV') && is_file($config = PAO.'/RunTime/Cache/config.cache.php')){
+        $env = getenv('ENV');
+
+        if(!$env && is_file($config = PAO.'/RunTime/Cache/config.cache.php')){
             return $this->config = require($config);
         }
 
@@ -186,7 +188,7 @@ class Config implements ArrayAccess, Repository
         /**
          * load environment config
          */
-        if(defined('ENV') && is_file($config_env = dirname($this->file).'/config.'.ENV.'.ini')){
+        if($env && is_file($config_env = dirname($this->file).'/config.'.$env.'.ini')){
             $config = array_replace_recursive($config,\Arr::dot(parse_ini_file($config_env, true)));
         }
 
