@@ -165,7 +165,7 @@ class Application extends Container
 
         $provider->register();
         /**
-         * @var $provider \PAO\Services\SystemServiceProvider
+         * @var $provider \PAO\Services\ServiceProvider
          */
         $provider->boot();
     }
