@@ -58,11 +58,6 @@ class Application extends Container
         $this->registerAutoLoadAlias();
 
         /**
-         * 解析配置文件
-         */
-        $this->registerSystemConfiguration();
-
-        /**
          * 配置系统环境
          */
         $this->registerSystemEnvironment();
@@ -221,6 +216,7 @@ class Application extends Container
         }
 
         $this->loader()->addClassMap($classMap);
+
     }
 
 
@@ -252,16 +248,6 @@ class Application extends Container
          * @var $this \Illuminate\Contracts\Foundation\Application
          */
         $this->register(new FoundationServiceProvider($this));
-    }
-
-    /**
-     * [registerSystemConfiguration 解析配置文件]
-     *
-     * @return mixed
-     */
-    private function registerSystemConfiguration()
-    {
-        return $this->make('config')->parseConfig($this->config);
     }
 
     /**

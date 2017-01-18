@@ -32,6 +32,7 @@ class Config implements ArrayAccess, Repository
     {
         $this->app = $app;
         $this->file =  DIR.'/Config/config.ini';
+        $this->parseConfig();
     }
 
     /**
@@ -194,7 +195,7 @@ class Config implements ArrayAccess, Repository
 
         $this->set($config);
 
-        file_put_contents(path(config('dir.cache'), 'config.cache.php'), '<?php return '.str_replace(array(PHP_EOL,' '),'',var_export($this->all(), true)).';');
+        file_put_contents(PAO.'/RunTime/Cache/config.cache.php', '<?php return '.str_replace(array(PHP_EOL,' '),'',var_export($this->all(), true)).';');
 
         return true;
     }
