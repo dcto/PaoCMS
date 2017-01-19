@@ -217,6 +217,12 @@ class Application extends Container
 
         $this->loader()->addClassMap($classMap);
 
+        foreach($this->config('docker') as $dock => $path) {
+            if (isset($this->aliases[$dock])) {
+                throw new \InvalidArgumentException('Invalid docker alias name ' . $dock);
+            }
+            $this->aliases[$dock] = $path;
+        }
     }
 
 
