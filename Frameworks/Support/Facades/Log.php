@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Facade;
  * Class Log
  * @method static Log log($level, string $message, array $context = [])
  * @method static Log dir($name)
- * @method static Log file($path, array $level = 'info')
  * @method static Log alert(string $message, array $context = [])
  * @method static Log critical(string $message, array $context = [])
  * @method static Log error(string $message, array $context = [])
