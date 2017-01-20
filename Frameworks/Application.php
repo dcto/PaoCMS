@@ -39,8 +39,9 @@ class Application extends Container
 
         /**
          * 注入容器
+         * $this->instance('Illuminate\Container\Container', $this);
          */
-        $this->instance('Illuminate\Container\Container', $this);
+        $this->instance('\PAO\Application', $this);
 
         /**
          * 注册系统组件
