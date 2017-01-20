@@ -1,3 +1,5 @@
+
+{{ lang }}
 <!DOCTYPE html>
 <html lang="zh-cn">
 <head>
@@ -5,11 +7,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-<meta name="keywords" content="{{ lang.KEYWORDS|default()}}" />
-<meta name="description" content="{{lang.DESCRIPTION|default()}}" />
+<meta name="keywords" content="{{ lang.keywords}}" />
+<meta name="description" content="{{lang.description}}" />
 <meta name="author" content="paocms" />
 <link rel="icon" href="favicon.ico" />
-<title>{%block title%}{%if title is defined%}{{title}} - {%endif%} {{lang.TITLE}} {%endblock%}</title>
+<title>{%block title%}{%if title is defined%}{{title}} - {%endif%} {{lang.title}} {%endblock%}</title>
 
 <!-- Custom styles for this template -->
 <link href="{{asset('css/pao.min.css')}}" rel="stylesheet">
@@ -25,7 +27,7 @@
 <script src="{{asset('js/html5shiv.min.js')}}"></script>
 <script src="{{asset('js/respond.min.js')}}"></script>
 <![endif]-->
-<script type="text/javascript">var Purl="{{asset('/')}}"; PLang="{{config('config.language')}}"</script>
+<script type="text/javascript">var Purl="{{asset('/')}}"; PLang="{{config('app.language')}}"</script>
 {%block head%}{%endblock%}
 </head>
 {% import 'admin/forms.html' as forms %}
@@ -81,7 +83,7 @@
       <!-- Collect the nav links, forms, and other content for toggling -->
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav nav_menu_item">
-          <li><a {#class="selected"#}href="{{ url('@index') }}"><i class="icon icon-home icon-4x"></i><h4>首页</h4></a></li>
+          <li><a {#class="selected"#}href="{{ url('@index') }}"><i class="icon icon-home icon-4x"></i><h4>{{ lang.home }}</h4></a></li>
           <li><a href="{{ url('@user') }}"><i class="icon icon-group icon-4x"></i><h4>{{ lang.menu.user }}</h4></a></li>
           <li><a href="{{ url('@article') }}"><i class="icon icon-file icon-4x"></i><h4>{{ lang.menu.article }}</h4></a></li>
         </ul>
@@ -89,9 +91,9 @@
         <ul class="nav navbar-nav navbar-right nav-custom">
             <li><a class="lang" data-lang="en-us" href="#">English</a></li>
             <li><a class="lang" data-lang="zh-cn" href="#">中文(简体)</a></li>
-            <li><a href="/" target="_parent">网站首页</a></li>
-            <li><a href="{{url('@logout')}}" target="_parent">安全退出</a></li>
-            <div class="nav_user"><span>admin</span><i>消息</i><b>5</b></div>
+            <li><a href="/" target="_parent">{{ lang.home }}</a></li>
+            <li><a href="{{url('@logout')}}" target="_parent">{{ lang.exit }}</a></li>
+            <div class="nav_user"><span>admin</span><i>{{ lang.message }}</i><b>5</b></div>
         </ul>
       </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
