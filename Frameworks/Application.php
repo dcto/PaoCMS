@@ -2,14 +2,12 @@
 
 namespace PAO;
 
-use PAO\Exception\PAOException;
-use PAO\Exception\SystemException;
-use PAO\Services\SystemServiceProvider;
+use PAO\Exception\Exception;
 use Illuminate\Container\Container;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Events\EventServiceProvider;
-
+use PAO\Services\FoundationServiceProvider;
 
 defined('PAO') || die('Invalid Construct System');
 
@@ -23,34 +21,6 @@ version_compare(PHP_VERSION,'5.5.0','ge') || die('The php version least must 5.5
  */
 class Application extends Container
 {
-    /**
-     * 自动加载器
-     * @var \Composer\Autoload\ClassLoader $loader
-     */
-    private $loader;
-
-    /**
-     * 已注入的模块
-     * @var array
-     */
-    private $is_bindings = [];
-
-
-    /**
-     * 已注册的服务
-     * @var array
-     */
-    private $is_providers = [];
-
-
-    /**
-     * Frameworks constructor.
-     * @param $loader
-     */
-    public function __construct($loader)
-    {
-        $this->loader = $loader;
-    }
 
     /**
      * [Issue 核心应用构造方法]
@@ -78,25 +48,25 @@ class Application extends Container
         $this->registerContainerAliases();
 
         /**
-         * 配置系统环境
-         */
-        $this->registerSystemEnvironment();
-
-        /**
          * 异常模块注入
          */
         $this->registerExceptionHandling();
+
+        /**
+         * 注册自动加载
+         */
+        $this->registerAutoLoadAlias();
+
+        /**
+         * 配置系统环境
+         */
+        $this->registerSystemEnvironment();
 
         /**
          * 初始外观模式
          * @var $this \Illuminate\Contracts\Foundation\Application
          */
         Facade::setFacadeApplication($this);
-
-        /**
-         * 注册自动加载
-         */
-        $this->registerAutoLoadAlias();
 
         /**
          * 基本服务注册
@@ -119,9 +89,15 @@ class Application extends Container
      */
     public function make($abstract, array $parameters = [])
     {
+        $abstract = $this->getAlias($this->normalize($abstract));
+        /*
         if (!isset($this->is_bindings[$abstract]) && $this->isAlias($abstract)) {
             $this->singleton($abstract, $this->getAlias($abstract));
             $this->is_bindings[$abstract] = true;
+        }
+        */
+        if(!$this->resolved($abstract)){
+            $this->singleton($abstract);
         }
 
         return parent::make($abstract, $parameters);
@@ -132,11 +108,11 @@ class Application extends Container
      *
      * @param $config [配置文件项]
      * @return mixed
-     * @example $this->config('app.debug');
+     * @example $this->config('app.debug', 'default');
      */
-    public function config($config)
+    public function config()
     {
-        return $this->make('config')->get($config);
+        return call_user_func_array(array($this->make('config'), 'get'), func_get_args());
     }
 
     /**
@@ -153,7 +129,7 @@ class Application extends Container
         //重置Response
         if(!$response instanceof \PAO\Http\Response)
         {
-            throw new SystemException('The Output Must be Instance of PAO\Response');
+            throw new \ErrorException('The Output Must be Instance of PAO\Response');
         }
         /**
          * 响应请求
@@ -163,13 +139,12 @@ class Application extends Container
     }
 
     /**
-     * Autoload
-     *
+     * get loader
      * @return \Composer\Autoload\ClassLoader
      */
     public function loader()
     {
-        return $this->loader;
+        return require(dirname(__DIR__).'/vendor/autoload.php');
     }
 
     /**
@@ -177,22 +152,20 @@ class Application extends Container
      *
      * @param $provider
      */
-    public function register($provider, $options = [])
+    public function register($provider)
     {
         if(!$provider instanceof ServiceProvider)
         {
             $provider = new $provider($this);
         }
 
-        if(isset($this->is_providers[$providerName = get_class($provider)]))
-        {
+        if($this->resolved($providerName = get_class($provider))){
             return;
         }
-        $this->is_providers[$providerName] = true;
 
         $provider->register();
         /**
-         * @var $provider \PAO\Services\SystemServiceProvider
+         * @var $provider \PAO\Services\ServiceProvider
          */
         $provider->boot();
     }
@@ -204,24 +177,25 @@ class Application extends Container
      */
     private function registerContainerAliases()
     {
+
         $this->aliases = array(
-            'app' => 'PAO\Application',
-            'router' => 'PAO\Routing\Router',
-            'config' => 'PAO\Configure\Repository',
-            'request' => 'PAO\Http\Request',
-            'response' => 'PAO\Http\Response',
-            'cookie' => 'PAO\Http\Cookie',
-            'session' => 'PAO\Http\Session',
-            'crypt' => 'PAO\Crypt\Crypt',
-            'captcha' => 'PAO\Captcha\Captcha',
+            'app'       => 'PAO\Application',
+            'router'    => 'PAO\Routing\Router',
+            'config'    => 'PAO\Config\Config',
+            'request'   => 'PAO\Http\Request',
+            'response'  => 'PAO\Http\Response',
+            'cookie'    => 'PAO\Http\Cookie',
+            'session'   => 'PAO\Http\Session\Session',
+            'captcha'   => 'PAO\Captcha\Captcha',
             'validator' => 'PAO\Form\Validator',
-            'lang' => 'PAO\Language\Lang',
-            'view' => 'PAO\View',
-            'curl' => 'PAO\Http\Curl',
-            'file' => 'PAO\FileSystem\Files',
-            'cache' => 'PAO\Cache\Cache',
-            'log' => 'PAO\Logger\Logger',
-            'db' => 'PAO\Database'
+            'crypt'     => 'PAO\Crypt\Crypt',
+            'lang'      => 'PAO\I18n\Lang',
+            'view'      => 'PAO\View',
+            'curl'      => 'PAO\Http\Curl\Curl',
+            'file'      => 'PAO\FileSystem\FileSystem',
+            'cache'     => 'PAO\Cache\Cache',
+            'log'       => 'PAO\Logger\Logger',
+            'db'        => 'PAO\Database'
         );
     }
 
@@ -235,11 +209,20 @@ class Application extends Container
             'Str' => __DIR__.'/Support/Str.php',
             'Schema' => __DIR__.'/Support/Facades/Schema.php'
         );
+
         foreach($this->aliases as $alias => $class) {
             $alias = $alias == 'db' ? strtoupper($alias) : ucfirst($alias);
             $classMap[$alias] = __DIR__.'/Support/Facades/'.$alias.'.php';
         }
-        $this->loader->addClassMap($classMap);
+
+        $this->loader()->addClassMap($classMap);
+
+        foreach($this->config('docker') as $dock => $path) {
+            if (isset($this->aliases[$dock])) {
+                throw new \InvalidArgumentException('Invalid docker alias name ' . $dock);
+            }
+            $this->aliases[$dock] = $path;
+        }
     }
 
 
@@ -249,20 +232,8 @@ class Application extends Container
      */
     private function registerExceptionHandling()
     {
-
-        //实例化异常类
-        $PAOException = new PAOException();
-
-        //设置抛出异常
-        set_exception_handler(function ($e)use($PAOException) {
-            $PAOException->Exception($e);
-        });
-
-        //异常错误处理
-        set_error_handler(array($PAOException, 'handleError'));
-
-        //致命错误处理
-        register_shutdown_function(array($PAOException,'handleShutdown'));
+        $PAOException = new Exception();
+        $PAOException->register();
     }
 
     /**
@@ -273,18 +244,17 @@ class Application extends Container
     private function registerBaseServiceProviders()
     {
         /**
-         * 系统服务
-         * @var $this \Illuminate\Contracts\Foundation\Application
-         */
-        $this->register(new SystemServiceProvider($this));
-
-        /**
          * 事件服务
          * @var $this \Illuminate\Contracts\Foundation\Application
          */
         $this->register(new EventServiceProvider($this));
-    }
 
+        /**
+         * 基础服务
+         * @var $this \Illuminate\Contracts\Foundation\Application
+         */
+        $this->register(new FoundationServiceProvider($this));
+    }
 
     /**
      * [registerSystemEnvironment 初始化配置系统环境]
@@ -293,17 +263,6 @@ class Application extends Container
      */
     private function registerSystemEnvironment()
     {
-        /**
-         * 设置错误报告
-         */
-        if($this->config('app.debug')) {
-            error_reporting(E_ALL);
-            ini_set('display_errors', 'On');
-        }else{
-            error_reporting(0);
-            ini_set('display_errors', 'Off');
-        }
-
         /**
          * 设置系统时区
          */

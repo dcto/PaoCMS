@@ -2,38 +2,18 @@
 
 namespace PAO\Http;
 
-use Illuminate\Container\Container;
-use PAO\Exception\NotFoundHttpException;
+use PAO\Exception\NotFoundException;
 use Symfony\Component\HttpFoundation;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
+
 class Request extends HttpFoundation\Request
 {
-
-    /**
-     * 容器
-     * @var static
-     */
-    private $container;
-
-
-    /**
-     * 临时存储文件
-     * @var
-     */
-    private $gainFiles;
-
-
     /**
      * 重构Request方法
      */
     public function __construct(array $query = array(), array $request = array(), array $attributes = array(), array $cookies = array(), array $files = array(), array $server = array(), $content = null)
     {
-        /**
-         * 获取容器
-         */
-        $this->container = Container::getInstance();
-
         /**
          * 命令行模式获取参数
          */
@@ -100,13 +80,13 @@ class Request extends HttpFoundation\Request
         $baseUrl = trim($this->baseUrl(), '/').'/';
         $tag = array_shift($args);
         if($tag[0] == '@'){
-            $router = $this->container->make('router');
-            if(!$route = $router->router(ltrim($tag, '@'))) throw new NotFoundHttpException("The $tag route does not found");
+            $router = make('router');
+            if(!$route = $router->router(ltrim($tag, '@'))) throw new NotFoundException("The $tag route does not found");
             if(!strpos($route->route(),':')) return $baseUrl.trim($route->route(), '/');
             $url = preg_replace("/\([^)]+\)/", '%s', $route->route);
             return $baseUrl.trim(vsprintf($url, $args));
         }else if($tag[0]=='$'){
-            $router = $this->container->make('router')->route();
+            $router = make('router')->route();
             $url = str_replace(array('$controller','$action'), explode('@', $router->callable()), $tag);
             return $baseUrl.trim($url, '/');
         }else{
@@ -247,71 +227,6 @@ class Request extends HttpFoundation\Request
     }
 
     /**
-     * [file 获取上传文件]
-     *
-     * @param null $key
-     * @param null $default
-     * @return mixed
-     * @author 11.
-     */
-    public function file($key = null, $default = null)
-    {
-        return \Arr::get($this->files(), $key, $default);
-    }
-
-
-    /**
-     * [files 获取多文件]
-     * @return mixed
-     */
-    public function files()
-    {
-        $files = $this->files->all();
-        return $this->gainFiles
-            ? $this->gainFiles
-            : $this->gainFiles = $this->gainFiles($files);
-    }
-
-
-    /**
-     * 判断文件是否上传
-     *
-     * @param  string  $key
-     * @return bool
-     */
-    public function hasFile($key)
-    {
-        if (! is_array($files = $this->file($key))) {
-            $files = [$files];
-        }
-
-        foreach ($files as $file) {
-            if ($file instanceof \SplFileInfo && $file->getPath() != '') {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * @param array $files
-     * @return array
-     */
-    private function gainFiles(array $files)
-    {
-        return array_map(function ($file) {
-            if (is_null($file) || (is_array($file) && empty(array_filter($file)))) {
-                return $file;
-            }
-
-            return is_array($file)
-                ? $this->gainFiles($file)
-                : Upload::initialize($file);
-        }, $files);
-    }
-
-    /**
      * [cookie 重构cookie方法适应Facades调用]
      *
      * @param $key
@@ -327,6 +242,46 @@ class Request extends HttpFoundation\Request
             return $this->cookies->all();
         }
     }
+
+    /**
+     * [获取session方法]
+     *
+     * @param null $key
+     * @return mixed
+     */
+    public function session($key = null)
+    {
+        if ($key) {
+            return make('session')->get($key);
+        } else {
+            return make('session')->all();
+        }
+    }
+
+
+    /**
+     * [file 获取上传文件]
+     *
+     * @param null $key
+     * @param null $default
+     * @return Files
+     * @author 11.
+     */
+    public function file($key = null, $default = null)
+    {
+        return \Arr::get($this->files(), $key, $default);
+    }
+
+
+    /**
+     * [files 获取上传文件]
+     * @return array
+     */
+    public function files()
+    {
+        return $this->getFiles($this->files->all());
+    }
+
 
     /**
      * [isJson 判断是否为json]
@@ -363,12 +318,14 @@ class Request extends HttpFoundation\Request
     /**
      * [method 获取当前请求方式]
      *
-     * @return string
-     * @author 11.
+     * @param null $type
+     * @return bool|string
      */
-    public function method()
+    public function method($type = null)
     {
-        return $this->getMethod();
+        $method = $this->getMethod();
+
+        return $type ? strtoupper($type) == $method : $method;
     }
 
 
@@ -485,6 +442,24 @@ class Request extends HttpFoundation\Request
         return $this->isSecure();
     }
 
+    /**
+     * Convert the given array of Symfony UploadedFiles
+     *
+     * @param  array  $files
+     * @return array
+     */
+    protected function getFiles(array $files)
+    {
+        return array_map(function ($file) {
+            if (is_null($file) || (is_array($file) && empty(array_filter($file)))) {
+                return $file;
+            }
+
+            return is_array($file)
+                ? $this->getFiles($file)
+                : Upload::createFromBase($file);
+        }, $files);
+    }
 
     /**
      * [retrieve]
@@ -508,7 +483,7 @@ class Request extends HttpFoundation\Request
     /**
      * [getInputSource 获取请求方法]
      *
-     * @return mixed|\Symfony\Component\HttpFoundation\ParameterBag
+     * @return mixed|ParameterBag
      * @author 11.
      */
     protected function getInputSource()

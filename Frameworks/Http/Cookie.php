@@ -2,22 +2,9 @@
 
 namespace PAO\Http;
 
-use Illuminate\Container\Container;
+use Symfony\Component\HttpFoundation;
 
 class Cookie{
-
-    /**
-     * 容器
-     * @var static
-     */
-    protected $container;
-
-
-
-    public function __construct()
-    {
-        $this->container = Container::getInstance();
-    }
 
     /**
      * [set 设置cookie]
@@ -31,17 +18,20 @@ class Cookie{
      * @param bool|true  $httpOnly
      * @author 11.
      */
-    public function set($name, $value = null, $expire = 0, $path = '/', $domain = null, $secure = false, $httpOnly = true)
+    public function set($name, $value, $expire = null, $path = null, $domain = null, $secure = null, $httpOnly = null)
     {
-        $cookie = new \Symfony\Component\HttpFoundation\Cookie($name, $value, $expire, $path, $domain, $secure, $httpOnly);
+        $path   = is_null($path) ? config('cookie.path', '/') : $path;
+        $expire = is_null($expire) ? config('cookie.expire', 0) : $expire;
+        $domain = is_null($domain) ? config('cookie.domain', null) : $domain;
+        $secure = is_null($secure) ? config('cookie.secure', false) : $secure;
+        $httpOnly = is_null($httpOnly) ? config('cookie.httpOnly', true) : $httpOnly;
 
-        $response = new \Symfony\Component\HttpFoundation\Response;
+        make('response')->headers->setCookie(
+            new HttpFoundation\Cookie($name, $value, time() + $expire, $path, $domain, $secure, $httpOnly)
+        );
 
-        $response->headers->setCookie($cookie);
-
-        $response->sendHeaders();
+        make('response')->sendHeaders();
     }
-
 
     /**
      * [has 判断cookie是否存在]
@@ -62,7 +52,7 @@ class Cookie{
      */
     public function get($name)
     {
-        return $this->container->make('request')->cookies->get($name);
+        return make('request')->cookies->get($name);
     }
 
     /**
@@ -73,9 +63,8 @@ class Cookie{
      */
     public function all()
     {
-        return $this->container->make('request')->cookies->all();
+        return make('request')->cookies->all();
     }
-
 
     /**
      * [del 删除cookie]
@@ -85,8 +74,7 @@ class Cookie{
      */
     public function del($name)
     {
-        $response = new \Symfony\Component\HttpFoundation\Response;
-        $response->headers->clearCookie($name);
-        $response->sendHeaders();
+        make('response')->headers->clearCookie($name);
+        make('response')->sendHeaders();
     }
 }

@@ -2,16 +2,14 @@
 
 namespace PAO;
 
-use Illuminate\Container\Container;
-
 
 abstract class Controller
 {
     /**
      * 全局容器
-     * @var Container
+     * @var Application
      */
-    protected $container;
+    protected $app;
 
     /**
      * [$controller 当前控制器]
@@ -40,9 +38,9 @@ abstract class Controller
 
     public function __construct()
     {
-        $this->container = Container::getInstance();
+        $this->app = app();
 
-        $this->router = $this->container->make('router')->router();
+        $this->router = $this->app->make('router')->router();
 
         $this->controller = $this->router->getController();
 
@@ -63,7 +61,7 @@ abstract class Controller
      */
     public function make($abstract, array $parameters = [])
     {
-        return $this->container->make($abstract, $parameters);
+        return $this->app->make($abstract, $parameters);
     }
 
     /**
@@ -78,7 +76,7 @@ abstract class Controller
      */
     public function assign($var, $val = null)
     {
-        $this->container->make('view')->assign($var, $val);
+        $this->app->make('view')->assign($var, $val);
     }
 
 
@@ -94,6 +92,6 @@ abstract class Controller
      */
     public function view($template, $variable = [])
     {
-        return $this->container->make('view')->show($template, $variable);
+        return $this->app->make('view')->show($template, $variable);
     }
 }

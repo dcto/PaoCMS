@@ -6,8 +6,9 @@ use Illuminate\Support\Facades\Facade;
  * Class Crypt
  *
  * @method static Crypt key(string $str = null)
- * @method static Crypt encrypt(string $str)
- * @method static Crypt decrypt(string $str)
+ * @method static Crypt null()
+ * @method static Crypt en(string $str, $key = null)
+ * @method static Crypt de(string $str, $key = null)
  */
 class Crypt extends Facade
 {

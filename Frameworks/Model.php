@@ -2,7 +2,6 @@
 
 namespace PAO;
 
-use Illuminate\Container\Container;
 
 abstract class Model extends \Illuminate\Database\Eloquent\Model
 {
@@ -108,7 +107,7 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model
     {
         parent::boot();
 
-        Container::getInstance()->make('db');
+        app('db');
 
         /**
          * 创建事件

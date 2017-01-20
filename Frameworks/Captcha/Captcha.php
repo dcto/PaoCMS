@@ -127,22 +127,17 @@ class Captcha {
         $this->setImageString($images, $phrase);
 
         /**
-         * 获取容器
-         */
-        $container = Container::getInstance();
-
-        /**
          * Session记录
          */
-        $container->make('session')->set($this->token, $phrase);
+        make('session')->set($this->token, $phrase);
 
-        if($container->make('session')->get($this->token) != $phrase) throw new SystemException ('The captcha set session was error.');
+        if(make('session')->get($this->token) != $phrase) throw new SystemException ('The captcha set session was error.');
 
         imagepng($images);
 
         imagedestroy($images);
 
-        return $container->make('response')->make(uniqid(), 200,
+        return make('response')->make(uniqid(), 200,
             array(
                 'Expires' => 'Mon,26 Jul 1997 05:00:00 GMT',
                 'Last-Modified' => gmdate("D,d M Y H:i:s")."GMT",
@@ -259,7 +254,7 @@ class Captcha {
      */
     private function getFont($font = null)
     {
-        $FontDir = __DIR__.DIRECTORY_SEPARATOR;
+        $FontDir = __DIR__.DIRECTORY_SEPARATOR.'Fonts'.DIRECTORY_SEPARATOR;
         if($font && is_readable($FontDir.$font))
         {
             return $FontDir.$font;

@@ -2,9 +2,6 @@
 
 namespace PAO\Form;
 
-use PAO\Exception\SystemException;
-
-
 /**
  * 字符串验证器
  * Class Validator
@@ -39,7 +36,7 @@ class Validator
      */
     public function is($is)
     {
-        if(!is_bool($is)) throw new SystemException('The Validator function [is] argument must be an boolean');
+        if(!is_bool($is)) throw new \InvalidArgumentException('The Validator function [is] argument must be an boolean');
         return !self::$Error == $is ? true :false;
     }
 
@@ -298,7 +295,7 @@ class Validator
                 return $this->regExp($this->regular[$name]);
             }
         }else{
-            throw new SystemException(sprintf("The validator regular [$name] was not found."));
+            throw new \InvalidArgumentException(sprintf("The validator regular [$name] was not found."));
         }
     }
 }

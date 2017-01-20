@@ -2,7 +2,7 @@
 namespace PAO\Routing;
 
 use Arr;
-use PAO\Exception\NotFoundHttpException;
+use PAO\Exception\NotFoundException;
 
 
 /**
@@ -120,8 +120,9 @@ class Route
 
         $this->namespace = Arr::get($property, 'namespace')?:Arr::get(Arr::get($property, 'group'),'namespace');
 
-        list($this->controller, $this->action) = explode('@', trim(strrchr($this->callable,'\\')?:$this->callable, '\\'));
-
+        if(is_string($this->callable)){
+            list($this->controller, $this->action) = explode('@', trim(strrchr($this->callable,'\\')?:$this->callable, '\\'));
+        }
         if (in_array('GET', $this->methods) && !in_array('HEAD', $this->methods)) {
             $this->methods[] = 'HEAD';
         }
@@ -131,12 +132,12 @@ class Route
      * @param $property
      * @param $arguments
      * @return $this
-     * @throws NotFoundHttpException
+     * @throws NotFoundException
      */
     public function __call($property, $arguments)
     {
         if (!property_exists($this, $property)) {
-            throw new  NotFoundHttpException('The route property no available of to the ' . $property . ' action');
+            throw new  NotFoundException('The route property no available of to the ' . $property . ' action');
         }
 
         if ($arguments) {
@@ -154,7 +155,11 @@ class Route
      */
     public function getCallable()
     {
-        return rtrim($this->namespace,'\\').'\\'.ltrim($this->callable, '\\');
+        if(is_string($this->callable)) {
+            return rtrim($this->namespace, '\\') . '\\' . ltrim($this->callable, '\\');
+        }else{
+            return $this->callable;
+        }
     }
 
     /**

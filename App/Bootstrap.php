@@ -3,19 +3,16 @@
 defined('PAO') || define('PAO', dirname(__DIR__));
 
 //定义APP路径
-defined('APP') || define('APP', __DIR__);
+defined('DIR') || define('DIR', __DIR__);
 
 //定义应用名称
-defined('NAME') || define('NAME', trim(basename($_SERVER['SCRIPT_NAME']),'.php'));
-
-//定义运行目录
-defined('RUNTIME') || define('RUNTIME', dirname(__DIR__).'/RunTime');
+defined('APP') || define('APP', trim(basename($_SERVER['SCRIPT_NAME']),'.php'));
 
 //Autoload 自动载入
-$loader = require('../vendor/autoload.php');
+require('../vendor/autoload.php');
 
 //创建实例构建应用
-$app = new PAO\Application($loader);
+$app = new PAO\Application();
 
 //发布应用
 $app->Issue();
