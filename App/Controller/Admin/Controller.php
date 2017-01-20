@@ -33,9 +33,9 @@ class Controller extends \App\Controller\Controller
             $this->db();
         }
 
-        $this->container->make('lang')->setLang($this->router->lang()?:config('config.language'));
+        $this->app->make('lang')->setLang($this->router->lang()?:config('config.language'));
 
-        $this->assign('menu', $this->container->make('router')->groups());
+        $this->assign('menu', $this->app->make('router')->groups());
     }
 
 
