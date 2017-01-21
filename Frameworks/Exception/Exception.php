@@ -149,6 +149,7 @@ class Exception
      */
     final private function logException(\Exception $e)
     {
+        global $argv;
         if(config('app.log')){
             try{
                 $_ERROR = array(
@@ -157,9 +158,9 @@ class Exception
                     '[FILE]'       =>     $e->getFile(),
                     '[LINE]'       =>     $e->getLine(),
                     '[MESSAGE]'    =>     E::error($e->getCode()).' '.$e->getMessage(),
-                    '[METHOD]'     =>     $_SERVER['REQUEST_METHOD'],
-                    '[REMOTE]'     =>     $_SERVER["REMOTE_ADDR"],
-                    '[REQUEST]'    =>     'http://'.$_SERVER['SERVER_NAME'].':'.$_SERVER["SERVER_PORT"].$_SERVER["REQUEST_URI"],
+                    '[METHOD]'     =>     PHP_SAPI=='cli' ? PHP_SAPI : $_SERVER['REQUEST_METHOD'],
+                    '[REMOTE]'     =>     PHP_SAPI=='cli' ? PHP_SAPI : $_SERVER["REMOTE_ADDR"],
+                    '[REQUEST]'    =>     PHP_SAPI=='cli' ? __FILE__.implode(' ', $argv) : 'http://'.$_SERVER['SERVER_NAME'].':'.$_SERVER["SERVER_PORT"].$_SERVER["REQUEST_URI"],
                     '[COOKIE]'     =>     isset($_SERVER['HTTP_COOKIE']) ? $_SERVER['HTTP_COOKIE'] : null,
                     '[BACKTRACE]'  =>     PHP_EOL.$e->getTraceAsString()
                 );
@@ -184,7 +185,7 @@ class Exception
      */
     final private function display(\Exception $e)
     {
-        ob_clean();
+        ob_get_contents() && ob_end_clean();
         http_response_code($e instanceof E ? $e->getStatus() : 500);
         config('app.debug') || die('PAO Server Error.');
 
