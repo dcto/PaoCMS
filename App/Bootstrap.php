@@ -9,7 +9,7 @@ defined('DIR') || define('DIR', __DIR__);
 defined('APP') || define('APP', trim(basename($_SERVER['SCRIPT_NAME']),'.php'));
 
 //Autoload 自动载入
-require('../vendor/autoload.php');
+require(PAO.'/vendor/autoload.php');
 
 //创建实例构建应用
 $app = new PAO\Application();
