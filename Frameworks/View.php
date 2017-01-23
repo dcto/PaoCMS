@@ -2,8 +2,6 @@
 
 namespace PAO;
 
-use PAO\Exception\NotFoundException;
-
 
 class View
 {
@@ -25,7 +23,6 @@ class View
         $this->app = $app;
     }
 
-
     /**
      * [twig 模板引擎]
      *
@@ -45,7 +42,7 @@ class View
         $twig  = new \Twig_Environment($loader, array(
 
             //用来保存编译后模板的绝对路径，缺省值为false，也就是关闭缓存。
-            'cache' => config('template.cache')? path(config('dir.cache'),'View') : false,
+            'cache' => config('template.cache') ? path(config('dir.cache'),'View') : false,
 
             //生成的模板会有一个__toString()方法，可以用来显示生成的Node（缺省为false）
             'debug' => config('app.debug')?:false,
@@ -93,8 +90,8 @@ class View
          */
         $twig->addGlobal('PAO', PAO);
         $twig->addGlobal('APP', APP);
+        $twig->addGlobal('lang', $this->app->make('lang'));
         $twig->addGlobal('request', $this->app->make('request'));
-        $twig->addGlobal('timezone', date_default_timezone_get());
 
         /**
          * 注册全局可用php函数
@@ -269,12 +266,8 @@ class View
         $template = sprintf($template .'%s'. trim($this->app->config('template.append'),'.'), '.');
 
         $variables = array_merge($this->variables, $variables);
-        try {
-            return $this->twig()->render($template, $variables);
-        }catch (NotFoundException $e){
-            throw new NotFoundException($e->getMessage());
-        }
 
+        return $this->twig()->render($template, $variables);
     }
 
     /**
