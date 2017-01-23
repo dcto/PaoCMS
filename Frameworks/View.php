@@ -2,9 +2,6 @@
 
 namespace PAO;
 
-use PAO\Exception\NotFoundException;
-use PAO\I18n\LangMagic;
-
 
 class View
 {
@@ -270,12 +267,7 @@ class View
 
         $variables = array_merge($this->variables, $variables);
 
-        try {
-            return $this->twig()->render($template, $variables);
-        }catch (NotFoundException $e){
-            throw new NotFoundException($e->getMessage());
-        }
-
+        return $this->twig()->render($template, $variables);
     }
 
     /**
