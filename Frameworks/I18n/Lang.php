@@ -20,19 +20,13 @@ class Lang
 	private $item = array();
 
     /**
-     * 当前根键器
-     * @var string
-     */
-    private $temp = null;
-
-    /**
-     * 语言选择器
+     * 临时语言选择器
      * @var array
      */
     private $keys = array();
 
     /**
-     * 当前调用参数
+     * 当前临时调用参数
      * @var array
      */
     private $args = array();
@@ -201,7 +195,7 @@ class Lang
     }
 
     /**
-     * 动态方法调用语言包
+     * 动态方法调用语言包 (lang->alert()->id())
      * @param $name
      * @param $arguments
      * @return mixed|string
@@ -210,6 +204,7 @@ class Lang
     {
         array_push($this->keys, $key);
         $this->args = $args;
+
         return $this;
     }
 
@@ -218,6 +213,9 @@ class Lang
      */
     public function __toString()
     {
-        return $this->take(implode('.', $this->keys), $this->args);
+        $lang = $this->take(implode('.', $this->keys), $this->args);
+        $this->keys = $this->args = array();
+        return $lang;
     }
+
 }

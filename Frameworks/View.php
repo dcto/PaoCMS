@@ -2,8 +2,8 @@
 
 namespace PAO;
 
-use Illuminate\Support\Arr;
 use PAO\Exception\NotFoundException;
+use PAO\I18n\LangMagic;
 
 
 class View
@@ -25,7 +25,6 @@ class View
     {
         $this->app = $app;
     }
-
 
     /**
      * [twig 模板引擎]
@@ -96,7 +95,6 @@ class View
         $twig->addGlobal('APP', APP);
         $twig->addGlobal('lang', $this->app->make('lang'));
         $twig->addGlobal('request', $this->app->make('request'));
-        $twig->addGlobal('timezone', date_default_timezone_get());
 
         /**
          * 注册全局可用php函数
@@ -271,6 +269,7 @@ class View
         $template = sprintf($template .'%s'. trim($this->app->config('template.append'),'.'), '.');
 
         $variables = array_merge($this->variables, $variables);
+
         try {
             return $this->twig()->render($template, $variables);
         }catch (NotFoundException $e){
