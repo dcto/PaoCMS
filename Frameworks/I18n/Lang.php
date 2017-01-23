@@ -11,14 +11,31 @@ class Lang
 	 * 当前设定语言
 	 * @var [type]
 	 */
-	protected $lang = null;
+	private $lang = null;
 
 	/**
 	 * 语言配置器
 	 * @var array
 	 */
-	protected $item = array();
+	private $item = array();
 
+    /**
+     * 当前根键器
+     * @var string
+     */
+    private $temp = null;
+
+    /**
+     * 语言选择器
+     * @var array
+     */
+    private $keys = array();
+
+    /**
+     * 当前调用参数
+     * @var array
+     */
+    private $args = array();
 
 	/**
 	 * 初始化语言对象
@@ -36,22 +53,6 @@ class Lang
             }
         }
         $this->parseLanguage();
-	}
-
-
-    /**
-     * Get the specified language value.
-     * @return mixed|string
-     */
-	public function get()
-	{
-        $args = func_get_args();
-        $key = array_shift($args);
-        $lang = \Arr::get($this->item, $key);
-        if(is_string($lang)){
-            return $args ? $this->replacements($lang, $args) : $lang;
-        }
-        return $key;
 	}
 
     /**
@@ -82,6 +83,35 @@ class Lang
         return $this->item;
     }
 
+
+    /**
+     * Get the specified language value.
+     * @return mixed|string
+     */
+    public function get()
+    {
+        $args = func_get_args();
+
+        $key = array_shift($args);
+
+        return $this->take($key, $args);
+    }
+
+    /**
+     * take language
+     *
+     * @param $key
+     * @param array $args
+     * @return string
+     */
+    public function take($key, array $args = array())
+    {
+        if(is_string($lang = \Arr::get($this->item, $key))){
+            return $args ? $this->replacements($lang, $args) : $lang;
+        }
+        return $key;
+    }
+
     /**
      * get current language
      *
@@ -108,6 +138,7 @@ class Lang
         }
         $this->lang = $lang;
     }
+
 
     /**
      * Make the place-holder replacements on a line.
@@ -154,5 +185,27 @@ class Lang
         }
         file_put_contents($cacheDir.$this->lang.'.cache.php', '<?php return '.str_replace(array(PHP_EOL,' '),'',var_export($this->all(), true)).';');
         return true;
+    }
+
+    /**
+     * 动态方法调用语言包
+     * @param $name
+     * @param $arguments
+     * @return mixed|string
+     */
+    public function __call($key, $args)
+    {
+echo $key.'<br />';
+        array_push($this->keys, $key);
+        $this->args = $args;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->take(implode('.', $this->keys), $this->args);
     }
 }

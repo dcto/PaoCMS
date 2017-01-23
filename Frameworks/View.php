@@ -94,7 +94,7 @@ class View
          */
         $twig->addGlobal('PAO', PAO);
         $twig->addGlobal('APP', APP);
-        $twig->addGlobal('lang', $this->app->make('lang')->all());
+        $twig->addGlobal('lang', $this->app->make('lang'));
         $twig->addGlobal('request', $this->app->make('request'));
         $twig->addGlobal('timezone', date_default_timezone_get());
 
