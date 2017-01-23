@@ -138,15 +138,14 @@ class Lang
      * Make the place-holder replacements on a line.
      *
      * @param  string  $line
-     * @param  array   $replace
+     * @param  array   $replaces
      * @return string
      */
-    private function replacements($lang, array $replace)
+    private function replacements($lang, array $args)
     {
-        if(substr_count($lang,'%s') > sizeof($replace)){
-            throw new \InvalidArgumentException($lang.' The language arguments count ['.implode(',', $replace).'] not match.');
-        }
-        return vsprintf($lang, $replace);
+        $args = array_pad($args, substr_count($lang,'%s'), '%s');
+
+        return vsprintf($lang, $args);
     }
 
     /**
@@ -215,7 +214,7 @@ class Lang
     {
         $lang = $this->take(implode('.', $this->keys), $this->args);
         $this->keys = $this->args = array();
-        return $lang;
+        return (string) $lang;
     }
 
 }
