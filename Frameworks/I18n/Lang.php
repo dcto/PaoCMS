@@ -169,7 +169,7 @@ class Lang
             $language = array_replace_recursive($language,\Arr::dot(parse_ini_file($subLang, true)));
         }
 
-        $this->set($language);
+        $this->item = $language;
 
         $cacheDir = path(config('dir.cache'), '/Lang/').'/';
 
