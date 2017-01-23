@@ -162,7 +162,7 @@ class Lang
      */
     private function parseLanguage()
     {
-        if(!getenv('ENV') && is_file($lang = PAO.'/RunTime/Cache/Language/'.$this->lang.'.cache.php')){
+        if(!getenv('ENV') && is_file($lang = PAO.'/RunTime/Cache/Lang/'.$this->lang.'.cache.php')){
             $this->item = require($lang);
         }
 
@@ -178,13 +178,26 @@ class Lang
 
         $this->set($language);
 
-        $cacheDir = path(config('dir.cache'), '/Language/').'/';
+        $cacheDir = path(config('dir.cache'), '/Lang/').'/';
 
         if(!is_dir($cacheDir)){
             make('file')->mkDir($cacheDir);
         }
         file_put_contents($cacheDir.$this->lang.'.cache.php', '<?php return '.str_replace(array(PHP_EOL,' '),'',var_export($this->all(), true)).';');
         return true;
+    }
+
+    /**
+     * To json
+     * @return string
+     */
+    public function toJson($key = null)
+    {
+        if($key){
+            return json_encode(\Arr::get($this->item, $key));
+        }
+
+        return json_encode($this->all());
     }
 
     /**
@@ -195,7 +208,6 @@ class Lang
      */
     public function __call($key, $args)
     {
-echo $key.'<br />';
         array_push($this->keys, $key);
         $this->args = $args;
         return $this;
